@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BB 防守翻後 | NL10 6-max</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, 'SF Mono', 'Monaco', monospace;
+    background: #0d1117; color: #c9d1d9;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 24px;
+  }
+  h1 { font-size: 20px; color: #58a6ff; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; }
+  .scorebar span { color: #8b949e; }
+  .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+
+  .table {
+    background: #1a5c2a; border-radius: 120px; width: 520px; max-width: 100%;
+    padding: 32px 24px; margin-bottom: 20px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .card {
+    width: 52px; height: 74px; border-radius: 6px;
+    background: #fff; color: #000; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-size: 20px; font-weight: bold;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1;
+  }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 22px; } .card .suit { font-size: 14px; margin-top: -2px; }
+
+  .board-section { margin-top: 8px; }
+  .board-flop { display: flex; justify-content: center; gap: 8px; margin: 8px 0; }
+  .board-flop .card { width: 48px; height: 68px; font-size: 18px; }
+
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2;
+    background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .spot-info .highlight { color: #ffd54f; font-weight: bold; }
+
+  .step-label { text-align: center; font-size: 13px; color: #58a6ff; margin: 12px 0 4px; font-weight: bold; }
+
+  .actions { display: flex; gap: 12px; margin-bottom: 20px; justify-content: center; }
+  .btn { padding: 12px 28px; border-radius: 8px; border: none; font-size: 15px; font-weight: bold;
+    cursor: pointer; transition: transform 0.1s, opacity 0.15s; font-family: inherit; }
+  .btn:hover { transform: scale(1.04); } .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-fold { background: #f85149; color: #fff; }
+  .btn-call { background: #58a6ff; color: #fff; }
+  .btn-raise { background: #3fb950; color: #fff; }
+  .btn-check { background: #8b949e; color: #fff; }
+  .btn-donk { background: #d2991d; color: #fff; }
+
+  .feedback { width: 520px; max-width: 100%; padding: 16px 20px; border-radius: 8px;
+    font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d;
+    background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer;
+    font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+</style>
+</head>
+<body>
+
+<h1>🛡 BB 防守翻後題庫</h1>
+<div class="sub">BTN open → BB call → Flop · 兩步決策練習</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— B B · H E R O ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="board-section">
+    <div class="board-label">—— F L O P ——</div>
+    <div class="board-flop" id="boardCards"></div>
+  </div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">第一步：你怎麼動？</div>
+<div class="actions" id="step1Actions">
+  <button class="btn btn-check" onclick="step1('check')">CHECK</button>
+  <button class="btn btn-donk" onclick="step1('donk')">DONK 小注</button>
+</div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一題 →</button>
+
+<script>
+const SUITS = ['s','h','d','c'];
+const SUIT_SYM = { s:'♠', h:'♥', d:'♦', c:'♣' };
+const SUIT_COLOR = { s:'black', h:'red', d:'red', c:'black' };
+const RANKS = ['2','3','4','5','6','7','8','9','T','J','Q','K','A'];
+const RANK_N = { '2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'T':10,'J':11,'Q':12,'K':13,'A':14 };
+
+let correct=0, wrong=0, streak=0;
+let heroCards, boardCards, potSize, cbSize, step=1, step1Right=0, step1Action='';
+
+function deal(n) {
+  const deck = [];
+  for (let r of RANKS) for (let s of SUITS) deck.push({rank:r,suit:s});
+  for (let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
+  return deck.slice(0,n);
+}
+
+function handID(c1,c2) {
+  const v1=RANK_N[c1.rank],v2=RANK_N[c2.rank];
+  if(v1===v2) return c1.rank+c2.rank;
+  const h=v1>v2?c1:c2, l=v1>v2?c2:c1;
+  return h.rank+l.rank+(h.suit===l.suit?'s':'o');
+}
+
+function renderCard(c) {
+  return `<div class="card ${SUIT_COLOR[c.suit]}"><span class="rank">${c.rank}</span><span class="suit">${SUIT_SYM[c.suit]}</span></div>`;
+}
+
+// BB defense range (30-35%)
+function inBBRange(key) {
+  const r = new Set();
+  // pairs
+  '22 33 44 55 66 77 88 99 TT JJ'.split(' ').forEach(p=>r.add(p));
+  // suited
+  'A2s A3s A4s A5s A6s A7s A8s A9s ATs AJs AQs AKs'.split(' ').forEach(h=>r.add(h));
+  'K2s K3s K4s K5s K6s K7s K8s K9s KTs KJs KQs'.split(' ').forEach(h=>r.add(h));
+  'Q5s Q6s Q7s Q8s Q9s QTs QJs'.split(' ').forEach(h=>r.add(h));
+  'J7s J8s J9s JTs'.split(' ').forEach(h=>r.add(h));
+  'T7s T8s T9s'.split(' ').forEach(h=>r.add(h));
+  '97s 98s 86s 87s 76s 75s 65s 64s 54s'.split(' ').forEach(h=>r.add(h));
+  // offsuit
+  'A2o A3o A4o A5o A6o A7o A8o A9o ATo AJo AQo AKo'.split(' ').forEach(h=>r.add(h));
+  'K9o KTo KJo KQo Q9o QTo QJo J9o JTo T9o'.split(' ').forEach(h=>r.add(h));
+  return r.has(key);
+}
+
+// Board classification
+function boardType(flop) {
+  const r = flop.map(c=>RANK_N[c.rank]).sort((a,b)=>a-b);
+  const suits = flop.map(c=>c.suit);
+  const paired = r[0]===r[1]||r[1]===r[2];
+  const highA = r[2]===14;
+  const highK = r[2]===13 && !highA;
+  const highQ = r[2]===12 && !highA && !highK;
+  const low = r[2]<=9;
+  const wet = (r[2]-r[0]<=4 && !paired) || new Set(suits).size===2;
+  const mono = new Set(suits).size===1;
+  const twotone = new Set(suits).size===2;
+
+  if (paired) return 'paired';
+  if (mono) return 'mono';
+  if (highA) return wet?'A-wet':'A-dry';
+  if (highK) return wet?'K-wet':'K-dry';
+  if (highQ) return wet?'Q-wet':'Q-dry';
+  if (low && wet) return 'low-wet';
+  if (low) return 'low-dry';
+  return 'mid';
+}
+
+// GTO: should BB donk?
+function shouldDonk(key, btype) {
+  if (btype==='paired') {
+    // BB can donk paired boards with trips / mid pairs
+    const pairs=['AA','KK','QQ','JJ','TT','99','88','77','66','55','44','33','22'];
+    if (key[0]===key[1]) return 'maybe'; // set potential
+    if (key.length===2) return 'no'; // pair
+    return 'no';
+  }
+  if (btype==='low-dry'||btype==='low-wet') {
+    if (['JJ','TT','99','88','77','66','55','44','33','22'].includes(key)) return 'maybe';
+    if (key.match(/^[ATJKQ][2-8]s$/)) return 'no';
+    return 'no';
+  }
+  // High card boards: almost never donk
+  return 'no';
+}
+
+// Step 1 result
+function step1HasDonkOption(btype) {
+  return ['paired','low-dry','low-wet'].includes(btype);
+}
+
+function getStep1GTO(key, btype) {
+  if (step1HasDonkOption(btype)) {
+    if (shouldDonk(key,btype)==='maybe') return 'donk';
+    return 'check';
+  }
+  return 'check';
+}
+
+// Step 2: after check, BTN c-bets. What to do?
+// hasFD: hero has flush draw
+// secondPair: hero has 2nd pair on board (e.g., Kx on A-high)
+// bottomPair: hero has bottom pair
+function getStep2GTO(key, btype, cbSizeRatio, hasFD, madePair, topPair, overPair, hasSet) {
+  const smallCB = cbSizeRatio <= 0.4; // 1/3 or smaller
+  const largeCB = cbSizeRatio >= 0.7; // 3/4 or larger
+
+  // Set — always raise, never slow-play in this drill
+  if (hasSet) return 'raise';
+
+  // Flush draw always has equity — check-raise or call
+  if (hasFD) {
+    // Nut flush draw (Ax) → always raise
+    if (key.startsWith('A')) return 'raise';
+    // Made pair + flush draw (combo draw) → raise
+    if (madePair && topPair) return 'raise';
+    // General flush draw → raise unless facing large c-bet (≥3/4 pot)
+    // NL10: OOP flush draw should be aggressive; check-raise is standard
+    return largeCB ? 'call' : 'raise';
+  }
+
+  // Overpair or better → raise
+  if (overPair || ['AA','KK','QQ','JJ'].includes(key)) return 'raise';
+  if (key==='AA'||key==='AKs'||key==='AKo') return 'raise';
+
+  // Paired boards
+  if (btype==='paired') {
+    if (topPair || overPair) return 'raise';
+    if (madePair) return 'call';
+    return 'fold';
+  }
+
+  // A-high boards
+  if (btype.startsWith('A-')) {
+    if (topPair) return 'raise'; // Ax = TPTK or better
+    if (madePair) return smallCB ? 'call' : 'fold'; // 中對/底對，小注可跟一條街
+    if (key.length===2 && RANK_N[key[0]]>=8) return smallCB ? 'call' : 'fold'; // 88+ OOP call 小注
+    return 'fold';
+  }
+
+  // K-high boards
+  if (btype.startsWith('K-')) {
+    if (topPair) return 'raise'; // Kx = TPTK
+    if (madePair) return smallCB ? 'call' : 'fold';
+    if (key.length===2 && RANK_N[key[0]]>=8) return smallCB ? 'call' : 'fold';
+    return 'fold';
+  }
+
+  // Q-high boards
+  if (btype.startsWith('Q-')) {
+    if (topPair) return 'raise';
+    if (madePair) return smallCB ? 'call' : 'fold';
+    if (['AKs','AKo','AQs'].includes(key)) return 'raise';
+    return 'fold';
+  }
+
+  // Low dry / low wet
+  if (btype==='low-dry'||btype==='low-wet') {
+    if (overPair || topPair) return 'raise';
+    if (madePair) return 'call';
+    return 'fold';
+  }
+
+  return 'fold';
+}
+
+function getExplanation(step, key, btype, gto, cbSize, hasFD, madePair, topPair, hasSet) {
+  const btLabels = {
+    'paired': '成對面（如 772）',
+    'A-dry': 'A-high 乾燥（如 A73r）',
+    'A-wet': 'A-high 濕潤',
+    'K-dry': 'K-high 乾燥',
+    'K-wet': 'K-high 濕潤',
+    'Q-dry': 'Q-high 乾燥',
+    'low-dry': '低張乾燥（如 952r）',
+    'low-wet': '低張濕潤（如 987）',
+    'mono': '單花面',
+    'mid': '中等面',
+  };
+  const small = cbSize <= 0.4;
+  const large = cbSize >= 0.7;
+
+  if (step===1) {
+    if (gto==='donk') return `成對面或低張面 BB 可以用中等牌 donk 小注試探。BTN 的 range 在這類面上容易被攻擊。`;
+    return `BB OOP 大部分時候不該 donk。${btLabels[btype]||btype}，讓 BTN 先動，你保留 check-raise 的威脅。`;
+  }
+
+  if (hasSet) return `中 set 一定要 check-raise！你有接近堅果的牌力，必須建大鍋。OOP 更該 raise——讓 BTN 為他的 c-bet 付錢，轉牌繼續 value。`;
+
+  if (hasFD && gto==='raise') return `花聽 OOP 應該 check-raise。你有 equity + fold equity——raise 能把 BTN 的空氣趕走，被跟注也有出路。${key.startsWith('A')?'堅果花聽，必須 raise。':small?'小注暴露弱點，更該 raise。':'NL10 的花聽 OOP 預設是 aggressive。'}`;
+  if (hasFD && gto==='call') return `花聽但面對大注（${Math.round(cbSize*100)}% pot），跟注比較穩。raise 被推回來會被迫棄掉 equity。`;
+
+  if (gto==='raise') return `強牌 OOP 要 check-raise 建鍋拿價值。${btLabels[btype]||btype} 上你領先 BTN 的 c-bet range。`;
+  if (gto==='call' && madePair && !topPair) return `中對或底對 OOP 可以跟注一條街。${btLabels[btype]||btype} 上 BTN 的 c-bet 包含大量空氣。${small?'小注賠率好，跟注看轉牌。':large?'但大注要棄——長期跟大注會漏錢。':'跟注後轉牌再評估。'}`;
+  if (gto==='call' && madePair) return `有對子 OOP 有 showdown value，跟注一條街合理。BTN 的 c-bet size（${Math.round(cbSize*100)}% pot）給了足夠賠率。`;
+  if (gto==='call') return `有 showdown value 或聽牌，OOP 跟注一條街合理。`;
+  return `OOP + miss = fold。${btLabels[btype]||btype} 上你的手牌 equity 不足，翻後沒位置難操作。長期跟注漏大錢。`;
+}
+
+// Pick a random hand from BB defense range (no trial-and-error)
+function randomBBHand() {
+  // Build the list dynamically from the range set for accurate picking
+  const all = [
+    '22','33','44','55','66','77','88','99','TT','JJ',
+    'A2s','A3s','A4s','A5s','A6s','A7s','A8s','A9s','ATs','AJs','AQs','AKs',
+    'K2s','K3s','K4s','K5s','K6s','K7s','K8s','K9s','KTs','KJs','KQs',
+    'Q5s','Q6s','Q7s','Q8s','Q9s','QTs','QJs',
+    'J7s','J8s','J9s','JTs',
+    'T7s','T8s','T9s','97s','98s','86s','87s','76s','75s','65s','64s','54s',
+    'A2o','A3o','A4o','A5o','A6o','A7o','A8o','A9o','ATo','AJo','AQo','AKo',
+    'K9o','KTo','KJo','KQo','Q9o','QTo','QJo','J9o','JTo','T9o',
+  ];
+  const key = all[Math.floor(Math.random() * all.length)];
+  const suited = key[2]==='s', offsuit = key[2]==='o', pair = key.length===2;
+  let r1, r2;
+  if (pair) { r1 = r2 = key[0]; }
+  else { r1 = key[0]; r2 = key[1]; }
+  const s1 = SUITS[Math.floor(Math.random()*4)];
+  let s2;
+  if (suited) { s2 = s1; }
+  else if (offsuit) { do { s2 = SUITS[Math.floor(Math.random()*4)]; } while (s2===s1); }
+  else { do { s2 = SUITS[Math.floor(Math.random()*4)]; } while (s2===s1); }
+  return [{rank:r1,suit:s1}, {rank:r2,suit:s2}];
+}
+
+// ── UI ──
+function newHand() {
+  step = 1;
+  heroCards = randomBBHand();
+  boardCards = deal(3);
+
+  document.getElementById('heroCards').innerHTML = heroCards.map(renderCard).join('');
+  document.getElementById('boardCards').innerHTML = boardCards.map(renderCard).join('');
+  potSize = 5.5; // BTN 2.5bb open + BB call + SB fold + antes ~5.5bb
+  document.getElementById('spotInfo').innerHTML = `
+    BTN open 2.5bb，你 <span class="highlight">BB call</span><br>
+    Pot: <span class="highlight">${potSize}bb</span>
+  `;
+
+  document.getElementById('stepLabel').textContent = '第一步：你怎麼動？';
+  document.getElementById('step1Actions').innerHTML = `
+    <button class="btn btn-check" onclick="step1('check')">CHECK</button>
+    <button class="btn btn-donk" onclick="step1('donk')">DONK 小注 (1/3 pot)</button>
+  `;
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').className = 'next-btn';
+  step1Right = 0;
+}
+
+function step1(action) {
+  const key = handID(heroCards[0], heroCards[1]);
+  const btype = boardType(boardCards);
+  const gto = getStep1GTO(key, btype);
+  step1Action = action;
+  const isCorrect = action === gto;
+
+  if (isCorrect) { correct++; streak++; step1Right = 1; }
+  else { wrong++; streak = 0; }
+
+  updateScore();
+
+  if (action === 'check') {
+    // Move to step 2
+    step = 2;
+    cbSize = [0.33, 0.33, 0.5, 0.5, 0.75][Math.floor(Math.random()*5)];
+    const cbAmount = Math.round(potSize * cbSize * 10) / 10;
+    document.getElementById('stepLabel').textContent = `第二步：BTN c-bet ${Math.round(cbSize*100)}% pot（${cbAmount}bb），你？`;
+    document.getElementById('step1Actions').innerHTML = `
+      <button class="btn btn-fold" onclick="step2('fold')">FOLD</button>
+      <button class="btn btn-call" onclick="step2('call')">CALL</button>
+      <button class="btn btn-raise" onclick="step2('raise')">CHECK-RAISE</button>
+    `;
+    document.getElementById('feedback').className = 'feedback';
+  } else {
+    // Donk — end hand
+    document.getElementById('stepLabel').textContent = '';
+    document.getElementById('step1Actions').innerHTML = '';
+    const fb = document.getElementById('feedback');
+    fb.className = `feedback show ${isCorrect?'correct':'wrong'}`;
+    fb.innerHTML = `
+      ${isCorrect ? '✅ <b>正確！</b>' : '❌ <b>這手不適合 donk。</b>'}
+      <div class="reason">${getExplanation(1, key, btype, gto, 0)}</div>
+    `;
+    document.getElementById('nextBtn').className = 'next-btn show';
+  }
+}
+
+function step2(action) {
+  const key = handID(heroCards[0], heroCards[1]);
+  const btype = boardType(boardCards);
+
+  // Detect flush draw: hero suited + 2+ board cards of same suit
+  let hasFD = false;
+  if (heroCards[0].suit === heroCards[1].suit) {
+    const hs = heroCards[0].suit;
+    const boardMatch = boardCards.filter(c=>c.suit===hs).length;
+    hasFD = boardMatch >= 2;
+  }
+  // Also detect if hero has any 4+ of a suit (e.g., one hero card + 3 on board)
+  if (!hasFD) {
+    for (let s of SUITS) {
+      const total = heroCards.filter(c=>c.suit===s).length + boardCards.filter(c=>c.suit===s).length;
+      if (total >= 4) { hasFD = true; break; }
+    }
+  }
+
+  // Detect made hand strength
+  const hr = heroCards.map(c=>RANK_N[c.rank]);
+  const fr = boardCards.map(c=>RANK_N[c.rank]);
+  let madePair = false, topPair = false, overPair = false, hasSet = false;
+
+  // Check for pair / set
+  for (let h of hr) {
+    for (let f of fr) {
+      if (h === f) {
+        madePair = true;
+        if (h === Math.max(...fr)) topPair = true;
+      }
+    }
+  }
+  // Set: pocket pair + matching board card
+  if (hr[0]===hr[1]) {
+    for (let f of fr) {
+      if (hr[0] === f) { hasSet = true; break; }
+    }
+  }
+  // Overpair
+  if (hr[0]===hr[1] && hr[0] > Math.max(...fr)) {
+    overPair = true;
+    madePair = true;
+  }
+
+  const gto = getStep2GTO(key, btype, cbSize, hasFD, madePair, topPair, overPair, hasSet);
+  const isCorrect = action === gto;
+
+  if (isCorrect) { correct++; streak++; }
+  else { wrong++; streak = 0; }
+  updateScore();
+
+  document.getElementById('stepLabel').textContent = '';
+  document.getElementById('step1Actions').innerHTML = '';
+  const fb = document.getElementById('feedback');
+  fb.className = `feedback show ${isCorrect?'correct':'wrong'}`;
+  fb.innerHTML = `
+    ${isCorrect ? '✅ <b>正確！</b>' : `❌ <b>錯誤。</b> 你選 ${action.toUpperCase()}，GTO 是 <b>${gto.toUpperCase()}</b>`}
+    <div class="reason">${getExplanation(2, key, btype, gto, cbSize, hasFD, madePair, topPair, hasSet)}</div>
+  `;
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const t = correct+wrong;
+  document.getElementById('pct').textContent = t ? Math.round(correct/t*100)+'%' : '--';
+  document.getElementById('streak').textContent = streak;
+}
+
+function nextHand() { newHand(); }
+newHand();
+</script>
+</body>
+</html>

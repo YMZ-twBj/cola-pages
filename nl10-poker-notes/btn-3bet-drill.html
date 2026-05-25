@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTN 防 3-bet 题库 | NL10 6-max</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, 'SF Mono', 'Monaco', monospace;
+    background: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+  }
+  h1 { font-size: 20px; color: #58a6ff; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+
+  /* Score bar */
+  .scorebar {
+    display: flex; gap: 32px; margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .scorebar span { color: #8b949e; }
+  .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; }
+  .scorebar .bad { color: #f85149; }
+  .scorebar .streak { color: #d2991d; }
+
+  /* Card area */
+  .table {
+    background: #1a5c2a;
+    border-radius: 120px;
+    width: 480px; max-width: 100%;
+    padding: 40px 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .board-label {
+    text-align: center; font-size: 11px; color: rgba(255,255,255,0.4);
+    letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .cards {
+    display: flex; justify-content: center; gap: 8px; margin-bottom: 16px;
+  }
+  .card {
+    width: 56px; height: 80px; border-radius: 6px;
+    background: #fff; color: #000;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 22px; font-weight: bold;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+    line-height: 1;
+  }
+  .card.red { color: #d32f2f; }
+  .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 24px; }
+  .card .suit { font-size: 16px; margin-top: -2px; }
+
+  .spot-info {
+    text-align: center; color: rgba(255,255,255,0.85);
+    font-size: 13px; line-height: 2;
+    background: rgba(0,0,0,0.3); border-radius: 8px;
+    padding: 12px; margin-top: 8px;
+  }
+  .spot-info .highlight { color: #ffd54f; font-weight: bold; }
+
+  /* Actions */
+  .actions {
+    display: flex; gap: 12px; margin-bottom: 20px;
+  }
+  .btn {
+    padding: 12px 32px; border-radius: 8px; border: none;
+    font-size: 15px; font-weight: bold; cursor: pointer;
+    transition: transform 0.1s, opacity 0.15s;
+    font-family: inherit;
+  }
+  .btn:hover { transform: scale(1.04); }
+  .btn:active { transform: scale(0.97); }
+  .btn-fold { background: #f85149; color: #fff; }
+  .btn-call { background: #58a6ff; color: #fff; }
+  .btn-4bet { background: #3fb950; color: #fff; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* Feedback */
+  .feedback {
+    width: 480px; max-width: 100%;
+    padding: 16px 20px; border-radius: 8px;
+    font-size: 14px; line-height: 1.7;
+    margin-bottom: 16px; display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .icon { font-size: 18px; margin-right: 6px; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+  .feedback .gto { color: #d2991d; font-size: 12px; }
+
+  /* Next button */
+  .next-btn {
+    padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d;
+    background: #21262d; color: #c9d1d9; font-size: 14px;
+    cursor: pointer; font-family: inherit; display: none;
+  }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: #30363d; }
+
+  /* Settings */
+  .settings { margin-top: 24px; font-size: 12px; color: #8b949e; }
+  .settings label { margin-right: 16px; cursor: pointer; }
+  .settings input { margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<h1>♠ BTN 防 3-bet 题库 ♠</h1>
+<div class="sub">NL10 6-max · GTO 翻前范围训练 · 无限随机题目</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— H E R O · B T N ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="actions">
+  <button class="btn btn-fold" onclick="answer('fold')">FOLD</button>
+  <button class="btn btn-call" onclick="answer('call')">CALL</button>
+  <button class="btn btn-4bet" onclick="answer('4bet')">4-BET</button>
+</div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一题 →</button>
+
+<div class="settings">
+  <label><input type="checkbox" id="showRange" onchange="toggleRange()"> 显示完整 range 参考</label>
+</div>
+<div id="rangeRef" style="display:none; margin-top:12px; font-size:12px; color:#8b949e; max-width:480px; line-height:1.8;"></div>
+
+<script>
+// ── GTO Range Engine ──
+const SUITS = ['s','h','d','c'];
+const SUIT_SYMBOL = { s:'♠', h:'♥', d:'♦', c:'♣' };
+const SUIT_COLOR = { s:'black', h:'red', d:'red', c:'black' };
+const RANKS = ['2','3','4','5','6','7','8','9','T','J','Q','K','A'];
+const RANK_VAL = { '2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'T':10,'J':11,'Q':12,'K':13,'A':14 };
+
+function randomHand() {
+  const deck = [];
+  for (let r of RANKS) for (let s of SUITS) deck.push({rank:r, suit:s});
+  // Fisher-Yates
+  for (let i = deck.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return [deck[0], deck[1]];
+}
+
+function handKey(c1, c2) {
+  const r1 = RANK_VAL[c1.rank], r2 = RANK_VAL[c2.rank];
+  const suited = c1.suit === c2.suit;
+  const high = r1>=r2 ? c1.rank : c2.rank;
+  const low = r1>=r2 ? c2.rank : c1.rank;
+  if (r1===r2) return high+high; // pair
+  return high+low+(suited?'s':'o');
+}
+
+function getGTOAction(key, vsSB, openSize) {
+  // Simplified GTO BTN vs 3-bet ranges for NL10 6-max
+  // vs SB 3-bet (~12% range) and vs BB 3-bet (~16% range, wider)
+  
+  const pair = key.length===2;
+  const suited = key[2]==='s';
+  const offsuit = key[2]==='o';
+  const ranks = key;
+  
+  // 4-bet value (always)
+  const fourBetValue = ['AA','KK','QQ','AKs','AKo'];
+  if (fourBetValue.includes(key)) return '4bet';
+  
+  // 4-bet bluff range
+  const fourBetBluff = vsSB ? ['A5s','A4s'] : ['A5s','A4s','A3s'];
+  if (fourBetBluff.includes(key)) return '4bet';
+  
+  // JJ: mostly 4-bet vs SB, mix vs BB
+  if (key==='JJ') return vsSB ? '4bet' : 'call';
+  
+  // Call range
+  const callRange = new Set();
+  
+  // Pairs that call
+  const callPairs = vsSB ? ['TT','99','88','77'] : ['TT','99','88','77','66'];
+  callPairs.forEach(p => callRange.add(p));
+  
+  // Suited hands that call
+  const callSuited = [
+    'AQs','AJs','ATs',
+    'KQs','KJs','KTs',
+    'QJs','QTs',
+    'JTs','T9s','98s','87s','76s',
+  ];
+  if (!vsSB) callSuited.push('65s','A2s','A3s');
+  callSuited.forEach(h => callRange.add(h));
+  
+  // Offsuit hands that call
+  const callOffsuit = ['AQo','AJo'];
+  callOffsuit.forEach(h => callRange.add(h));
+  
+  // KQo calls vs BB, folds vs SB
+  if (!vsSB) callRange.add('KQo');
+  
+  if (callRange.has(key)) return 'call';
+  
+  return 'fold';
+}
+
+function getExplanation(key, vsSB, action) {
+  const pos = vsSB ? 'SB' : 'BB';
+  const wider = vsSB ? '' : '（BB 3-bet 更寬，防守範圍擴大）';
+  
+  const explanations = {
+    'AA': 'AA 是翻前絕對堅果，必須 4-bet 建大鍋。',
+    'KK': 'KK 翻前領先除 AA 外所有牌，4-bet 鎖定 value 並避免翻牌 23% 出 A 的困境。',
+    'QQ': 'QQ 面對 3-bet 有足夠 equity，4-bet 拿 fold equity + 建鍋。',
+    'AKs': 'AKs 是 premium，block AA/KK + 堅果花潛力 → 必 4-bet。',
+    'AKo': 'AKo 同樣 block AA/KK，4-bet 拿翻前 fold equity 或翻後 c-bet 優勢。',
+    'JJ': vsSB ? 'JJ vs SB 3-bet 需要 4-bet 保護（翻牌 40%+ 出高張）。' : 'JJ vs BB 3-bet 可選擇跟注利用位置，翻牌低張就打。',
+    'A5s': 'A5s/A4s 是經典 GTO 4-bet bluff——A blocker + 翻後可玩性。被跟注後仍可能中 A 或中順。',
+    'A4s': 'A4s/A5s 是經典 GTO 4-bet bluff——A blocker + 翻後可玩性。被跟注後仍可能中 A 或中順。',
+    'A3s': 'A3s 面對較寬的 BB 3-bet 可做 4-bet bluff——A blocker + wheel 順子潛力。',
+    'TT': 'TT 跟注看翻牌。面對 4-bet 範圍不該推——翻牌 50%+ 出高張。IP 跟注後翻牌評估。',
+    '99': '中型對子 IP 跟注 → 翻牌沒中的話有位置決定是否 float。',
+    '88': '中型對子 IP 跟注——翻牌中 set 或無高張可繼續。',
+    '77': '小對子 IP 跟注，純 set-mining + 位置。',
+    '66': '小對子 IP 跟注，翻牌低張時有 showdown value。' + wider,
+    'AQs': 'AQs 太強不能棄，但 4-bet 被跟注後容易被 dominate。IP 跟注是最佳線。',
+    'AJs': 'AJs IP 跟注，A blocker + 堅果花潛力。翻牌 miss 記得評估 board 再決定 c-bet 與否。',
+    'ATs': 'ATs 翻後有 Broadway + 堅果花潛力，IP 跟注足夠。',
+    'KQs': 'KQs 是 premium suited connector，IP 跟注後翻牌中對/中花都有操作空間。',
+    'KJs': 'KJs 適合 IP 跟注，翻牌 Broadway 面很好打。',
+    'KTs': 'KTs 在 IP 面對 3-bet 跟注，翻牌 K-high 有頂對，miss 就棄。',
+    'QJs': 'QJs suited connector，IP 跟注後翻牌好打。不適合 4-bet——被跟注後踢腳太小。',
+    'QTs': 'QTs 邊緣跟注，適合面對較寬的 3-bet range。' + wider,
+    'JTs': 'JTs 經典 suited connector，IP 有位置跟注。翻牌 miss 就果斷棄。',
+    'T9s': 'T9s 中規格 suited connector，IP 跟注 set/順/花三種路徑。',
+    '98s': '中等 suited connector，翻牌低張面 c-bet，高張面棄。',
+    '87s': '小 suited connector，翻前 equity 不足但 IP 可看翻牌。miss 果斷棄。',
+    '76s': '小 suited connector，IP 跟注碰運氣。翻牌 miss 就放棄。',
+    '65s': '邊緣跟注，僅在面對寬 3-bet 時 IP 勉強跟注。' + wider,
+    'A2s': 'A2s 有 A blocker，翻牌中花是堅果。面對寬 3-bet 可跟注。' + wider,
+    'AQo': 'AQo IP 跟注。4-bet 被跟注後翻牌出 K 很被動。跟注看翻牌更可控。',
+    'AJo': 'AJo 邊緣跟注，翻牌 miss 就果斷棄。不適合 4-bet——被跟注後踢腳太小。',
+    'KQo': 'KQo 僅在面對 BB 寬 3-bet 時 IP 跟注。vs SB 緊 3-bet 應棄。',
+  };
+  
+  const general = {
+    fold: `這手牌不在 BTN vs ${pos} 3-bet 的防守範圍。翻前 equity 不足，長期跟注會漏錢。果斷棄。`,
+    call: `這手牌適合 IP 跟注 ${pos} 的 3-bet。你有位置 + 翻後可操作性，不需要 4-bet 冒險。`,
+    '4bet': `這手牌應該 4-bet 回去。${vsSB?'SB':'BB'} 的 3-bet range 較${vsSB?'緊':'寬'}，你的手牌有足夠 equity + fold equity。`,
+  };
+  
+  return explanations[key] || general[action];
+}
+
+// ── UI State ──
+let currentHand = null;
+let currentVsSB = true;
+let currentOpenSize = 2.5;
+let current3betSize = 0;
+let correct = 0, wrong = 0, streak = 0, bestStreak = 0;
+
+// ── Render ──
+function renderCard(c) {
+  const color = SUIT_COLOR[c.suit];
+  const sym = SUIT_SYMBOL[c.suit];
+  return `<div class="card ${color}"><span class="rank">${c.rank}</span><span class="suit">${sym}</span></div>`;
+}
+
+function newHand() {
+  currentHand = randomHand();
+  currentVsSB = Math.random() < 0.5;
+  currentOpenSize = [2, 2.2, 2.5, 3][Math.floor(Math.random()*4)];
+  current3betSize = Math.round(currentOpenSize * 4 * 10) / 10;
+  
+  document.getElementById('heroCards').innerHTML = currentHand.map(renderCard).join('');
+  document.getElementById('spotInfo').innerHTML = `
+    你在 <span class="highlight">BTN</span>  open <span class="highlight">${currentOpenSize}bb</span><br>
+    <span class="highlight">${currentVsSB?'SB':'BB'}</span> 3-bet 到 <span class="highlight">${current3betSize}bb</span>（約 4x）<br>
+    全桌 fold 回你。你補 <span class="highlight">${Math.round((current3betSize - currentOpenSize)*10)/10}bb</span> 可跟注。
+  `;
+  
+  // Reset UI
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').className = 'next-btn';
+  document.querySelectorAll('.btn').forEach(b => b.disabled = false);
+}
+
+function answer(action) {
+  const key = handKey(currentHand[0], currentHand[1]);
+  const gto = getGTOAction(key, currentVsSB, currentOpenSize);
+  const isCorrect = action === gto;
+  
+  if (isCorrect) {
+    correct++; streak++;
+    if (streak > bestStreak) bestStreak = streak;
+    document.getElementById('feedback').className = 'feedback show correct';
+    document.getElementById('feedback').innerHTML = `
+      <span class="icon">✅</span><b>正確！</b> ${action.toUpperCase()}
+      <div class="gto">GTO 動作：${gto.toUpperCase()}</div>
+      <div class="reason">${getExplanation(key, currentVsSB, gto)}</div>
+    `;
+  } else {
+    wrong++; streak = 0;
+    document.getElementById('feedback').className = 'feedback show wrong';
+    document.getElementById('feedback').innerHTML = `
+      <span class="icon">❌</span><b>錯誤。</b> 你選了 ${action.toUpperCase()}，但 GTO 是<b> ${gto.toUpperCase()}</b>
+      <div class="reason">${getExplanation(key, currentVsSB, gto)}</div>
+    `;
+  }
+  
+  updateScore();
+  document.querySelectorAll('.btn').forEach(b => b.disabled = true);
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+function nextHand() {
+  newHand();
+}
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total ? Math.round(correct/total*100)+'%' : '--';
+  document.getElementById('streak').textContent = streak;
+}
+
+function toggleRange() {
+  const show = document.getElementById('showRange').checked;
+  const ref = document.getElementById('rangeRef');
+  if (show) {
+    ref.style.display = 'block';
+    ref.innerHTML = `
+      <b>4-Bet 價值</b>：AA·KK·QQ·AKs·AKo<br>
+      <b>4-Bet Bluff</b>：A5s·A4s（vs BB +A3s）<br>
+      <b>Call</b>：JJ-77·AQs-ATs·AQo·AJo·KQs-KTs·QJs-QTs·JTs·T9s·98s·87s·76s<br>
+      <span style="color:#8b949e">+KQo·65s·A2s-A3s（僅 vs BB 寬 3-bet）</span><br>
+      <b>Fold</b>：其餘所有牌<br>
+      <span style="color:#f85149">JJ vs SB → 4-bet；JJ vs BB → Call</span>
+    `;
+  } else {
+    ref.style.display = 'none';
+  }
+}
+
+// ── Init ──
+newHand();
+</script>
+</body>
+</html>

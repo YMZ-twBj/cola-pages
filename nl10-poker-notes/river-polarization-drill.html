@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>河牌極化決策 | NL10/25 虛實篇</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'SF Mono', 'Monaco', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { font-size: 20px; color: #d2991d; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+  .mode-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+  .mode-btn { padding: 8px 20px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: #8b949e; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .mode-btn.active { background: #d2991d; color: #000; border-color: #d2991d; font-weight: bold; }
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; }
+  .scorebar span { color: #8b949e; } .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+  .table { background: #1a5c2a; border-radius: 120px; width: 520px; max-width: 100%; padding: 32px 24px; margin-bottom: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3); position: relative; }
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .card { width: 52px; height: 74px; border-radius: 6px; background: #fff; color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1; }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 22px; } .card .suit { font-size: 14px; margin-top: -2px; }
+  .board-flop { display: flex; justify-content: center; gap: 8px; margin: 8px 0; }
+  .board-flop .card { width: 42px; height: 60px; font-size: 16px; }
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .step-label { text-align: center; font-size: 14px; color: #d2991d; margin: 12px 0 6px; font-weight: bold; }
+  .actions { display: flex; gap: 12px; margin-bottom: 20px; justify-content: center; }
+  .btn { padding: 12px 28px; border-radius: 8px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.1s; font-family: inherit; }
+  .btn:hover { transform: scale(1.04); } .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-call { background: #58a6ff; color: #fff; }
+  .btn-fold { background: #f85149; color: #fff; }
+  .btn-bluff { background: #d2991d; color: #000; }
+  .btn-giveup { background: #8b949e; color: #fff; }
+  .btn-raise { background: #3fb950; color: #fff; }
+
+  .feedback { width: 520px; max-width: 100%; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+</style>
+</head>
+<body>
+
+<h1>🌊 河牌極化 · 虛實篇</h1>
+<div class="sub">詐與不詐 · 抓與不抓 — NL10/25 河牌最難的兩類決策</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('heroCall')" id="modeHeroCall">🛡 抓詐模式</button>
+  <button class="mode-btn" onclick="setMode('bluff')" id="modeBluff">⚔️ 轉詐模式</button>
+</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— H E R O ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="board-section">
+    <div class="board-label">—— B O A R D ——</div>
+    <div class="board-flop" id="boardCards"></div>
+  </div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">你的決定？</div>
+<div class="actions" id="actions"></div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一題 →</button>
+
+<script src="deck.js"></script>
+<script>
+const SUITS = ['s','h','d','c'];
+const SUIT_SYMBOLS = { s:'♠', h:'♥', d:'♦', c:'♣' };
+const SUIT_COLORS = { s:'black', h:'red', d:'red', c:'black' };
+const RANKS = ['A','K','Q','J','T','9','8','7','6','5','4','3','2'];
+const RANK_VALUES = { A:14, K:13, Q:12, J:11, T:10, '9':9, '8':8, '7':7, '6':6, '5':5, '4':4, '3':3, '2':2 };
+
+let mode = 'heroCall'; // 'heroCall' or 'bluff'
+let correct = 0, wrong = 0, streak = 0, current = null, answered = false;
+let hcCorrect = 0, hcWrong = 0, hcStreak = 0;
+let blCorrect = 0, blWrong = 0, blStreak = 0;
+
+function freshDeck() {
+  const deck = [];
+  for (const s of SUITS) for (const r of RANKS) deck.push({ rank:r, suit:s });
+  return deck;
+}
+function shuffle(arr) { for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+function handStr(hand) {
+  const sorted = [...hand].sort((a,b) => RANK_VALUES[b.rank] - RANK_VALUES[a.rank]);
+  return sorted[0].rank === sorted[1].rank ? sorted[0].rank+sorted[1].rank : sorted[0].rank+sorted[1].rank+(sorted[0].suit===sorted[1].suit?'s':'o');
+}
+function handStrength(hand, board) {
+  const all = [...hand, ...board];
+  const suits = {}; for (const c of all) { suits[c.suit] = (suits[c.suit]||0)+1; }
+  const hasFlush = Object.values(suits).some(v => v >= 5);
+  const ranks = all.map(c => RANK_VALUES[c.rank]).sort((a,b)=>b-a);
+  const isPP = hand[0].rank === hand[1].rank;
+  const bRanks = board.map(c => RANK_VALUES[c.rank]);
+  const maxB = Math.max(...bRanks);
+  const topPair = bRanks.some(r => ranks.includes(r));
+  const overpair = isPP && RANK_VALUES[hand[0].rank] > maxB;
+  const trips = hand.some(c => board.filter(bc => bc.rank === c.rank).length >= 1) &&
+    board.some(c => board.filter(bc => bc.rank === c.rank).length >= 2);
+  if (hasFlush) return 'flush';
+  if (trips) return 'trips';
+  if (overpair) return 'overpair';
+  if (topPair) return 'topPair';
+  return 'air';
+}
+
+function cardHTML(c) {
+  const color = SUIT_COLORS[c.suit];
+  return `<div class="card ${color}"><span class="rank">${c.rank}</span><span class="suit">${SUIT_SYMBOLS[c.suit]}</span></div>`;
+}
+function renderBoard(board) { return board.map(c => cardHTML(c)).join(''); }
+
+// ---------- HERO CALL SCENARIOS ----------
+
+function genHeroCall() {
+  const deck = shuffle(freshDeck());
+  const hero = [deck.pop(), deck.pop()];
+  const board = [deck.pop(), deck.pop(), deck.pop(), deck.pop(), deck.pop()];
+  const hs = handStrength(hero, board);
+  const position = ['BTN','CO'][Math.floor(Math.random()*2)];
+  const pot = 8 + Math.floor(Math.random() * 15); // 8-22bb
+  const betPct = [0.5, 0.66, 0.75, 1.0, 1.5][Math.floor(Math.random()*5)];
+  const bet = Math.round(pot * betPct * 10) / 10;
+
+  // Determine if this should be a call or fold
+  // Simplified heuristic: call with topPair+ on non-flush non-straight boards; fold with air
+  const shouldCall = (hs === 'overpair' || hs === 'topPair' || hs === 'trips');
+  const shouldFold = (hs === 'air');
+
+  // Randomize: sometimes air is hero call (opponent bluffs), sometimes top pair is fold (opponent never bluffs)
+  const bluffLikely = Math.random() < 0.5;
+  const isCall = shouldCall || (hs === 'air' && bluffLikely);
+
+  return {
+    hero, board, position, pot, bet, betPct,
+    scenario: 'heroCall',
+    correctAction: isCall ? 'CALL' : 'FOLD',
+    heroStrength: hs,
+    explanation: isCall
+      ? `對手河牌下注 ${bet}bb (${(betPct*100).toFixed(0)}% pot)。你的 ${handStr([hero[0], hero[1]])} 在這個牌面上有足夠的 showndown value——對手在 NL10/25 河牌大注 bluff 的頻率遠低於 GTO，但這裡 pot odds 是 ${(bet/(pot+bet*2)*100).toFixed(0)}%，抓得動。`
+      : `對手河牌下注 ${bet}bb (${(betPct*100).toFixed(0)}% pot)。你的 ${handStr([hero[0], hero[1]])} 在這個牌面上太弱。NL10/25 的對手河牌大注 90% 是 value——不要 hero call。省下來的這一注，相當於多贏了一個 pot。`
+  };
+}
+
+// ---------- BLUFF SCENARIOS ----------
+
+function genBluff() {
+  const deck = shuffle(freshDeck());
+  const hero = [deck.pop(), deck.pop()];
+  const board = [deck.pop(), deck.pop(), deck.pop(), deck.pop(), deck.pop()];
+  const hs = handStrength(hero, board);
+  const position = ['BTN','CO'][Math.floor(Math.random()*2)];
+  const pot = 8 + Math.floor(Math.random() * 12);
+
+  // Determine if this is a good bluff spot
+  const boardHasHighCards = board.some(c => ['A','K','Q'].includes(c.rank));
+  const heroHasBlocker = hero.some(c => ['A','K','Q'].includes(c.rank));
+  const isScaryBoard = board.filter(c => c.suit === board[0].suit).length >= 2;
+
+  // Good bluff: you have air, scary board, and you have blockers
+  const isGoodBluff = hs === 'air' && (isScaryBoard || (boardHasHighCards && heroHasBlocker));
+  const isBadBluff = hs !== 'air' || (!isScaryBoard && !boardHasHighCards);
+
+  return {
+    hero, board, position, pot,
+    scenario: 'bluff',
+    correctAction: isGoodBluff ? 'BLUFF' : (isBadBluff ? 'GIVE_UP' : (Math.random() < 0.5 ? 'BLUFF' : 'GIVE_UP')),
+    heroStrength: hs,
+    explanation: isGoodBluff
+      ? `你 miss 了——但這個牌面是你的範圍。${isScaryBoard?'牌面有聽花威脅——對手不容易 hero call。':'你有阻擋牌——減少了他有頂端的概率。'}推一個 ${Math.round(pot*0.75*10)/10}bb (~75% pot) 拿下。`
+      : `你 miss 了，但這個牌面不適合 bluff——${hs!=='air'?'你實際上有 showndown value，不要把自己的中等牌轉成 bluff。':'牌面太乾，對手有太多牌會接。'}放棄這一手，等更好的 bluff spot。`
+  };
+}
+
+// ---------- RENDER ----------
+
+function renderHand() {
+  answered = false;
+  current = mode === 'heroCall' ? genHeroCall() : genBluff();
+
+  document.getElementById('heroCards').innerHTML = renderBoard(current.hero);
+  document.getElementById('boardCards').innerHTML = renderBoard(current.board);
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  if (mode === 'heroCall') {
+    document.getElementById('spotInfo').innerHTML = `
+      <span style="color:#58a6ff">🛡 抓詐模式</span><br>
+      你在 ${current.position}，對手河牌下注 <span style="color:#ffd54f">${current.bet}bb</span> (${(current.betPct*100).toFixed(0)}% pot)<br>
+      Pot: ${current.pot}bb · 你的牌: <span style="color:#8b949e">${handStr(current.hero)}</span>
+    `;
+    document.getElementById('stepLabel').textContent = 'CALL 還是 FOLD？';
+    document.getElementById('actions').innerHTML = `
+      <button class="btn btn-call" onclick="answer('CALL')">💰 CALL</button>
+      <button class="btn btn-fold" onclick="answer('FOLD')">🏳️ FOLD</button>
+    `;
+  } else {
+    document.getElementById('spotInfo').innerHTML = `
+      <span style="color:#d2991d">⚔️ 轉詐模式</span><br>
+      你在 ${current.position}，翻前 open → 一路到河牌。對手 check。<br>
+      Pot: ${current.pot}bb · 你的牌: <span style="color:#8b949e">${handStr(current.hero)} · ${current.heroStrength}</span>
+    `;
+    document.getElementById('stepLabel').textContent = 'BLUFF 還是 GIVE UP？';
+    document.getElementById('actions').innerHTML = `
+      <button class="btn btn-bluff" onclick="answer('BLUFF')">⚔️ BLUFF</button>
+      <button class="btn btn-giveup" onclick="answer('GIVE_UP')">🏳️ GIVE UP</button>
+    `;
+  }
+
+  document.querySelectorAll('.btn').forEach(b => b.disabled = false);
+}
+
+function answer(action) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.btn').forEach(b => b.disabled = true);
+
+  const isCorrect = action === current.correctAction;
+  const fb = document.getElementById('feedback');
+
+  if (isCorrect) {
+    correct++; streak++;
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <span style="color:#3fb950">正確！</span>${action}。<div class="reason">${current.explanation}</div>`;
+  } else {
+    wrong++; streak = 0;
+    fb.className = 'feedback show wrong';
+    fb.innerHTML = `❌ 你選了 ${action}，但正確是 <span style="color:#ffa726">${current.correctAction}</span>。<div class="reason">${current.explanation}</div>`;
+  }
+
+  updateScore();
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+function nextHand() { renderHand(); }
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total > 0 ? (correct/total*100).toFixed(0) + '%' : '--';
+  document.getElementById('streak').textContent = streak;
+  localStorage.setItem(`riverPolar_${mode}`, JSON.stringify({correct,wrong,streak}));
+}
+
+function loadScore() {
+  const s = JSON.parse(localStorage.getItem(`riverPolar_${mode}`) || '{}');
+  correct = s.correct || 0; wrong = s.wrong || 0; streak = s.streak || 0;
+  updateScore();
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('modeHeroCall').className = 'mode-btn' + (m==='heroCall'?' active':'');
+  document.getElementById('modeBluff').className = 'mode-btn' + (m==='bluff'?' active':'');
+  loadScore();
+  renderHand();
+}
+
+loadScore();
+renderHand();
+</script>
+</body>
+</html>

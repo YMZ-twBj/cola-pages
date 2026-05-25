@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4-Bet 翻前防守 | IP vs OOP · 始計篇</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'SF Mono', 'Monaco', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { font-size: 20px; color: #58a6ff; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+  .rules-ref { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; line-height: 1.8; width: 520px; max-width: 100%; }
+  .rules-ref strong { color: #58a6ff; }
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; }
+  .scorebar span { color: #8b949e; } .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+  .table { background: #1a5c2a; border-radius: 120px; width: 520px; max-width: 100%; padding: 32px 24px; margin-bottom: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3); position: relative; }
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .card { width: 56px; height: 80px; border-radius: 6px; background: #fff; color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1; }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 24px; } .card .suit { font-size: 14px; margin-top: -2px; }
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .step-label { text-align: center; font-size: 14px; color: #58a6ff; margin: 12px 0 6px; font-weight: bold; }
+  .actions { display: flex; gap: 12px; margin-bottom: 20px; justify-content: center; }
+  .btn { padding: 12px 28px; border-radius: 8px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.1s; font-family: inherit; }
+  .btn:hover { transform: scale(1.04); } .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-fold { background: #f85149; color: #fff; }
+  .btn-call { background: #58a6ff; color: #fff; }
+  .btn-jam { background: #3fb950; color: #fff; }
+
+  .feedback { width: 520px; max-width: 100%; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+</style>
+</head>
+<body>
+
+<h1>🛡 4-Bet 翻前防守 · 始計篇</h1>
+<div class="sub">你 3-bet 了——對面推回來 4-bet。IP 還是 OOP？FOLD / CALL / 5-BET JAM？</div>
+
+<div class="rules-ref">
+  <strong>📜 始計篇鐵律：</strong> 3-bet 後被 4-bet → 不拿 QQ / AK 以下接。IP 可 flat QQ/AK，OOP 只接 KK+。<br>
+  <strong>🔴 關鍵教訓：</strong> 5/22 QQ 4-bet vs KK 5-bet（-$10）· 5/23 QQ 4-bet vs AA push（-$25）
+</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— H E R O ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">面對 4-bet，你的決定？</div>
+<div class="actions" id="actions"></div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一題 →</button>
+
+<script src="deck.js"></script>
+<script>
+const SUITS = ['s','h','d','c'];
+const SUIT_SYMBOLS = { s:'♠', h:'♥', d:'♦', c:'♣' };
+const SUIT_COLORS = { s:'black', h:'red', d:'red', c:'black' };
+const RANKS = ['A','K','Q','J','T','9','8','7','6','5','4','3','2'];
+
+let correct = 0, wrong = 0, streak = 0, current = null, answered = false;
+
+function freshDeck() {
+  const deck = [];
+  for (const s of SUITS) for (const r of RANKS) deck.push({ rank:r, suit:s });
+  return deck;
+}
+function shuffle(arr) { for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+function handStr(hand) {
+  const sorted = [...hand].sort((a,b) => {
+    const vals = { A:14,K:13,Q:12,J:11,T:10,'9':9,'8':8,'7':7,'6':6,'5':5,'4':4,'3':3,'2':2 };
+    return vals[b.rank] - vals[a.rank];
+  });
+  const r1 = sorted[0].rank, r2 = sorted[1].rank;
+  if (r1 === r2) return r1 + r2;
+  return r1 + r2 + (sorted[0].suit === sorted[1].suit ? 's' : 'o');
+}
+
+function cardHTML(c) {
+  const color = SUIT_COLORS[c.suit];
+  return `<div class="card ${color}"><span class="rank">${c.rank}</span><span class="suit">${SUIT_SYMBOLS[c.suit]}</span></div>`;
+}
+
+// ---------- SCENARIO GENERATION ----------
+
+const HANDS = {
+  'AA': { cat:'premium', desc:'AA — 翻前最強牌', action_IP:'JAM', action_OOP:'JAM', reason:'AA 永遠是 5-bet jam。不管位置。你領先所有範圍。' },
+  'KK': { cat:'premium', desc:'KK — 第二強', action_IP:'JAM', action_OOP:'JAM', reason:'KK 面對 4-bet 也是 jam。唯一例外是對方極緊（3-bet <2%）但 100bb 以內不 fold KK pre。' },
+  'QQ': { cat:'strong', desc:'QQ — 始計篇關鍵測試', action_IP:'CALL', action_OOP:'FOLD', reason:'QQ 是始計篇最核心的案例。IP flat 可以看翻牌——翻後有 set mining 和乾燥面繼續的選擇。OOP 在 4-bet pot 裡位置劣勢太大，直接棄。記住你的話：QQ 當 JJ 打。' },
+  'AKs': { cat:'strong', desc:'AKs — 強但非無敵', action_IP:'CALL', action_OOP:'FOLD', reason:'AKs IP 可以 flat 4-bet——你 block AA/KK，翻後有 flush draw equity。OOP 棄——4-bet pot 裡 OOP 拿 AK miss 66% 的時候沒有翻後選擇。' },
+  'AKo': { cat:'strong', desc:'AKo — 真正的麻煩牌', action_IP:'CALL', action_OOP:'FOLD', reason:'AKo IP 勉強能接——但這是邊緣。OOP 直接棄。5/22 你拿 AKo 5-bet jam vs AA 虧了 90bb。始計篇第①條的實戰教訓。' },
+  'JJ': { cat:'medium', desc:'JJ — 中等對子', action_IP:'FOLD', action_OOP:'FOLD', reason:'JJ 面對 4-bet 無論位置都棄。對手的 4-bet 範圍是 QQ+/AK，JJ 被完全碾壓。翻後 spr 太低 set mining 賠率不夠。' },
+  'TT': { cat:'medium', desc:'TT — 比 JJ 還弱', action_IP:'FOLD', action_OOP:'FOLD', reason:'TT 被 4-bet 直接棄。不要幻想 set mine——4-bet pot 的 spr 不給你賠率。' },
+  'AQs': { cat:'medium', desc:'AQs — 好看但騙人', action_IP:'FOLD', action_OOP:'FOLD', reason:'AQs 被 4-bet 要棄。你 dominated 太嚴重——對面 4-bet range 裡的 AK/AQ/QQ+ 全都壓制你。不要被 suited 騙。' },
+  'AJs': { cat:'weak', desc:'AJs — 連 close 都算不上', action_IP:'FOLD', action_OOP:'FOLD', reason:'AJs 被 4-bet？秒棄。5/22 AJs 5-bet 撞 AA 還記得嗎？$6.59 的教訓。' },
+  'KQs': { cat:'weak', desc:'KQs — 翻前漂亮翻後陷阱', action_IP:'FOLD', action_OOP:'FOLD', reason:'KQs 看起來很強但面對 4-bet 被完全碾壓。你最好的情況是 flip vs 小對子，最壞的情況是撞 KK/AA dominated。' },
+  '99': { cat:'weak', desc:'99 及以下對子', action_IP:'FOLD', action_OOP:'FOLD', reason:'小對子被 4-bet 永遠不值得接。set mining 需要 spr > 15，4-bet pot 的 spr 只有 1-2。' },
+  'A5s': { cat:'bluff', desc:'A5s — GTO 4-bet bluff 候選', action_IP:'FOLD', action_OOP:'FOLD', reason:'在 GTO 框架裡 A5s 是 4-bet bluff 的好手牌——block AA + 有 post-flop playability。但在 NL10/25，對手 4-bet 範圍太強，你的 bluff 沒 fold equity。面對 4-bet，不要反 bluff——棄。' },
+  'JTs': { cat:'bluff', desc:'JTs — 大家最愛的投機牌', action_IP:'FOLD', action_OOP:'FOLD', reason:'JTs 很漂亮。但面對 4-bet 它就是一張投機票。翻後 spr 不給投機空間——棄。' },
+};
+
+function generateHand() {
+  const handKeys = Object.keys(HANDS);
+  const handKey = handKeys[Math.floor(Math.random() * handKeys.length)];
+  const handInfo = HANDS[handKey];
+  const position = Math.random() < 0.5 ? 'IP' : 'OOP';
+
+  // Generate actual cards
+  const deck = shuffle(freshDeck());
+  let hero;
+  const targetRanks = handKey.replace(/[so]$/, '').split('').filter(c => 'AKQJT98765432'.includes(c));
+  const targetSuited = handKey.endsWith('s');
+
+  if (targetRanks.length === 2) {
+    if (targetRanks[0] === targetRanks[1]) {
+      // Pocket pair
+      const suitPairs = [['s','h'], ['d','c']];
+      const pair = suitPairs[Math.floor(Math.random()*2)];
+      hero = pair.map(s => ({ rank: targetRanks[0], suit: s }));
+    } else {
+      // Non-pair
+      let suit2 = ['s','h','d','c'][Math.floor(Math.random()*4)];
+      let suit1;
+      if (targetSuited) {
+        suit1 = suit2;
+      } else {
+        const colors = { s:'black', h:'red', d:'red', c:'black' };
+        const sameColor = Object.entries(colors).filter(([s,c]) => c === colors[suit2] && s !== suit2);
+        const diffColor = Object.entries(colors).filter(([s,c]) => c !== colors[suit2]);
+        const candidates = handKey === 'AKo' ? diffColor : [...sameColor, ...diffColor];
+        suit1 = candidates[Math.floor(Math.random()*candidates.length)][0];
+      }
+      hero = [{ rank: targetRanks[0], suit: suit1 }, { rank: targetRanks[1], suit: suit2 }];
+    }
+  } else {
+    hero = [deck.pop(), deck.pop()];
+  }
+
+  const descriptor = position === 'IP' ? 'BTN/CO' : 'SB/BB';
+  const action = position === 'IP' ? handInfo.action_IP : handInfo.action_OOP;
+  const reason = handInfo.reason;
+
+  return {
+    hero, handKey, handInfo, position, action, reason,
+    desc: handInfo.desc,
+    descriptor,
+  };
+}
+
+// ---------- RENDER ----------
+
+function renderHand() {
+  answered = false;
+  current = generateHand();
+
+  document.getElementById('heroCards').innerHTML = current.hero.map(c => cardHTML(c)).join('');
+  document.getElementById('spotInfo').innerHTML = `
+    你在 <span style="color:#ffd54f">${current.descriptor}</span> (${current.position})，手上 <span style="color:#ffd54f">${current.handKey}</span><br>
+    ${current.handInfo.desc}<br>
+    <span style="color:#8b949e">翻前：你 3-bet → 對手 4-bet 推回來 · 有效籌碼 100bb</span>
+  `;
+  document.getElementById('stepLabel').textContent = 'FOLD / CALL / 5-BET JAM？';
+  document.getElementById('actions').innerHTML = `
+    <button class="btn btn-fold" onclick="answer('FOLD')">🏳️ FOLD</button>
+    <button class="btn btn-call" onclick="answer('CALL')">📞 CALL</button>
+    <button class="btn btn-jam" onclick="answer('JAM')">🚀 5-BET JAM</button>
+  `;
+
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  document.querySelectorAll('.btn').forEach(b => b.disabled = false);
+}
+
+function answer(action) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.btn').forEach(b => b.disabled = true);
+
+  const isCorrect = action === current.action;
+  const fb = document.getElementById('feedback');
+
+  if (isCorrect) {
+    correct++; streak++;
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <span style="color:#3fb950">正確！</span>${action}。<div class="reason">${current.reason}</div>`;
+  } else {
+    wrong++; streak = 0;
+    fb.className = 'feedback show wrong';
+    const actionNames = { FOLD:'棄牌', CALL:'跟注', JAM:'全下' };
+    fb.innerHTML = `❌ 你選了 ${actionNames[action]||action}，但正確是 <span style="color:#ffa726">${actionNames[current.action]||current.action}</span>。<div class="reason">${current.reason}</div>`;
+  }
+
+  updateScore();
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+function nextHand() { renderHand(); }
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total > 0 ? (correct/total*100).toFixed(0) + '%' : '--';
+  document.getElementById('streak').textContent = streak;
+  localStorage.setItem('fourBetDefendScore', JSON.stringify({correct,wrong,streak}));
+}
+
+function loadScore() {
+  const s = JSON.parse(localStorage.getItem('fourBetDefendScore') || '{}');
+  correct = s.correct || 0; wrong = s.wrong || 0; streak = s.streak || 0;
+  updateScore();
+}
+
+loadScore();
+renderHand();
+</script>
+</body>
+</html>

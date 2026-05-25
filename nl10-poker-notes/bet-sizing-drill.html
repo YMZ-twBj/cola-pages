@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下注尺寸決策 | NL10/25 兵勢篇</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'SF Mono', 'Monaco', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { font-size: 20px; color: #ffa726; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; }
+  .scorebar span { color: #8b949e; } .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+  .table { background: #1a5c2a; border-radius: 120px; width: 520px; max-width: 100%; padding: 32px 24px; margin-bottom: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3); position: relative; }
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .card { width: 52px; height: 74px; border-radius: 6px; background: #fff; color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1; }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 22px; } .card .suit { font-size: 14px; margin-top: -2px; }
+  .board-flop { display: flex; justify-content: center; gap: 8px; margin: 8px 0; }
+  .board-flop .card { width: 48px; height: 68px; font-size: 18px; }
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .step-label { text-align: center; font-size: 14px; color: #ffa726; margin: 12px 0 6px; font-weight: bold; }
+
+  .size-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; }
+  .size-btn { padding: 10px 14px; border-radius: 8px; border: none; font-size: 13px; font-weight: bold; cursor: pointer; transition: transform 0.1s, opacity 0.15s; font-family: inherit; color: #fff; min-width: 60px; }
+  .size-btn:hover { transform: scale(1.04); } .size-btn:active { transform: scale(0.97); }
+  .size-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .s-25 { background: #607d8b; } .s-33 { background: #546e7a; }
+  .s-50 { background: #455a64; } .s-66 { background: #37474f; }
+  .s-75 { background: #263238; } .s-100 { background: #1c2833; }
+  .s-150 { background: #6d4c41; }
+
+  .feedback { width: 520px; max-width: 100%; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback.partial { background: rgba(255,167,38,0.12); border: 1px solid #ffa726; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+</style>
+</head>
+<body>
+
+<h1>🎯 下注尺寸決策 · 兵勢篇</h1>
+<div class="sub">你的籌碼是你的兵——選對尺寸，每手多賺 5bb</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>⚠️ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— H E R O ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="board-section">
+    <div class="board-label">—— B O A R D ——</div>
+    <div class="board-flop" id="boardCards"></div>
+  </div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">你下多少？</div>
+<div class="size-actions" id="sizeActions"></div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一題 →</button>
+
+<script src="deck.js"></script>
+<script>
+const SUITS = ['s','h','d','c'];
+const SUIT_SYMBOLS = { s:'♠', h:'♥', d:'♦', c:'♣' };
+const SUIT_COLORS = { s:'black', h:'red', d:'red', c:'black' };
+const RANKS = ['A','K','Q','J','T','9','8','7','6','5','4','3','2'];
+const RANK_VALUES = { A:14, K:13, Q:12, J:11, T:10, '9':9, '8':8, '7':7, '6':6, '5':5, '4':4, '3':3, '2':2 };
+
+let correct = 0, wrong = 0, streak = 0, current = null, answered = false;
+let scoreKey = 'betSizingScore', streakKey = 'betSizingStreak';
+
+function freshDeck() {
+  const deck = [];
+  for (const s of SUITS) for (const r of RANKS) deck.push({ rank:r, suit:s });
+  return deck;
+}
+function shuffle(arr) { for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+function cardHTML(c) {
+  const color = SUIT_COLORS[c.suit];
+  return `<div class="card ${color}"><span class="rank">${c.rank}</span><span class="suit">${SUIT_SYMBOLS[c.suit]}</span></div>`;
+}
+
+// ---------- SCENARIO GENERATION ----------
+
+const SCENARIOS = {
+  dryCbet: {
+    title: '乾燥面 C-Bet',
+    desc: (p, b) => `你在 ${p}，${p==='BTN'?'open':'open'} → BB call。Flop ${b.map(c=>c.rank).join(' ')} — 乾燥面，你決定 c-bet。`,
+    sizes: ['25%','33%','50%','66%','75%','100%'],
+    correct: (board, hand) => 'small',
+    reason: '乾燥面 c-bet 不應該大——對手範圍要嘛中要嘛不中，小注足夠拿下 equity denial。25-33% pot 是標準。大注只會讓他的空氣棄牌、讓他的對子繼續，白燒自己的 bluff range。',
+    heroType: 'any'
+  },
+  wetValue: {
+    title: '潮濕面 Value Bet',
+    desc: (p, b) => `你在 ${p}，翻前 open → BB call。Flop ${b.map(c=>c.rank).join(' ')} 潮濕。你中了不錯的牌，需要保護。`,
+    sizes: ['33%','50%','66%','75%','100%','150%'],
+    correct: (board, hand) => 'large',
+    reason: '潮濕面你的牌有價值但脆弱——聽花聽順都在對面範圍裡。需要大注（66-100%）來 deny equity。給對面便宜看轉牌等於送他免費 equity。',
+    heroType: 'value'
+  },
+  riverThinValue: {
+    title: '河牌 Thin Value',
+    desc: (p, b) => `你在 ${p}，一路打到河牌。Board ${b.map(c=>c.rank).join(' ')}。你有中等的牌力——夠強到贏一些更差的牌，但不夠強碾壓。`,
+    sizes: ['25%','33%','50%','66%','75%','100%'],
+    correct: (board, hand) => 'thin',
+    reason: 'Thin value 的重點是「讓他更差的牌還願意跟」。太大他只會跟有強牌的，你的 bet 變成價值-。33-50% pot 是 thin value 的黃金區間——中等牌夠弱會 fold、又不會嚇跑他的第二對。',
+    heroType: 'medium'
+  },
+  riverBluff: {
+    title: '河牌 Bluff Sizing',
+    desc: (p, b) => `你在 ${p}，翻前 open → 一路 bet 到河牌。Board ${b.map(c=>c.rank).join(' ')}。你 miss 了——但你覺得對手也弱。要 bluff 嗎？下多少？`,
+    sizes: ['33%','50%','66%','75%','100%','150%'],
+    correct: (board, hand) => 'polar',
+    reason: 'Bluff 的 size 決定你要他棄什麼範圍。小注（33%）只能讓他 fold 空氣。要讓他 fold 中等牌力（第二對、A-high），你需要 66-100% pot。記住：你需要多少 fold equity，就下多大。',
+    heroType: 'air'
+  },
+  oopCbet: {
+    title: 'OOP C-Bet 乾燥面',
+    desc: (p, b) => `你在 ${p}（OOP），翻前 open → BTN flat。Flop ${b.map(c=>c.rank).join(' ')} 乾燥。`,
+    sizes: ['25%','33%','50%','66%','75%','Check'],
+    correct: (board, hand) => 'small',
+    reason: 'OOP 乾燥面 c-bet 應該小——25-33%。你跟 IP 不同：你的範圍優勢不如他明顯。大注只會放大你的位置劣勢。乾燥面先打一個小注，拿資訊和控制。',
+    heroType: 'any'
+  },
+  turnDouble: {
+    title: '轉牌雙槍',
+    desc: (p, b) => `你在 ${p}，翻牌 c-bet 被 call。Turn ${b.map(c=>c.rank).join(' ')} 對你有利。要不要開第二槍？下多少？`,
+    sizes: ['50%','66%','75%','100%','Check'],
+    correct: (board, hand) => 'barrel',
+    reason: '轉牌雙槍需要大注——66-100%。第一槍驗範圍，第二槍就是 statement。小注讓對面便宜看到河牌，你的 bluff/半 bluff 就沒意義了。',
+    heroType: 'any'
+  }
+};
+
+function pickScenario() {
+  const keys = Object.keys(SCENARIOS);
+  return SCENARIOS[keys[Math.floor(Math.random() * keys.length)]];
+}
+
+function generateHand() {
+  let deck, hero, board;
+  let scenarioType = pickScenario();
+
+  // Keep generating until we have a valid config
+  for (let attempt = 0; attempt < 100; attempt++) {
+    deck = shuffle(freshDeck());
+    hero = [deck.pop(), deck.pop()];
+    board = [deck.pop(), deck.pop(), deck.pop()];
+    const position = ['UTG','MP','CO','BTN','SB'][Math.floor(Math.random()*5)];
+    const potStr = `Pot: ${(1.5 + Math.floor(Math.random()*4)).toFixed(1)}bb`;
+
+    return {
+      hero, board, position,
+      scenario: scenarioType,
+      potStr,
+    };
+  }
+}
+
+// ---------- RENDER ----------
+
+function renderBoard(board) {
+  return board.map(c => cardHTML(c)).join('');
+}
+
+function rateScenario(scenario, hero, board) {
+  // Determine if hero's hand is strong/medium/air on this board
+  const hRanks = hero.map(c => RANK_VALUES[c.rank]).sort((a,b)=>b-a);
+  const bRanks = board.map(c => RANK_VALUES[c.rank]).sort((a,b)=>b-a);
+  const isPP = hRanks[0] === hRanks[1];
+  const topPair = bRanks.some(r => hRanks.includes(r));
+  const overpair = isPP && hRanks[0] > Math.max(...bRanks);
+  const hasFlushDraw = hero[0].suit === hero[1].suit && board.filter(c => c.suit === hero[0].suit).length >= 1;
+
+  if (scenario.heroType === 'any') return;
+  if (scenario.heroType === 'value' && !overpair && !topPair) return false;
+  if (scenario.heroType === 'medium' && overpair) return false;
+  if (scenario.heroType === 'air' && (topPair || overpair)) return false;
+
+  return true;
+}
+
+function renderHand() {
+  answered = false;
+  const h = generateHand();
+
+  // Ensure scenario matches hand strength
+  let sanity = 0;
+  while (sanity < 50) {
+    if (rateScenario(h.scenario, h.hero, h.board) !== false) break;
+    sanity++;
+    const nh = generateHand();
+    h.hero = nh.hero;
+    h.board = nh.board;
+    h.position = nh.position;
+    h.scenario = nh.scenario;
+  }
+
+  current = h;
+
+  document.getElementById('heroCards').innerHTML = renderBoard(h.hero);
+  document.getElementById('boardCards').innerHTML = renderBoard(h.board);
+  document.getElementById('spotInfo').innerHTML = `
+    <span style="color:#ffd54f">${h.scenario.title}</span><br>
+    ${h.scenario.desc(h.position, h.board)}<br>
+    <span style="color:#8b949e">${h.potStr} · SPR ~${(3+Math.floor(Math.random()*5))}</span>
+  `;
+  document.getElementById('stepLabel').textContent = '你下多少？';
+
+  // Size buttons
+  const sizes = h.scenario.sizes;
+  const sizeMap = { '25%':'s-25','33%':'s-33','50%':'s-50','66%':'s-66','75%':'s-75','100%':'s-100','150%':'s-150','Check':'s-25' };
+  document.getElementById('sizeActions').innerHTML = sizes.map(s =>
+    `<button class="size-btn ${sizeMap[s]||'s-50'}" onclick="answer('${s}')">${s}</button>`
+  ).join('');
+
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  document.querySelectorAll('.size-btn').forEach(b => b.disabled = false);
+}
+
+const CORRECT_SIZES = {
+  small: ['25%','33%'],
+  large: ['66%','75%','100%'],
+  thin: ['33%','50%'],
+  polar: ['66%','75%','100%','150%'],
+  barrel: ['66%','75%','100%'],
+};
+
+function answer(size) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.size-btn').forEach(b => b.disabled = true);
+
+  const correctSet = CORRECT_SIZES[current.scenario.correct(current.board, current.hero)];
+  const isCorrect = correctSet.includes(size);
+
+  const fb = document.getElementById('feedback');
+  if (isCorrect) {
+    correct++; streak++;
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <span style="color:#3fb950">正確！</span>${size} 是這個場景的正確尺寸。<div class="reason">${current.scenario.reason}</div>`;
+  } else {
+    wrong++; streak = 0;
+    fb.className = 'feedback show wrong';
+    const suggestion = correctSet.join(' / ');
+    fb.innerHTML = `❌ ${size} 不太對。這個場景建議 <span style="color:#ffa726">${suggestion}</span>。<div class="reason">${current.scenario.reason}</div>`;
+  }
+
+  updateScore();
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+function nextHand() { renderHand(); }
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total > 0 ? (correct/total*100).toFixed(0) + '%' : '--';
+  document.getElementById('streak').textContent = streak;
+  localStorage.setItem(scoreKey, JSON.stringify({correct,wrong,streak}));
+}
+
+function loadScore() {
+  const s = JSON.parse(localStorage.getItem(scoreKey) || '{}');
+  correct = s.correct || 0; wrong = s.wrong || 0; streak = s.streak || 0;
+  updateScore();
+}
+
+loadScore();
+renderHand();
+</script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP 3-bet Miss Flop | NL10 6-max</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, 'SF Mono', 'Monaco', monospace;
+    background: #0d1117; color: #c9d1d9;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 24px;
+  }
+  h1 { font-size: 20px; color: #58a6ff; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; }
+  .scorebar span { color: #8b949e; }
+  .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+
+  .table {
+    background: #1a5c2a; border-radius: 120px; width: 520px; max-width: 100%;
+    padding: 32px 24px; margin-bottom: 20px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .card {
+    width: 52px; height: 74px; border-radius: 6px;
+    background: #fff; color: #000; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-size: 20px; font-weight: bold;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1;
+  }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 22px; } .card .suit { font-size: 14px; margin-top: -2px; }
+  .board-flop { display: flex; justify-content: center; gap: 8px; margin: 8px 0; }
+  .board-flop .card { width: 48px; height: 68px; font-size: 18px; }
+
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2;
+    background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .spot-info .highlight { color: #ffd54f; font-weight: bold; }
+  .miss-badge { display: inline-block; background: #f85149; color: #fff; font-size: 11px;
+    padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+
+  .actions { display: flex; gap: 12px; margin-bottom: 20px; justify-content: center; }
+  .btn { padding: 12px 36px; border-radius: 8px; border: none; font-size: 15px; font-weight: bold;
+    cursor: pointer; transition: transform 0.1s, opacity 0.15s; font-family: inherit; }
+  .btn:hover { transform: scale(1.04); } .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-cbet { background: #d2991d; color: #000; }
+  .btn-check-flod { background: #f85149; color: #fff; }
+  .btn-check-raise { background: #3fb950; color: #fff; }
+
+  .feedback { width: 520px; max-width: 100%; padding: 16px 20px; border-radius: 8px;
+    font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d;
+    background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer;
+    font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+</style>
+</head>
+<body>
+
+<h1>🎯 OOP 3-bet Miss Flop 題庫</h1>
+<div class="sub">Hero SB/BB 3-bet → BTN cold-call → Flop miss · C-bet 還是 Check？</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— H E R O · 3-bettor ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="board-section">
+    <div class="board-label">—— F L O P ——</div>
+    <div class="board-flop" id="boardCards"></div>
+  </div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="actions" id="actions">
+  <button class="btn btn-cbet" onclick="answer('cbet')">C-BET</button>
+  <button class="btn btn-check-flod" onclick="answer('check')">CHECK</button>
+</div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一題 →</button>
+
+<script>
+const SUITS = ['s','h','d','c'];
+const SUIT_SYM = { s:'♠', h:'♥', d:'♦', c:'♣' };
+const SUIT_COLOR = { s:'black', h:'red', d:'red', c:'black' };
+const RANKS = ['2','3','4','5','6','7','8','9','T','J','Q','K','A'];
+const RANK_N = { '2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'T':10,'J':11,'Q':12,'K':13,'A':14 };
+
+let correct=0, wrong=0, streak=0;
+let heroCards, boardCards, pos;
+
+function deal(n) {
+  const deck = [];
+  for (let r of RANKS) for (let s of SUITS) deck.push({rank:r,suit:s});
+  for (let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
+  return deck.slice(0,n);
+}
+
+function handID(c1,c2) {
+  const v1=RANK_N[c1.rank],v2=RANK_N[c2.rank];
+  if(v1===v2) return c1.rank+c2.rank;
+  const h=v1>v2?c1:c2, l=v1>v2?c2:c1;
+  return h.rank+l.rank+(h.suit===l.suit?'s':'o');
+}
+
+function renderCard(c) {
+  return `<div class="card ${SUIT_COLOR[c.suit]}"><span class="rank">${c.rank}</span><span class="suit">${SUIT_SYM[c.suit]}</span></div>`;
+}
+
+// OOP 3-bet range (SB/BB vs BTN open) — 12-15%
+const threeBetValue = new Set([
+  'AA','KK','QQ','JJ','TT',
+  'AKs','AQs','AKo',
+]);
+const threeBetBluff = new Set([
+  '99','88','77',
+  'AJs','ATs','A5s','A4s','A3s',
+  'AQo',
+  'KQs','KJs','KTs','QJs','QTs','JTs','T9s','98s','87s','76s',
+]);
+// Merge
+const threeBetRange = new Set([...threeBetValue, ...threeBetBluff]);
+
+function in3BetRange(key) { return threeBetRange.has(key); }
+
+// Pick a random hand from the 3-bet range directly (no trial-and-error loop)
+function random3BetHand() {
+  const all = [...threeBetRange];
+  const key = all[Math.floor(Math.random() * all.length)];
+  // Build two cards from hand key
+  const suited = key[2]==='s';
+  const offsuit = key[2]==='o';
+  const pair = key.length===2;
+  
+  let r1, r2;
+  if (pair) {
+    r1 = r2 = key[0];
+  } else {
+    r1 = key[0]; r2 = key[1];
+  }
+  
+  // Pick random suits (ensuring suited/offsuit match)
+  const s1 = SUITS[Math.floor(Math.random()*4)];
+  let s2;
+  if (suited) {
+    s2 = s1;
+  } else if (offsuit) {
+    do { s2 = SUITS[Math.floor(Math.random()*4)]; } while (s2===s1);
+  } else {
+    // pair
+    do { s2 = SUITS[Math.floor(Math.random()*4)]; } while (s2===s1);
+  }
+  
+  return [{rank:r1, suit:s1}, {rank:r2, suit:s2}];
+}
+
+// Build a random flop that MISSES hero's hand
+function randomMissFlop(hero) {
+  const hr = hero.map(c=>RANK_N[c.rank]);
+  const hs = hero.map(c=>c.suit);
+  
+  // Build deck excluding hero cards
+  const deck = [];
+  for (let r of RANKS) for (let s of SUITS) {
+    const isHeroCard = hero.some(c=>c.rank===r && c.suit===s);
+    if (!isHeroCard) deck.push({rank:r,suit:s});
+  }
+  
+  // Shuffle
+  for (let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
+  
+  // Try up to 200 random 3-card flops, find one that misses
+  for (let attempt=0; attempt<200; attempt++) {
+    const flop = [deck[attempt*3], deck[attempt*3+1], deck[attempt*3+2]];
+    if (!flop[2]) continue; // ran out
+    if (!hitFlop(hero, flop)) return flop;
+  }
+  
+  // Fallback: pick the lowest 3 cards from deck (unlikely to pair hero)
+  return [deck[0], deck[1], deck[2]];
+}
+
+// Does hero HIT the flop? (only counts real made hands, not backdoor draws)
+function hitFlop(hero, flop) {
+  const hr = hero.map(c=>RANK_N[c.rank]);
+  const hs = hero.map(c=>c.suit);
+  const fr = flop.map(c=>RANK_N[c.rank]);
+  const fs = flop.map(c=>c.suit);
+
+  // Pair or better (including sets, two pair)
+  for (let h of hr) for (let f of fr) if (h===f) return true;
+
+  // Pocket pair higher than all board cards = overpair
+  if (hr[0]===hr[1] && hr[0] > Math.max(...fr)) return true;
+
+  // Flush draw: hero's 2 suited cards + 2+ on board of same suit
+  if (hs[0]===hs[1]) {
+    const boardMatching = fs.filter(s=>s===hs[0]).length;
+    if (boardMatching >= 2) return true;
+  }
+
+  return false;
+}
+
+// Board classification
+function boardType(flop) {
+  const r = flop.map(c=>RANK_N[c.rank]).sort((a,b)=>a-b);
+  const suits = flop.map(c=>c.suit);
+  const paired = r[0]===r[1]||r[1]===r[2];
+  const mono = new Set(suits).size===1;
+  const twotone = new Set(suits).size===2;
+  const highA = r[2]===14;
+  const highK = r[2]===13 && !highA;
+  const highQ = r[2]===12 && !highA && !highK;
+  const low = r[2]<=9;
+  const connected = (r[2]-r[0]<=4 && !paired);
+  const wet = connected || twotone;
+
+  if (paired) return 'paired';
+  if (mono) return 'mono';
+  if (highA) return wet?'A-wet':'A-dry';
+  if (highK) return wet?'K-wet':'K-dry';
+  if (highQ) return wet?'Q-wet':'Q-dry';
+  if (low && wet) return 'low-wet';
+  if (low) return 'low-dry';
+  return 'mid';
+}
+
+// GTO: should OOP 3-bettor c-bet when MISSING flop?
+function shouldCbetMiss(key, btype, pos) {
+  const pair = key.length===2;
+  const suited = key[2]==='s';
+  const rank1 = key[0];
+
+  // NEVER c-bet K/Q-high when missed
+  if (btype.startsWith('K-') || btype.startsWith('Q-')) return 'check';
+  // NEVER c-bet A-high when missed (villain cold-call range hits A)
+  if (btype.startsWith('A-')) return 'check';
+  // Monotone: be cautious
+  if (btype==='mono') return 'check';
+
+  // J-high: c-bet if you have overs (AQ+, TT+)
+  if (btype.startsWith('J-')) {
+    const highRank = pair ? RANK_N[key[0]] : RANK_N[key[0]];
+    if (highRank >= 12 || (pair && highRank >= 10)) return 'cbet';
+    return 'check';
+  }
+
+  // Low dry: c-bet almost always (range advantage)
+  if (btype==='low-dry') return 'cbet';
+
+  // Low wet: c-bet with overs or backdoor equity
+  if (btype==='low-wet') {
+    if (pair && RANK_N[key[0]] >= 8) return 'cbet';
+    if (suited) return 'cbet';
+    if (['AKo','AQo','AJo'].includes(key)) return 'cbet';
+    return 'check';
+  }
+
+  // Paired boards: c-bet with premiums only
+  if (btype==='paired') {
+    if (pair && RANK_N[key[0]] >= 10) return 'cbet';
+    if (['AKs','AKo','AQs','AQo'].includes(key)) return 'cbet';
+    return 'check';
+  }
+
+  return 'check';
+}
+
+function getExplanation(key, btype, gto, pos) {
+  const btDesc = {
+    'A-dry': 'A-high 乾燥面',
+    'A-wet': 'A-high 濕潤面',
+    'K-dry': 'K-high 乾燥',
+    'K-wet': 'K-high 濕潤',
+    'Q-dry': 'Q-high 乾燥',
+    'low-dry': '低張乾燥',
+    'low-wet': '低張濕潤',
+    'paired': '成對面',
+    'mono': '單花面',
+  };
+
+  const hand = key;
+  const isAJs = hand==='AJs' || hand==='AJo';
+
+  // Special AJs explanations
+  if (isAJs && gto==='check' && (btype.startsWith('K-')||btype.startsWith('Q-'))) {
+    return `🛑 AJs on K/Q-high = ego 牌！對面 cold-call 3-bet 的範圍天然重 KQ/KJs/QJs。你的 A blocker 擋了 AK，但沒擋他手裡的 Kx/Qx。翻牌 check 不是示弱——是不賠冤枉錢。這是你之前輸很多次的場景。`;
+  }
+
+  if (gto==='cbet') {
+    if (btype==='low-dry') return `${btDesc[btype]||btype} 上你 OOP 3-bettor 有壓倒性 range advantage。你的整個 range 都在這類面上領先。C-bet 是必須的，即使你 miss 了。`;
+    if (btype==='low-wet') return `${btDesc[btype]||btype} 上你的 overs/backdoor equity + range advantage 夠支撐一個 c-bet。對面沒中就會棄。`;
+    if (btype.startsWith('J-')) return `J-high 面你的 overs + range advantage 允許 c-bet。對面 cold-call range 在 J-high 面上不強。`;
+    return `你的手牌在 ${btDesc[btype]||btype} 上有足夠的 fold equity + backdoor 潛力。C-bet 拿翻前 aggression 的紅利。`;
+  }
+
+  if (btype.startsWith('A-') || btype.startsWith('K-') || btype.startsWith('Q-')) {
+    return `${btDesc[btype]||btype} 是 BTN cold-call 3-bet 最喜歡的面。他的 range 重 AQ/AJ/KQ/QJ。你 miss 了在這裡 c-bet = 送錢。Check，如果他打就評估。`;
+  }
+  return `OOP + miss + 不利面 = check。你保留 check-raise 的威脅（他不敢隨便 bet），同時免費看轉牌。`;
+}
+
+// ── UI ──
+function newHand() {
+  heroCards = random3BetHand();
+  boardCards = randomMissFlop(heroCards);
+  pos = Math.random() < 0.5 ? 'SB' : 'BB';
+
+  document.getElementById('heroCards').innerHTML = heroCards.map(renderCard).join('');
+  document.getElementById('boardCards').innerHTML = boardCards.map(renderCard).join('');
+  const key2 = handID(heroCards[0], heroCards[1]);
+  document.getElementById('spotInfo').innerHTML = `
+    BTN open → 你 <span class="highlight">${pos} 3-bet</span> → BTN cold-call<br>
+    Flop — <span class="highlight">你 miss 了</span> <span class="miss-badge">MISS</span><br>
+    Pot ~18bb · 你的手牌不中對、不中聽
+  `;
+
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').className = 'next-btn';
+  document.querySelectorAll('#actions .btn').forEach(b => b.disabled = false);
+}
+
+function answer(action) {
+  const key = handID(heroCards[0], heroCards[1]);
+  const btype = boardType(boardCards);
+  const gto = shouldCbetMiss(key, btype, pos);
+  const isCorrect = action === gto;
+
+  if (isCorrect) { correct++; streak++; }
+  else { wrong++; streak = 0; }
+  updateScore();
+
+  document.querySelectorAll('#actions .btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('feedback');
+  fb.className = `feedback show ${isCorrect?'correct':'wrong'}`;
+  fb.innerHTML = `
+    ${isCorrect ? '✅ <b>正確！</b>' : `❌ <b>錯誤。</b> 你選 ${action.toUpperCase()}，GTO 是 <b>${gto.toUpperCase()}</b>`}
+    <div class="reason">${getExplanation(key, btype, gto, pos)}</div>
+  `;
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const t = correct+wrong;
+  document.getElementById('pct').textContent = t ? Math.round(correct/t*100)+'%' : '--';
+  document.getElementById('streak').textContent = streak;
+}
+
+function nextHand() { newHand(); }
+newHand();
+</script>
+</body>
+</html>
