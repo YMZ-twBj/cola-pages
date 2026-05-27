@@ -437,8 +437,16 @@
             <a href="btn-3bet-drill.html" class="nav-link drill-link" target="_blank">📋 BTN 面对 3-Bet</a>
             <a href="bet-sizing-drill.html" class="nav-link drill-link" target="_blank">🎯 下注尺寸决策</a>
             <a href="oop-miss-drill.html" class="nav-link drill-link" target="_blank">💨 OOP 3-Bet Miss</a>
+            <a href="flop-cbet-drill.html" class="nav-link drill-link" target="_blank">🃏 翻牌 C-bet 决策</a>
+            <a href="turn-barrel-drill.html" class="nav-link drill-link" target="_blank">🔄 转牌 Barrel 决策</a>
             <div class="nav-section">📖 笔记目录</div>
             <a href="#1-心态与纪律" class="nav-link">1. 心态与纪律</a>            <a href="#2-资金管理" class="nav-link">2. 资金管理</a>            <a href="#3-基础概念一-概率-赔率与期望值" class="nav-link">3. 基础概念一：概率、赔率与期望值</a>            <a href="#4-基础概念二-范围与-gto" class="nav-link">4. 基础概念二：范围与 GTO</a>            <a href="#5-基础概念三-从-gto-到剥削打法" class="nav-link">5. 基础概念三：从 GTO 到剥削打法</a>            <a href="#6-始计篇-nl10-翻前铁律" class="nav-link">6. 始计篇：NL10 翻前铁律</a>            <a href="#7-兵势篇-nl10-的隐形与欺骗" class="nav-link">7. 兵势篇：NL10 的隐形与欺骗</a>            <a href="#9-翻前范围详解" class="nav-link">9. 翻前范围详解</a>            <a href="#10-翻后牌面分类与打法" class="nav-link">10. 翻后牌面分类与打法</a>            <a href="#11-核心概念深度解析" class="nav-link">11. 核心概念深度解析</a>            <a href="#12-转牌决策体系" class="nav-link">12. 转牌决策体系</a>            <a href="#13-价值下注" class="nav-link">13. 价值下注</a>            <a href="#14-river-bluff-什麼時候轉詐唬" class="nav-link">14. River Bluff — 什麼時候轉詐唬</a>            <a href="#15-多人底池策略" class="nav-link">15. 多人底池策略</a>            <a href="#16-nl10-线上实战调整" class="nav-link">16. NL10 线上实战调整</a>            <a href="#17-牌桌选择" class="nav-link">17. 牌桌选择</a>            <a href="#18-进阶-玩家分类与针对性策略" class="nav-link">18. 进阶：玩家分类与针对性策略</a>            <a href="#19-公共牌阻挡效应-board-blockers" class="nav-link">19. 公共牌阻挡效应（Board Blockers）</a>            <a href="#20-手牌选择与隐含赔率" class="nav-link">20. 手牌选择与隐含赔率</a>            <a href="#21-大牌翻后透明化与翻前纪律" class="nav-link">21. 大牌翻后透明化与翻前纪律</a>            <a href="#22-overbet-与防-overbet" class="nav-link">22. Overbet 与防 Overbet</a>            <a href="#23-bet-size-即语言-從讀牌到讀人" class="nav-link">23. Bet Size 即语言：從讀牌到讀人</a>            <a href="#24-牌面分類-底池類型-sb-vs-bb-範圍" class="nav-link">24. 牌面分類 × 底池類型 + SB vs BB 範圍</a>            <a href="#25-bb-sb-盲注位防守系統" class="nav-link">25. BB/SB 盲注位防守系統</a>            <a href="#26-特定手牌專題-邊緣牌的攻防" class="nav-link">26. 特定手牌專題 — 邊緣牌的攻防</a>
+            <a href="#27-donk-bet-翻前-caller-的翻牌先手" class="nav-link">27. Donk Bet — 翻前 Caller 的翻牌先手</a>
+            <a href="#28-floating-ip-的空氣跟注" class="nav-link">28. Floating — IP 的空氣跟注</a>
+            <a href="#29-geometric-sizing-三街串聯思維" class="nav-link">29. Geometric Sizing — 三街串聯思維</a>
+            <a href="#30-probe-bet-delayed-c-bet" class="nav-link">30. Probe Bet + Delayed C-bet</a>
+            <a href="#31-3-bet-pot-翻後專項" class="nav-link">31. 3-Bet Pot 翻後專項</a>
+            <a href="#32-手牌閱讀系統-逐街窄化範圍" class="nav-link">32. 手牌閱讀系統 — 逐街窄化範圍</a>
     </div>
   </nav>
 
@@ -446,7 +454,7 @@
     <div class="hero">
       <h1>扑克深度学习笔记 — NL10 6-max 线上（公开版）</h1>
       <div class="hero-meta">
-        <span><span class="dot dot-green"></span> 25 章</span>
+        <span><span class="dot dot-green"></span> 32 章</span>
         <span><span class="dot dot-cyan"></span> NL10 6-Max 现金桌</span>
         <span>GG Poker · GTO 理论 + 实战</span>
       </div>
@@ -6494,6 +6502,105 @@
             <ul><li><strong>你在贏。</strong> +11.2 bb/100 是 healthy win rate。</li><li><strong>C-bet 是下一個槓桿點。</strong> 從 48% 拉到 55% 可以增加 ~2-3 bb/100。</li><li><strong>BB 已是 NL10 中上水準，再微調即可。</strong> Chapter 16 的三個優先級改善到位後，BB 可從 -19 進步到 -25~-35。</li><li><strong>情緒管理系統在進化。</strong> Tilt 自診已驗證有效。第三道防線（非 tilt 貪打）待建。</li></ul>
             <hr>
             <blockquote>🎯 <strong>实战训练</strong>：<a href="marginal-hands-drill.html" target="_blank">⚔️ 邊緣牌攻防 · AJ/AQ/KQ/ATo</a> — 翻前什麼時候 open？面對 3-bet 跟還是棄？翻後 TPTK 怎麼打？23 題涵蓋翻前翻後，把筆記變成肌肉記憶。</blockquote>
+      </section>      <section id="27-donk-bet-翻前-caller-的翻牌先手" class="chapter">
+        <h2>27. Donk Bet — 翻前 Caller 的翻牌先手</h2>
+            <blockquote><strong>核心問題</strong>：翻前你跟注了，翻牌你第一個行動。你該 check 還是直接 bet？</blockquote>
+            <h4>27.1 什麼是 Donk Bet</h4>
+            <p><strong>Donk Bet</strong> = 你不是翻前 aggressor，但在翻牌<strong>率先下注</strong>。</p>
+            <pre><code>翻前：BTN open 2.5bb → 你 BB call<br>翻牌：你第一個行動 → 你 bet → Donk Bet</code></pre>
+            <p>NL10 多數人不 donk——他們只 check。但 donk bet 是 BB 防守武器庫裡最重要的激進工具。</p>
+            <h4>27.2 NL10 的 Donk Bet 現狀</h4>
+            <table><thead><tr><th>對手類型</th><th>Donk 頻率</th><th>Donk 含義</th></tr></thead><tbody><tr><td>魚/娛樂玩家</td><td>高（15-25%）</td><td>亂 donk——"我中了就打"</td></tr><tr><td>Reg</td><td>低（< 5%）</td><td>Donk = 真貨。頂對+或強 draw</td></tr><tr><td>優秀 Reg</td><td>適中（8-12%）</td><td>平衡——有 value 有 bluff</td></tr></tbody></table>
+            <blockquote><strong>你在 NL10 不要平衡 donk range。</strong> 沒人會因為你只有 value donk 而剝削你。</blockquote>
+            <h4>27.3 什麼時候 Donk Bet</h4>
+            <p>Donk 的核心邏輯：<strong>牌面嚴重偏向 caller 的範圍時，aggressor 會 check back 太多，你需要自己建池。</strong></p>
+            <h4>✅ 適合 Donk 的牌面</h4>
+            <table><thead><tr><th>牌面類型</th><th>為什麼 Donk</th><th>例子</th></tr></thead><tbody><tr><td><strong>中低連接面</strong></td><td>Aggressor 的高牌範圍大量 miss，他會 check back</td><td>9♠8♦6♥, 7♠5♣4♦</td></tr><tr><td><strong>對子低牌面</strong></td><td>Aggressor miss 頻率極高。你的範圍有大量 trips/對子</td><td>5♠5♦2♣</td></tr><tr><td><strong>濕潤中等面</strong></td><td>Aggressor check back 控池。Draw-heavy，你需要收學費</td><td>J♠T♠8♦</td></tr><tr><td><strong>雙同花連接面</strong></td><td>你 BB 範圍有大量 suited 牌。Aggressor offsuit 全 miss</td><td>8♠7♠4♥</td></tr></tbody></table>
+            <h4>❌ 不適合 Donk 的牌面</h4>
+            <table><thead><tr><th>牌面類型</th><th>為什麼不 Donk</th><th>你該做什麼</th></tr></thead><tbody><tr><td>A/K-high 乾燥</td><td>Aggressor 範圍有大量 A/K，他高頻 c-bet</td><td>check，等他 c-bet 再決定</td></tr><tr><td>超乾燥面</td><td>雙方都 miss，但 aggressor 會 c-bet</td><td>check-raise 或 check-call</td></tr><tr><td>Broadway-heavy</td><td>Aggressor 的 broadway 範圍命中率極高</td><td>check-fold 大部分</td></tr></tbody></table>
+            <h4>27.4 Donk Bet Sizing</h4>
+            <table><thead><tr><th>面類型</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>潮濕連接面（J♠T♠8♦）</td><td><strong>¾ pot</strong></td><td>收 draw 學費</td></tr><tr><td>對子低牌面（5♦5♠2♣）</td><td><strong>⅓ pot</strong></td><td>範圍 bet。小注讓弱牌跟</td></tr><tr><td>中低連接（9♠8♦6♥）</td><td><strong>½ pot</strong></td><td>兩對/順子/強 draw donk</td></tr></tbody></table>
+            <h4>27.5 Donk Bet Range 建構（BB vs BTN）</h4>
+            <table><thead><tr><th>牌力</th><th>Donk?</th><th>例子</th></tr></thead><tbody><tr><td>兩對+</td><td>✅ Donk</td><td>97 on 976, 55 on 552</td></tr><tr><td>頂對好踢腳</td><td>⚠️ 混</td><td>KQ on K-high 中低面</td></tr><tr><td>頂對弱踢腳</td><td>❌ Check</td><td>K5 on K-high</td></tr><tr><td>強 draw（flush + gutshot）</td><td>✅ Donk</td><td>A♠2♠ on J♠T♠4♦</td></tr><tr><td>中等 draw（OESD）</td><td>⚠️ 混</td><td>98 on JT4</td></tr><tr><td>Air + blocker</td><td>✅ Bluff donk</td><td>A♠3♦ on 852</td></tr></tbody></table>
+            <h4>27.6 如何應對對手的 Donk Bet</h4>
+            <table><thead><tr><th>你的牌</th><th>面對 Donk</th><th>理由</th></tr></thead><tbody><tr><td>TPTK+</td><td>Call（別 raise）</td><td>你 raise = 比他差的跑，比他好的推</td></tr><tr><td>中等對子</td><td>Call 一條街</td><td>他轉牌 check → 你可以 steal</td></tr><tr><td>Air（miss）</td><td><strong>直接棄</strong></td><td>NL10 donk = 有貨</td></tr><tr><td>Set/兩對</td><td><strong>Raise</strong></td><td>他 donk 有貨 → raise 被跟/推 → 吃大底池</td></tr></tbody></table>
+            <blockquote><strong>NL10 鐵律</strong>：reg 的 donk = 頂對+。魚的 donk = 任何中了的東西。被 reg donk 就謹慎，被魚 donk 可以 float。</blockquote>
+            <hr>
+      </section>      <section id="28-floating-ip-的空氣跟注" class="chapter">
+        <h2>28. Floating — IP 的空氣跟注</h2>
+            <blockquote><strong>核心問題</strong>：你在 IP 跟了翻牌 c-bet，但你什麼都沒有。這是送錢還是進攻？</blockquote>
+            <h4>28.1 什麼是 Floating</h4>
+            <p><strong>Float</strong> = IP call flop c-bet <strong>without a made hand</strong>，計劃在轉牌對手 check 時 bet 偷池。</p>
+            <pre><code>翻前：BTN open → 你 BB call<br>翻牌：你 check → BTN c-bet ½ pot → 你 call（float）<br>轉牌：BTN check → 你 bet ⅔ pot → BTN fold</code></pre>
+            <p>你從頭到尾沒中牌——你是在打他的 <strong>check 信號</strong>。</p>
+            <h4>28.2 Float 的兩個前提（缺一不可）</h4>
+            <table><thead><tr><th>前提</th><th>說明</th></tr></thead><tbody><tr><td><strong>1. 有位置</strong></td><td>IP 才能 float。OOP float = 自殺</td></tr><tr><td><strong>2. 對手會 check 轉牌</strong></td><td>Float 的核心是 exploit「對手 c-bet 翻牌但 check 轉牌」的 pattern</td></tr></tbody></table>
+            <blockquote><strong>NL10 人口特徵</strong>：大量玩家 c-bet flop 頻率高（65%+），但 turn c-bet 頻率驟降（< 40%）。這正是 float 的土壤。</blockquote>
+            <h4>28.3 Float 的好牌 vs 壞牌</h4>
+            <table><thead><tr><th>手牌特徵</th><th>Float?</th><th>理由</th></tr></thead><tbody><tr><td>有 backdoor flush draw</td><td>✅ 最佳</td><td>轉牌中花 draw → 半詐 bluff</td></tr><tr><td>有兩張 overcards</td><td>✅ 好</td><td>轉牌中 top pair → 變成 value</td></tr><tr><td>有 gutshot / OESD</td><td>✅ 好</td><td>轉牌中順 → value；不中 → bluff</td></tr><tr><td>有 blocker（A/K）</td><td>✅ 好</td><td>A blocker 降低他 AK/AA</td></tr><tr><td>純空氣 + 低牌面</td><td>⚠️ 可以</td><td>他 c-bet range 弱</td></tr><tr><td>純空氣 + A/K-high 面</td><td>❌ 不行</td><td>他 c-bet range 強，你撞牆</td></tr></tbody></table>
+            <h4>28.4 Float 轉牌 Bet Sizing</h4>
+            <table><thead><tr><th>轉牌面</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>Blank（沒改變）</td><td><strong>⅔ pot</strong></td><td>他 check = 沒有。大注直接收</td></tr><tr><td>你中 draw 的牌</td><td><strong>½ pot</strong></td><td>建池 + 半詐</td></tr><tr><td>危險張（花/順到了）</td><td><strong>Check back</strong></td><td>card 幫了他範圍</td></tr></tbody></table>
+            <h4>28.5 Float vs Raise 的選擇</h4>
+            <table><thead><tr><th></th><th>Float</th><th>Raise</th></tr></thead><tbody><tr><td>成本</td><td>翻牌 ½ pot call</td><td>翻牌 raise（~3x c-bet）</td></tr><tr><td>風險</td><td>低（一條街）</td><td>高（被推回來就死了）</td></tr><tr><td>NL10 推薦</td><td>✅ 更常用</td><td>⚠️ 少用</td></tr></tbody></table>
+            <blockquote><strong>口訣</strong>：「Float 是偷一條街，Raise 是跟對面打架。NL10——偷就好，別打架。」</blockquote>
+            <hr>
+      </section>      <section id="29-geometric-sizing-三街串聯思維" class="chapter">
+        <h2>29. Geometric Sizing — 三街串聯思維</h2>
+            <blockquote><strong>核心問題</strong>：你現在打的大小，能不能讓河牌剛好推 all-in？</blockquote>
+            <h4>29.1 什麼是 Geometric Sizing</h4>
+            <p><strong>Geometric Sizing</strong> = 按三街規劃下注大小，讓河牌最後一注剛好等於剩餘籌碼。</p>
+            <pre><code>你有 TPTK，底池 6bb，有效碼 100bb。<br>幾何下注不是在問「翻牌打多少」——是在問：<br>「我要三條街打多少%，河牌才能剛好把 100bb 推進池裡？」</code></pre>
+            <h4>29.2 Geometric Size 速算</h4>
+            <table><thead><tr><th>目標街數</th><th>每街 Size (% pot)</th><th>總增長倍數</th></tr></thead><tbody><tr><td>2 街（翻牌 check，轉+河）</td><td>75% + 75%</td><td>~7x</td></tr><tr><td>3 街</td><td>66% + 66% + 66%</td><td>~13x</td></tr><tr><td>3 街（大）</td><td>75% + 75% + 75%</td><td>~20x</td></tr><tr><td>3 街（小）</td><td>50% + 50% + 62%</td><td>~8x</td></tr></tbody></table>
+            <h4>29.3 NL10 實戰模板</h4>
+            <table><thead><tr><th>SPR 區間</th><th>模板</th><th>例子</th></tr></thead><tbody><tr><td><strong>低 SPR（1-3）</strong></td><td>一槍 ½ pot，河牌推</td><td>4-bet pot with AA</td></tr><tr><td><strong>中 SPR（4-6）</strong></td><td>翻牌 ⅔，轉牌 ⅔，河牌推剩下的</td><td>3-bet pot with TPTK</td></tr><tr><td><strong>高 SPR（7-13）</strong></td><td>翻牌 ½，轉牌 ⅔，河牌 ¾</td><td>SRP with overpair</td></tr></tbody></table>
+            <blockquote><strong>一句話</strong>：「翻牌打的每一分錢，都是在為河牌的那一推鋪路。」</blockquote>
+            <hr>
+      </section>      <section id="30-probe-bet-delayed-c-bet" class="chapter">
+        <h2>30. Probe Bet + Delayed C-bet</h2>
+            <blockquote><strong>核心問題</strong>：翻牌雙方都 check 了——轉牌誰先出手？</blockquote>
+            <h4>30.1 Probe Bet（試探下注）</h4>
+            <p><strong>Probe Bet</strong> = 你是翻前 caller/OOP，翻牌雙方 check，轉牌你<strong>率先下注</strong>。</p>
+            <pre><code>翻前：BTN open → 你 BB call<br>翻牌：你 check → BTN check back<br>轉牌：你 bet → Probe Bet</code></pre>
+            <p>當 aggressor check back 翻牌時，他在說：①「我有 show down value，控池。」②「我完全 miss，放棄了。」Probe bet 同時攻擊這兩種。</p>
+            <h4>適合 Probe 的轉牌</h4>
+            <table><thead><tr><th>轉牌</th><th>為什麼</th><th>動作</th></tr></thead><tbody><tr><td><strong>高牌（A/K/Q）</strong></td><td>你的 BB 範圍有大量 Ax/Kx</td><td>Bet ⅔</td></tr><tr><td><strong>完成 draw</strong></td><td>BB 有大量 suited connector</td><td>Bet ¾</td></tr><tr><td><strong>低 blank</strong></td><td>你先 bet → 他中等牌難受</td><td>Bet ½</td></tr><tr><td><strong>對子（board pair）</strong></td><td>Trips 在 BB 範圍密度高</td><td>Bet ⅔</td></tr></tbody></table>
+            <h4>30.2 Delayed C-bet（延遲 C-bet）</h4>
+            <p><strong>Delayed C-bet</strong> = 你是翻前 aggressor，翻牌<strong>故意 check</strong>，轉牌<strong>bet</strong>。</p>
+            <table><thead><tr><th></th><th>標準 C-bet</th><th>Delayed C-bet</th></tr></thead><tbody><tr><td>時機</td><td>翻牌就打</td><td>翻牌 check → 轉牌 bet</td></tr><tr><td>訊息</td><td>「我範圍比你強」</td><td>「我翻牌在陷阱/控池，現在我要打了」</td></tr><tr><td>對手反應</td><td>以為你總有牌</td><td>以為你 miss 了 → 更容易 call value / fold to bluff</td></tr></tbody></table>
+            <h4>什麼時候用 Delayed C-bet</h4>
+            <table><thead><tr><th>場景</th><th>Delayed?</th><th>理由</th></tr></thead><tbody><tr><td>你有堅果，面乾燥</td><td>✅</td><td>翻牌 check = 裝弱。轉牌 bet = 誘捕</td></tr><tr><td>你有 TPTK，面濕</td><td>❌</td><td>濕面直接 c-bet 收學費</td></tr><tr><td>你完全 miss，面乾</td><td>✅</td><td>你的 range 比 cold-call 的強</td></tr><tr><td>面 A/K-high，你 miss</td><td>❌</td><td>他 cold-call range 有 A/K。bet = 撞牆</td></tr></tbody></table>
+            <blockquote><strong>記憶</strong>：「Probe = 被動變主動。Delayed = 主動裝被動再變主動。」</blockquote>
+            <hr>
+      </section>      <section id="31-3-bet-pot-翻後專項" class="chapter">
+        <h2>31. 3-Bet Pot 翻後專項</h2>
+            <blockquote><strong>核心問題</strong>：3-bet pot 的 SPR 只有 3-5，翻後決策樹極短——打錯一街就沒了。</blockquote>
+            <h4>31.1 3-Bet Pot vs SRP</h4>
+            <table><thead><tr><th></th><th>SRP</th><th>3BP</th></tr></thead><tbody><tr><td>翻前底池</td><td>5-6bb</td><td>18-22bb</td></tr><tr><td>SPR</td><td>15-20</td><td>3-5</td></tr><tr><td>剩餘街數</td><td>3 街</td><td>1.5-2 街</td></tr><tr><td>TPTK 強度</td><td>能打三街 value</td><td>接近堅果</td></tr></tbody></table>
+            <h4>31.2 你是 3-Bettor — 翻牌 C-bet 策略</h4>
+            <table><thead><tr><th>SPR</th><th>C-bet 頻率</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>3-4</td><td>70%+</td><td>⅓-½ pot</td><td>小注就能威脅整組</td></tr><tr><td>4-5</td><td>60%+</td><td>½ pot</td><td>適中</td></tr><tr><td>5-6</td><td>55%+</td><td>½-⅔</td><td>接近 SRP 思維</td></tr></tbody></table>
+            <h4>31.3 你是 3-Bet Caller — 翻牌面對 C-bet</h4>
+            <table><thead><tr><th>你的牌</th><th>SPR</th><th>動作</th></tr></thead><tbody><tr><td>TPTK</td><td>任何</td><td><strong>Call</strong>。低 SPR 下 TPTK 不需要 raise</td></tr><tr><td>頂對弱踢腳</td><td>任何</td><td>Call 一條街。轉牌對手 bet → 棄</td></tr><tr><td>中對（88-JJ on 低面）</td><td>< 4</td><td>Call。SPR 低 = 中對很強</td></tr><tr><td>Draw（flush/OESD）</td><td>< 4</td><td>可以推 all-in semi-bluff</td></tr><tr><td>Air</td><td>任何</td><td><strong>棄。</strong> 3BP 不是 float 的地方</td></tr></tbody></table>
+            <h4>31.4 NL10 3BP 特別篇</h4>
+            <table><thead><tr><th>NL10 特徵</th><th>你的調整</th></tr></thead><tbody><tr><td>3-bet 範圍偏 value-heavy</td><td>Call 3-bet 的範圍收緊</td></tr><tr><td>翻牌被 c-bet 後很少 float</td><td>你的 fold to c-bet in 3BP 可以高</td></tr><tr><td>轉牌 check = 放棄</td><td>當 aggressor：轉牌繼續 bet</td></tr><tr><td>河牌推 = 有貨</td><td>別 hero call 3BP river shove</td></tr></tbody></table>
+            <hr>
+      </section>      <section id="32-手牌閱讀系統-逐街窄化範圍" class="chapter">
+        <h2>32. 手牌閱讀系統 — 逐街窄化範圍</h2>
+            <blockquote><strong>核心問題</strong>：對手的每一手動作都在窄化他的範圍。你能不能從「他有 AK」精確到「他在這 6 個 combo 裡」？</blockquote>
+            <h4>32.1 手牌閱讀的三層次</h4>
+            <table><thead><tr><th>層次</th><th>你做什麼</th><th>例子</th></tr></thead><tbody><tr><td><strong>L1</strong>：翻前範圍</td><td>「他 MP open。」</td><td>15-18% range, ~200 combos</td></tr><tr><td><strong>L2</strong>：翻牌行動</td><td>「他 c-bet on A-high。」</td><td>窄到 ~90 combos</td></tr><tr><td><strong>L3</strong>：逐街精確</td><td>「他 turn bet ⅔, river check。」</td><td>窄到 ~12 combos</td></tr></tbody></table>
+            <h4>32.2 逐街窄化框架</h4>
+            <p><strong>翻牌 Call 含義</strong>：有 equity——對子、draw、A-high（想 showdown）。不只是「他有頂對」。</p>
+            <p><strong>轉牌從 Size 讀</strong>：Bet 大（¾+）= 窄（TPTK+）、Bet 小（⅓-½）= 寬（中等對子想便宜 showdown）、Check-raise = 極窄（nuts）。</p>
+            <p><strong>河牌最終窄化</strong>：Bet 大 → ~8-15 combos（Value 2-5, Bluff 3-10）。Check OOP → 放棄。推 all-in overbet → 70% 堅果。</p>
+            <h4>32.3 實戰：從 200 combos 到 24 combos</h4>
+            <pre><code>翻前：MP open 2.5bb。範圍 ~18%（~240 combos）<br><br>翻牌：A♠J♦7♥。你 c-bet ½ → 他 call。<br>  → fold 空氣、gutshot、弱對子<br>  → 剩下 ~90 combos<br><br>轉牌：4♦（blank）。你 bet ⅔ → 他 call。<br>  → 剩下 AK/AQ/AJ/KJ/QJ/JT ~30 combos<br><br>河牌：2♣（blank）。你 bet ¾ → 他 call。<br>  → 剩下 AK/AQ/AJ/KJ ~24 combos</code></pre>
+            <h4>32.4 新手常犯的讀牌錯誤</h4>
+            <table><thead><tr><th>錯誤</th><th>為什麼錯</th><th>正確做法</th></tr></thead><tbody><tr><td>「他一定有 AK」</td><td>把範圍坍縮成一組牌</td><td>想「他可能有 AK/AQ/AJ/AT，共 XX combos」</td></tr><tr><td>「他 check = 他沒牌」</td><td>Check 可能是陷阱</td><td>參照他的整體範圍。他會 check nuts 嗎？</td></tr><tr><td>「有 A blocker 所以他沒 A」</td><td>Blocker 只減 ~25%，不是 100%</td><td>「他有 A 的機率降低了，不是消失了」</td></tr></tbody></table>
+            <h4>32.5 NL10 讀牌速查</h4>
+            <table><thead><tr><th>對手類型</th><th>翻牌 Call</th><th>轉牌 Call</th><th>河牌 Bet</th></tr></thead><tbody><tr><td>魚（VPIP 40%+）</td><td>任何中了/任何 draw</td><td>中了頂對+</td><td>有貨（很少 bluff）</td></tr><tr><td>Reg（VPIP 20-28%）</td><td>中等對+、draw、A-high</td><td>TPTK+、強 draw</td><td>平衡</td></tr><tr><td>NIT（VPIP < 18%）</td><td>頂對+</td><td>頂對好踢腳+</td><td>堅果</td></tr></tbody></table>
+            <blockquote><strong>終極口訣</strong>：「不是猜他拿什麼，是縮小他可能的範圍。每條街砍一半，河牌剩 10-20 combos。」</blockquote>
+            <hr>
       </section>
   </main>
 

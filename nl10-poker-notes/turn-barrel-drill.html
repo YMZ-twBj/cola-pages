@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>轉牌 Barrel 決策 | NL10/25</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'SF Mono', 'Monaco', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { font-size: 20px; color: #d2991d; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 20px; text-align: center; max-width: 520px; line-height: 1.6; }
+  .mode-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+  .mode-btn { padding: 8px 20px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: #8b949e; font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .mode-btn:hover { background: #30363d; }
+  .mode-btn.active { background: #d2991d; color: #000; border-color: #d2991d; font-weight: bold; }
+
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; flex-wrap: wrap; justify-content: center; }
+  .scorebar span { color: #8b949e; } .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+
+  .table { background: #1a5c2a; border-radius: 120px; width: 520px; max-width: 100%; padding: 28px 24px 24px; margin-bottom: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3); position: relative; }
+
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; }
+  .card { width: 52px; height: 74px; border-radius: 6px; background: #fff; color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1; }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 22px; } .card .suit { font-size: 14px; margin-top: -2px; }
+
+  .board-section { margin: 12px 0; }
+  .board-row { display: flex; justify-content: center; align-items: center; gap: 6px; }
+  .board-flop { display: flex; gap: 6px; }
+  .board-flop .card { width: 42px; height: 60px; font-size: 16px; }
+  .board-flop .card .rank { font-size: 18px; }
+  .board-flop .card .suit { font-size: 12px; margin-top: -2px; }
+
+  .turn-indicator { color: rgba(255,255,255,0.5); font-size: 20px; margin: 0 6px; }
+  .turn-card-wrap .card { width: 42px; height: 60px; font-size: 16px; position: relative; }
+  .turn-card-wrap .card .rank { font-size: 18px; }
+  .turn-card-wrap .card .suit { font-size: 12px; margin-top: -2px; }
+  .turn-card-wrap .card::after { content: ''; position: absolute; inset: -3px; border-radius: 8px; border: 2px solid #d2991d; pointer-events: none; }
+
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .spot-info .action-line { display: block; margin: 2px 0; }
+  .spot-info .street { color: #d2991d; font-weight: bold; }
+  .step-label { text-align: center; font-size: 14px; color: #d2991d; margin: 16px 0 8px; font-weight: bold; }
+
+  .actions { display: flex; gap: 12px; margin-bottom: 16px; justify-content: center; }
+  .btn { padding: 12px 28px; border-radius: 8px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.1s; font-family: inherit; }
+  .btn:hover { transform: scale(1.04); } .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-barrel { background: #d2991d; color: #000; }
+  .btn-check { background: #8b949e; color: #fff; }
+
+  .feedback { width: 520px; max-width: 100%; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+
+  .progress { text-align: center; font-size: 11px; color: #545d68; margin-top: 4px; }
+
+  @media (max-width: 540px) {
+    .table { border-radius: 80px; padding: 20px 12px; }
+    .card { width: 40px; height: 56px; font-size: 16px; }
+    .card .rank { font-size: 18px; } .card .suit { font-size: 12px; }
+    .board-flop .card, .turn-card-wrap .card { width: 34px; height: 48px; font-size: 14px; }
+    .board-flop .card .rank, .turn-card-wrap .card .rank { font-size: 16px; }
+    .board-flop .card .suit, .turn-card-wrap .card .suit { font-size: 10px; }
+    .scorebar { gap: 16px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🔥 轉牌 Barrel 決策</h1>
+<div class="sub">Flop c-bet 被接了——轉牌繼續開槍還是停？<br>20 個 NL10/25 典型場景 · 練到你不用想</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('all')" id="modeAll">🎲 全部</button>
+  <button class="mode-btn" onclick="setMode('barrel')" id="modeBarrel">🔥 繼續 Barrel</button>
+  <button class="mode-btn" onclick="setMode('check')" id="modeCheck">🛑 停／放棄</button>
+</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— H E R O ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="board-section">
+    <div class="board-label">F L O P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T U R N</div>
+    <div class="board-row">
+      <div class="board-flop" id="boardFlop"></div>
+      <span class="turn-indicator">→</span>
+      <div class="turn-card-wrap" id="turnCard"></div>
+    </div>
+  </div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">你的決定？</div>
+<div class="actions" id="actions">
+  <button class="btn btn-barrel" onclick="answer('barrel')">🔥 Barrel</button>
+  <button class="btn btn-check" onclick="answer('check')">🛑 Check</button>
+</div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一題 →</button>
+<div class="progress" id="progress"></div>
+
+<script src="deck.js"></script>
+<script>
+// ─── Card rendering (override deck.js styles to match drill) ───
+function cardHTML(c) {
+  const color = SUIT_COLORS[c.suit];
+  return `<div class="card ${color}"><span class="rank">${c.rank}</span><span class="suit">${SUIT_SYMBOLS[c.suit]}</span></div>`;
+}
+
+// ─── State ───
+let mode = 'all';
+let correct = 0, wrong = 0, streak = 0, current = null, answered = false;
+let recentIds = []; // track last few to avoid repeats
+let totalAnswered = 0;
+
+// ─── 20 Hand-Crafted Scenarios ───
+const SCENARIOS = [
+  {
+    id: 1,
+    mode: 'barrel',
+    hero: [{rank:'A',suit:'s'},{rank:'K',suit:'d'}],
+    flop: [{rank:'K',suit:'c'},{rank:'7',suit:'h'},{rank:'2',suit:'s'}],
+    turn: {rank:'4',suit:'d'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop K♣7♥2♠ · Hero c-bet ⅓ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '⅔ pot (~12bb)',
+    title: 'TPTK 乾燥面 · 轉牌 blank',
+    explanation: 'TPTK 在乾燥牌面上是扎實的價值牌。轉牌 4♦ 是純 blank——沒有完成任何聽牌、也沒有 overcard。BB flop call 的範圍裡有很多 second pair / middle pair / gutshot——這些牌面對轉牌 ⅔ barrel 會非常痛苦。繼續打，不給免費牌。'
+  },
+  {
+    id: 2,
+    mode: 'check',
+    hero: [{rank:'A',suit:'d'},{rank:'K',suit:'s'}],
+    flop: [{rank:'K',suit:'h'},{rank:'J',suit:'h'},{rank:'8',suit:'c'}],
+    turn: {rank:'3',suit:'h'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop K♥J♥8♣ · Hero c-bet ¾ pot → BB calls'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: 'TPTK 濕潤面 · 轉牌完成同花',
+    explanation: '轉牌 3♥ 完成了同花聽牌——而這是翻牌上最明顯的 draw。BB flop call ¾ pot 的範圍很強：可能是 Kx、Jx、聽花、聽順。現在聽花到了——你的 TPTK 瞬間從價值牌變成 bluff-catcher。Check 控池，河牌看對手動作再決定。Barrel 只會讓更好牌跟、更差牌棄。'
+  },
+  {
+    id: 3,
+    mode: 'barrel',
+    hero: [{rank:'Q',suit:'s'},{rank:'J',suit:'s'}],
+    flop: [{rank:'7',suit:'d'},{rank:'2',suit:'h'},{rank:'4',suit:'c'}],
+    turn: {rank:'9',suit:'d'},
+    position: 'BTN',
+    ip: true,
+    actionLines: [
+      'Hero (BTN) RFI 2.5bb → BB calls',
+      'Flop 7♦2♥4♣ · Hero c-bet ⅓ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '⅔ pot (~10bb)',
+    title: '空氣 乾燥面 · IP 轉牌 blank',
+    explanation: '你在乾燥面 flop c-bet 被接——BB 的 call range 在 742r 這種牌面上非常弱：多半是小對子、A-high、或純空氣。轉牌 9♦ 沒有改變牌面結構。你在 IP，有範圍優勢（你的 BTN open range 在這個牌面上比 BB 防守範圍強很多）。Barrel ⅔ pot 代表極化——對手的小對子很難接第二槍。'
+  },
+  {
+    id: 4,
+    mode: 'check',
+    hero: [{rank:'K',suit:'s'},{rank:'Q',suit:'d'}],
+    flop: [{rank:'A',suit:'c'},{rank:'7',suit:'h'},{rank:'2',suit:'s'}],
+    turn: {rank:'5',suit:'d'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop A♣7♥2♠ · Hero c-bet ½ pot → BB calls'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: '空氣 A-high 面 · IP 轉牌 blank',
+    explanation: 'A-high 乾燥面——你在 flop c-bet，BB 跟了。在 A-high 面，BB 的 call range 絕大多數是 Ax。你的 KQo 完全 miss。轉牌繼續 barrel 的 fold equity 非常低——只要 BB 有 A（概率很高），他不會棄。省下轉牌這一槍，找更好的 spot。'
+  },
+  {
+    id: 5,
+    mode: 'barrel',
+    hero: [{rank:'Q',suit:'s'},{rank:'Q',suit:'d'}],
+    flop: [{rank:'7',suit:'c'},{rank:'2',suit:'h'},{rank:'4',suit:'s'}],
+    turn: {rank:'9',suit:'d'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop 7♣2♥4♠ · Hero c-bet ½ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '¾ pot (~14bb)',
+    title: 'Overpair 低乾面 · 轉牌 blank',
+    explanation: 'QQ 在 742r 是純 overpair——BB 的 call range 在這個牌面上最多的就是 7x、88/99、和一些小對子。轉牌 9♦ 給 99 三條、給 88 更多 equity，但整體上你的 overpair 仍然遙遙領先 BB 的範圍。翻牌 ½ → 轉牌 ¾ 的 sizing 階梯代表強度遞增——最大化價值。'
+  },
+  {
+    id: 6,
+    mode: 'check',
+    hero: [{rank:'A',suit:'s'},{rank:'A',suit:'d'}],
+    flop: [{rank:'J',suit:'h'},{rank:'T',suit:'s'},{rank:'7',suit:'c'}],
+    turn: {rank:'8',suit:'h'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 3bb → BB calls',
+      'Flop J♥T♠7♣ · Hero c-bet ⅔ pot → BB calls'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: 'Overpair 連接面 · 轉牌完成順子',
+    explanation: 'J-T-7 是極度連接的牌面。BB flop call ⅔ pot 的範圍裡有 Q9、98、T9、J9——全是聽順。轉牌 8♥ 完美完成 Q9 的順子、也完成了 98 的兩頭順。你的 AA 現在只是一個 bluff-catcher。繼續 barrel 只會被順子 raise 或讓更差的 Jx 棄牌。Check 控池，河牌 reassess。'
+  },
+  {
+    id: 7,
+    mode: 'check',
+    hero: [{rank:'9',suit:'s'},{rank:'8',suit:'s'}],
+    flop: [{rank:'K',suit:'h'},{rank:'9',suit:'d'},{rank:'3',suit:'c'}],
+    turn: {rank:'2',suit:'s'},
+    position: 'BTN',
+    ip: true,
+    actionLines: [
+      'Hero (BTN) RFI 2.5bb → BB calls',
+      'Flop K♥9♦3♣ · Hero c-bet ⅓ pot → BB calls'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: 'Second Pair 乾燥面 · Showdown Value',
+    explanation: '你的 9 是 second pair——有 showdown value，但不足以打三街價值。BB flop call 的範圍裡有 Kx（比你強）、也有更差的 3x / A-high。轉牌繼續 barrel 只會讓 Kx 跟、讓更差的牌棄——這是典型的「打走更差、留下更強」。Check 保持 pot 小，河牌可以考慮 thin value 或 check-call。'
+  },
+  {
+    id: 8,
+    mode: 'barrel',
+    hero: [{rank:'A',suit:'h'},{rank:'Q',suit:'h'}],
+    flop: [{rank:'9',suit:'h'},{rank:'4',suit:'h'},{rank:'2',suit:'c'}],
+    turn: {rank:'7',suit:'d'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop 9♥4♥2♣ · Hero c-bet ½ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '½ pot (~9bb)',
+    title: '聽花 + 兩高張 · 半詐唬 Barrel',
+    explanation: 'A♥Q♥ 有 nut flush draw + 兩張 overcard——這是 premium semi-bluff 手牌。轉牌 7♦ 是 blank，你沒有成牌，但你有 15 個 outs（9♥ + 3A + 3Q）——大約 30% equity。½ pot barrel 給自己很好的價格：fold equity + 擊中後的 implied odds 讓這手牌的轉牌 barrel 是 +EV。'
+  },
+  {
+    id: 9,
+    mode: 'check',
+    hero: [{rank:'K',suit:'h'},{rank:'J',suit:'h'}],
+    flop: [{rank:'A',suit:'h'},{rank:'7',suit:'h'},{rank:'3',suit:'c'}],
+    turn: {rank:'3',suit:'d'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop A♥7♥3♣ · Hero c-bet ½ pot → BB calls'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: '聽花 · 轉牌公對面',
+    explanation: '轉牌 3♦ 形成了公對（board pair）。這對你的聽花有兩個打擊：(1) 對手的 3x 現在變成了 trips——你中花後可能還是輸；(2) 對手 Ax 在這個公對面上更不願意棄牌。你的 flush draw 的 implied odds 大幅下降。Check 拿免費牌——中花後也要小心評估。'
+  },
+  {
+    id: 10,
+    mode: 'barrel',
+    hero: [{rank:'Q',suit:'s'},{rank:'J',suit:'s'}],
+    flop: [{rank:'T',suit:'h'},{rank:'9',suit:'d'},{rank:'3',suit:'c'}],
+    turn: {rank:'2',suit:'s'},
+    position: 'BTN',
+    ip: true,
+    actionLines: [
+      'Hero (BTN) RFI 2.5bb → BB calls',
+      'Flop T♥9♦3♣ · Hero c-bet ⅓ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '½ pot (~8bb)',
+    title: 'Gutshot 連接面 · 轉牌 blank',
+    explanation: 'QJs 在 T9x 面上有 gutshot（K 或 8 成順）+ 兩張 overcards。翻牌 c-bet ⅓ pot 是很便宜的 stab——被接後轉牌繼續 barrel ½ pot 是合理的 semi-bluff。你有 4 張 K（順子）+ 對 Q/J 的微弱 equity。即使沒中，barrel 能讓 T9/98/9x 這類 marginal pair 棄牌。'
+  },
+  {
+    id: 11,
+    mode: 'check',
+    hero: [{rank:'K',suit:'s'},{rank:'Q',suit:'s'}],
+    flop: [{rank:'K',suit:'h'},{rank:'9',suit:'d'},{rank:'2',suit:'c'}],
+    turn: {rank:'A',suit:'d'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop K♥9♦2♣ · Hero c-bet ⅔ pot → BB calls'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: 'TPTK · 轉牌 Overcard (A)',
+    explanation: '你在 K-high flop 有 TPTK——很強。但轉牌 A♦ 是最恐怖的 overcard。BB flop call ⅔ pot 的範圍裡本來就有很多 Ax（尤其是 A9、AT、AJ）。現在這些 Ax 全部反超你——你的 KQ 從 TPTK 變成了 second pair。繼續 barrel 是在幫對手贏錢。Check 控池，你的牌現在只值一街價值。'
+  },
+  {
+    id: 12,
+    mode: 'barrel',
+    hero: [{rank:'A',suit:'s'},{rank:'5',suit:'s'}],
+    flop: [{rank:'Q',suit:'h'},{rank:'7',suit:'d'},{rank:'2',suit:'c'}],
+    turn: {rank:'4',suit:'d'},
+    position: 'BTN',
+    ip: true,
+    actionLines: [
+      'Hero (BTN) RFI 2.5bb → BB calls',
+      'Flop Q♥7♦2♣ · Hero c-bet ⅓ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '⅔ pot (~10bb)',
+    title: '空氣 + A Blocker · IP',
+    explanation: 'A5s 完全 miss 了 Q72r——但你有一張 A♦ blocker。這很關鍵：你 block 了對手的 Ax（尤其是 AQ），減少了他有頂對的概率。乾燥面的 BB call range 在 flop 之後其實很弱——很多是 Qx 或小對子。轉牌 4♦ 仍然是空白，你的 A blocker + 位置優勢讓 barrel ⅔ pot 有足夠的 fold equity。'
+  },
+  {
+    id: 13,
+    mode: 'barrel',
+    hero: [{rank:'7',suit:'s'},{rank:'7',suit:'d'}],
+    flop: [{rank:'K',suit:'h'},{rank:'7',suit:'c'},{rank:'2',suit:'s'}],
+    turn: {rank:'4',suit:'d'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop K♥7♣2♠ · Hero c-bet ⅓ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '½ pot (~8bb)',
+    title: 'Set 乾燥面 · 轉牌 blank',
+    explanation: '你在 K72r 中了底 set——幾乎是 nuts。翻牌 ⅓ pot small c-bet 引誘跟注。轉牌 4♦ 是純 blank。現在該開始 build pot 了——½ pot 是「我沒那麼強」的假信號，但實際上給河牌留了 shove 空間。不要 check 慢打——乾燥面 check-check 兩條街然後河牌突然打大注，太可疑。'
+  },
+  {
+    id: 14,
+    mode: 'barrel',
+    hero: [{rank:'K',suit:'s'},{rank:'Q',suit:'s'}],
+    flop: [{rank:'K',suit:'h'},{rank:'Q',suit:'d'},{rank:'J',suit:'d'}],
+    turn: {rank:'5',suit:'c'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 3bb → BB calls',
+      'Flop K♥Q♦J♦ · Hero c-bet ¾ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '¾ pot (~18bb)',
+    title: '兩對 濕潤面 · 轉牌 blank',
+    explanation: '你在 KQJ 兩同花面上中了頂兩對——Top two pair。這個牌面非常 wet：任何 T 成順、任何♦成花。BB flop call ¾ pot 的範圍非常強——有很多聽牌（AT、T9、♦♦）和 made hand（KJ、QJ、JT）。轉牌 5♣ 是 safe card——你必須繼續打大注來 charge 對手的聽牌，不能給免費河牌。¾ pot 不給 odds。'
+  },
+  {
+    id: 15,
+    mode: 'check',
+    hero: [{rank:'J',suit:'s'},{rank:'T',suit:'s'}],
+    flop: [{rank:'A',suit:'h'},{rank:'7',suit:'d'},{rank:'2',suit:'c'}],
+    turn: {rank:'4',suit:'d'},
+    position: 'SB',
+    ip: false,
+    actionLines: [
+      'Hero (SB) RFI 3bb → BB calls',
+      'Flop A♥7♦2♣ · Hero c-bet ½ pot → BB calls',
+      '⚠️ OOP（Hero 在 SB）'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: '空氣 OOP · 翻牌 C-bet 被接',
+    explanation: '你在 SB open，flop A-high ——你 c-bet 代表 A。BB 跟了——他在 A-high 面跟注，大概率有 A。你的 JTs 完全 miss。更糟的是，你 OOP。轉牌繼續 barrel 沒有位置、沒有 equity、沒有 fold equity。三重不利因素——這是給對面送錢。Check-fold。下次在 SB 別拿 JTs open 打這種面。'
+  },
+  {
+    id: 16,
+    mode: 'check',
+    hero: [{rank:'8',suit:'s'},{rank:'7',suit:'s'}],
+    flop: [{rank:'8',suit:'h'},{rank:'6',suit:'d'},{rank:'2',suit:'c'}],
+    turn: {rank:'5',suit:'d'},
+    position: 'BTN',
+    ip: true,
+    actionLines: [
+      'Hero (BTN) RFI 2.5bb → BB calls',
+      'Flop 8♥6♦2♣ · Hero c-bet ½ pot → BB calls'
+    ],
+    correctAction: 'check',
+    sizing: null,
+    title: '頂對弱踢腳 · 轉牌完成順面',
+    explanation: '翻牌 8♥6♦2♣——你有 top pair，但踢腳是 7。轉牌 5♦ 完成了 97 和 74 的順子——而這些正是 BB 在 862 面最常見的防守手牌（76、75、97、86、55）。你的 87 現在有 open-ender（任何 4 或 9 成順），但你的 top pair 已經不安全了。Check 拿免費牌——中順後打價值，沒中河牌可以考慮 thin value 或 check-fold。'
+  },
+  {
+    id: 17,
+    mode: 'barrel',
+    hero: [{rank:'A',suit:'s'},{rank:'Q',suit:'s'}],
+    flop: [{rank:'Q',suit:'h'},{rank:'7',suit:'d'},{rank:'2',suit:'c'}],
+    turn: {rank:'3',suit:'s'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) 3-bet 9bb → BTN calls',
+      'Flop Q♥7♦2♣ · Hero c-bet ⅓ pot → BTN calls',
+      '💰 3-bet pot · SPR ~2 (剩 40bb / pot 20bb)'
+    ],
+    correctAction: 'barrel',
+    sizing: '½ pot (~10bb)',
+    title: '3-bet Pot 低 SPR · TPTK',
+    explanation: '3-bet pot，SPR 只有 ~2。TPTK 在這種情況下是 auto-stack-off 的牌——你不需要考慮 fold。轉牌 barrel ½ pot 的好處：(1) 小注不嚇跑對手 Qx；(2) 河牌 pot 會變成 ~40bb，你剩 ~30bb，剛好可以推。低 SPR 的時候不要打太大——你要的是對手跟進來，不是嚇跑他。兩街小注 + 河牌 shove。'
+  },
+  {
+    id: 18,
+    mode: 'barrel',
+    hero: [{rank:'J',suit:'s'},{rank:'9',suit:'s'}],
+    flop: [{rank:'A',suit:'h'},{rank:'7',suit:'d'},{rank:'2',suit:'c'}],
+    turn: {rank:'K',suit:'d'},
+    position: 'BTN',
+    ip: true,
+    actionLines: [
+      'Hero (BTN) RFI 2.5bb → BB calls',
+      'Flop A♥7♦2♣ · check-check',
+      'Turn K♦ · BB checks → 你的動作？'
+    ],
+    correctAction: 'barrel',
+    sizing: '⅔ pot (~8bb)',
+    title: 'Flop Check-Check · 轉牌 Probe Bet',
+    explanation: 'Flop check-check 在 A-high 面——這告訴你 BB 大概率沒有 A（否則他會 bet 或 check-raise）。轉牌 K♦ 是第二張高牌——對你的 BTN open range 極好（你有所有的 AK、AQ、KQ、KJ）。BB 再次 check——他大概率只是小對子或 air。Probe bet ⅔ pot 代表「我有 K 或更好」——BB 的 7x/2x 不可能接第二槍。'
+  },
+  {
+    id: 19,
+    mode: 'barrel',
+    hero: [{rank:'7',suit:'h'},{rank:'8',suit:'h'}],
+    flop: [{rank:'6',suit:'h'},{rank:'9',suit:'h'},{rank:'2',suit:'c'}],
+    turn: {rank:'3',suit:'d'},
+    position: 'BTN',
+    ip: true,
+    actionLines: [
+      'Hero (BTN) RFI 2.5bb → BB calls',
+      'Flop 6♥9♥2♣ · Hero c-bet ½ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '¾ pot (~12bb)',
+    title: 'Combo Draw (聽花+兩頭順) · 轉牌 blank',
+    explanation: '7♥8♥ 在 6♥9♥2♣ 上是 monster draw——flush draw + open-ended straight draw。你有 15 個 clean outs（9♥ + 3 non-♥ 的 5 和 T = 實際上有重疊，大約 13-14 個）。翻牌 ½ pot c-bet 建立底池，轉牌 3♦ 是 blank——你仍然是 draw，但你 equity 太高了（~50% vs 任何一對）。¾ pot barrel 是必須的——build pot，河牌擊中後可以拿到最大價值。就算沒擊中，河牌也能繼續 bluff。'
+  },
+  {
+    id: 20,
+    mode: 'barrel',
+    hero: [{rank:'A',suit:'s'},{rank:'K',suit:'h'}],
+    flop: [{rank:'K',suit:'s'},{rank:'7',suit:'h'},{rank:'2',suit:'h'}],
+    turn: {rank:'5',suit:'s'},
+    position: 'CO',
+    ip: true,
+    actionLines: [
+      'Hero (CO) RFI 2.5bb → BB calls',
+      'Flop K♠7♥2♥ · Hero c-bet ⅔ pot → BB calls'
+    ],
+    correctAction: 'barrel',
+    sizing: '¾ pot (~16bb)',
+    title: 'TPTK · 轉牌帶來第二個聽花',
+    explanation: '翻牌 K♠7♥2♥——有一個聽花。你的 A♠K♥ 是 TPTK。BB call ⅔ pot，他的範圍裡有 ♥ draw 和 Kx。轉牌 5♠ 帶來了第二個聽花——這意味著 BB 現在多了 ♠ draw 的可能性。對你來說，現在有兩個聽花威脅，你必須 charge 它們。¾ pot barrel 不給兩個聽花正確的 odds。而且你的 A♠ 給了 backdoor nut flush draw——即使被接，你還有 redraw。'
+  }
+];
+
+// ─── Rendering ───
+
+function pickScenario() {
+  let pool;
+  if (mode === 'all') {
+    pool = SCENARIOS;
+  } else if (mode === 'barrel') {
+    pool = SCENARIOS.filter(s => s.mode === 'barrel');
+  } else {
+    pool = SCENARIOS.filter(s => s.mode === 'check');
+  }
+
+  // Avoid immediate repeats by filtering out the last 3 shown IDs
+  let candidates = pool;
+  if (recentIds.length > 0 && pool.length > 3) {
+    const filtered = pool.filter(s => !recentIds.includes(s.id));
+    if (filtered.length > 0) candidates = filtered;
+  }
+
+  const pick = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Track recent
+  recentIds.push(pick.id);
+  if (recentIds.length > 5) recentIds.shift();
+
+  return pick;
+}
+
+function renderHand() {
+  answered = false;
+  current = pickScenario();
+
+  document.getElementById('heroCards').innerHTML =
+    current.hero.map(c => cardHTML(c)).join('');
+  document.getElementById('boardFlop').innerHTML =
+    current.flop.map(c => cardHTML(c)).join('');
+  document.getElementById('turnCard').innerHTML = cardHTML(current.turn);
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  const oopNote = current.ip ? '' : ' <span style="color:#f85149">[OOP]</span>';
+  const actionHTML = current.actionLines.map(l =>
+    `<span class="action-line">${l}</span>`
+  ).join('');
+
+  document.getElementById('spotInfo').innerHTML = `
+    <span style="color:#d2991d;font-weight:bold">${current.title}</span><br>
+    位置: ${current.position}${oopNote}<br>
+    ${actionHTML}
+  `;
+
+  document.getElementById('stepLabel').textContent = '繼續 Barrel 還是 Check？';
+  document.getElementById('actions').innerHTML = `
+    <button class="btn btn-barrel" onclick="answer('barrel')">🔥 Barrel</button>
+    <button class="btn btn-check" onclick="answer('check')">🛑 Check</button>
+  `;
+
+  document.getElementById('progress').textContent =
+    `已答 ${totalAnswered} 題 · 題庫 ${SCENARIOS.length} 題 · 當前模式: ${modeLabel()}`;
+
+  document.querySelectorAll('.btn').forEach(b => b.disabled = false);
+}
+
+function modeLabel() {
+  if (mode === 'all') return '全部';
+  if (mode === 'barrel') return '🔥 只練 Barrel';
+  return '🛑 只練 Check';
+}
+
+function answer(action) {
+  if (answered) return;
+  answered = true;
+  totalAnswered++;
+  document.querySelectorAll('.btn').forEach(b => b.disabled = true);
+
+  const isCorrect = action === current.correctAction;
+  const fb = document.getElementById('feedback');
+
+  if (isCorrect) {
+    correct++; streak++;
+    fb.className = 'feedback show correct';
+
+    let sizingNote = '';
+    if (current.correctAction === 'barrel' && current.sizing) {
+      sizingNote = `<br><span style="color:#3fb950">🎯 推薦下注尺寸：${current.sizing}</span>`;
+    }
+
+    fb.innerHTML = `✅ <span style="color:#3fb950">正確！</span>${action === 'barrel' ? '繼續 Barrel 🔥' : '停下來 Check 🛑'}。${sizingNote}<div class="reason">${current.explanation}</div>`;
+  } else {
+    wrong++; streak = 0;
+    fb.className = 'feedback show wrong';
+
+    const correctLabel = current.correctAction === 'barrel' ? '🔥 Barrel' : '🛑 Check';
+    fb.innerHTML = `❌ 你選了 ${action === 'barrel' ? 'Barrel' : 'Check'}，但正確是 <span style="color:#ffa726">${correctLabel}</span>。<div class="reason">${current.explanation}</div>`;
+  }
+
+  updateScore();
+  document.getElementById('nextBtn').className = 'next-btn show';
+  document.getElementById('progress').textContent =
+    `已答 ${totalAnswered} 題 · 題庫 ${SCENARIOS.length} 題 · 當前模式: ${modeLabel()}`;
+}
+
+function nextHand() { renderHand(); }
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total > 0 ? (correct/total*100).toFixed(0) + '%' : '--';
+  document.getElementById('streak').textContent = streak;
+  localStorage.setItem('turnBarrel_' + mode, JSON.stringify({correct, wrong, streak, totalAnswered}));
+}
+
+function loadScore() {
+  const s = JSON.parse(localStorage.getItem('turnBarrel_' + mode) || '{}');
+  correct = s.correct || 0; wrong = s.wrong || 0; streak = s.streak || 0;
+  totalAnswered = s.totalAnswered || 0;
+  updateScore();
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('modeAll').className = 'mode-btn' + (m === 'all' ? ' active' : '');
+  document.getElementById('modeBarrel').className = 'mode-btn' + (m === 'barrel' ? ' active' : '');
+  document.getElementById('modeCheck').className = 'mode-btn' + (m === 'check' ? ' active' : '');
+  recentIds = [];
+  loadScore();
+  renderHand();
+}
+
+// ─── Init ───
+loadScore();
+renderHand();
+</script>
+</body>
+</html>
