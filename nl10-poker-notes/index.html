@@ -115,6 +115,26 @@
       border-left-color: var(--accent-cyan);
     }
 
+    .nav-section {
+      padding: 16px 24px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-amber);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .drill-link {
+      color: var(--accent-purple);
+      font-size: 12px;
+    }
+    .drill-link:hover {
+      color: var(--accent-purple);
+      background: rgba(168, 85, 247, 0.08);
+      border-left-color: var(--accent-purple);
+    }
+
     /* Main content */
     .main {
       margin-left: 260px;
@@ -410,6 +430,14 @@
       <div class="subtitle">SYSTEMATIC POKER · 公开版</div>
     </div>
     <div class="nav">
+            <div class="nav-section">🎯 练习题库</div>
+            <a href="marginal-hands-drill.html" class="nav-link drill-link">⚔️ 边缘牌攻防 · AJ/AQ/KQ/ATo</a>
+            <a href="river-polarization-drill.html" class="nav-link drill-link">🌊 河牌极化决策</a>
+            <a href="fourbet-defend-drill.html" class="nav-link drill-link">🛡 4-Bet 翻前防守</a>
+            <a href="btn-3bet-drill.html" class="nav-link drill-link">📋 BTN 面对 3-Bet</a>
+            <a href="bet-sizing-drill.html" class="nav-link drill-link">🎯 下注尺寸决策</a>
+            <a href="oop-miss-drill.html" class="nav-link drill-link">💨 OOP 3-Bet Miss</a>
+            <div class="nav-section">📖 笔记目录</div>
             <a href="#1-心态与纪律" class="nav-link">1. 心态与纪律</a>            <a href="#2-资金管理" class="nav-link">2. 资金管理</a>            <a href="#3-基础概念一-概率-赔率与期望值" class="nav-link">3. 基础概念一：概率、赔率与期望值</a>            <a href="#4-基础概念二-范围与-gto" class="nav-link">4. 基础概念二：范围与 GTO</a>            <a href="#5-基础概念三-从-gto-到剥削打法" class="nav-link">5. 基础概念三：从 GTO 到剥削打法</a>            <a href="#6-始计篇-nl10-翻前铁律" class="nav-link">6. 始计篇：NL10 翻前铁律</a>            <a href="#7-兵势篇-nl10-的隐形与欺骗" class="nav-link">7. 兵势篇：NL10 的隐形与欺骗</a>            <a href="#9-翻前范围详解" class="nav-link">9. 翻前范围详解</a>            <a href="#10-翻后牌面分类与打法" class="nav-link">10. 翻后牌面分类与打法</a>            <a href="#11-核心概念深度解析" class="nav-link">11. 核心概念深度解析</a>            <a href="#12-转牌决策体系" class="nav-link">12. 转牌决策体系</a>            <a href="#13-价值下注" class="nav-link">13. 价值下注</a>            <a href="#14-river-bluff-什麼時候轉詐唬" class="nav-link">14. River Bluff — 什麼時候轉詐唬</a>            <a href="#15-多人底池策略" class="nav-link">15. 多人底池策略</a>            <a href="#16-nl10-线上实战调整" class="nav-link">16. NL10 线上实战调整</a>            <a href="#17-牌桌选择" class="nav-link">17. 牌桌选择</a>            <a href="#18-进阶-玩家分类与针对性策略" class="nav-link">18. 进阶：玩家分类与针对性策略</a>            <a href="#19-公共牌阻挡效应-board-blockers" class="nav-link">19. 公共牌阻挡效应（Board Blockers）</a>            <a href="#20-手牌选择与隐含赔率" class="nav-link">20. 手牌选择与隐含赔率</a>            <a href="#21-大牌翻后透明化与翻前纪律" class="nav-link">21. 大牌翻后透明化与翻前纪律</a>            <a href="#22-overbet-与防-overbet" class="nav-link">22. Overbet 与防 Overbet</a>            <a href="#23-bet-size-即语言-從讀牌到讀人" class="nav-link">23. Bet Size 即语言：從讀牌到讀人</a>            <a href="#24-牌面分類-底池類型-sb-vs-bb-範圍" class="nav-link">24. 牌面分類 × 底池類型 + SB vs BB 範圍</a>            <a href="#25-bb-sb-盲注位防守系統" class="nav-link">25. BB/SB 盲注位防守系統</a>            <a href="#26-特定手牌專題-邊緣牌的攻防" class="nav-link">26. 特定手牌專題 — 邊緣牌的攻防</a>
     </div>
   </nav>
@@ -6465,6 +6493,7 @@
             <blockquote>自診體系有效。症狀命名 → 數據驗證 → 行為修復的流程已經建立。</blockquote>
             <ul><li><strong>你在贏。</strong> +11.2 bb/100 是 healthy win rate。</li><li><strong>C-bet 是下一個槓桿點。</strong> 從 48% 拉到 55% 可以增加 ~2-3 bb/100。</li><li><strong>BB 已是 NL10 中上水準，再微調即可。</strong> Chapter 16 的三個優先級改善到位後，BB 可從 -19 進步到 -25~-35。</li><li><strong>情緒管理系統在進化。</strong> Tilt 自診已驗證有效。第三道防線（非 tilt 貪打）待建。</li></ul>
             <hr>
+            <blockquote>🎯 <strong>实战训练</strong>：[⚔️ 邊緣牌攻防 · AJ/AQ/KQ/ATo](marginal-hands-drill.html) — 翻前什麼時候 open？面對 3-bet 跟還是棄？翻後 TPTK 怎麼打？23 題涵蓋翻前翻後，把筆記變成肌肉記憶。</blockquote>
       </section>
   </main>
 

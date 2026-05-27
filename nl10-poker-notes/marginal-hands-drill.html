@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邊緣牌攻防 | AJ/AQ/KQ/ATo 決策題庫</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'SF Mono', 'Monaco', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { font-size: 20px; color: #a855f7; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+
+  .mode-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+  .mode-btn { padding: 8px 16px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: #8b949e; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .mode-btn.active { background: #a855f7; color: #fff; border-color: #a855f7; font-weight: bold; }
+
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; }
+  .scorebar span { color: #8b949e; } .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+
+  .table { background: #1a5c2a; border-radius: 120px; width: 520px; max-width: 100%; padding: 32px 24px; margin-bottom: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3); position: relative; }
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .card { width: 52px; height: 74px; border-radius: 6px; background: #fff; color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1; }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 22px; } .card .suit { font-size: 14px; margin-top: -2px; }
+
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .step-label { text-align: center; font-size: 14px; color: #a855f7; margin: 12px 0 6px; font-weight: bold; }
+
+  .actions { display: flex; gap: 12px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+  .btn { padding: 12px 24px; border-radius: 8px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.1s; font-family: inherit; }
+  .btn:hover { transform: scale(1.04); } .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-call { background: #58a6ff; color: #fff; }
+  .btn-fold { background: #f85149; color: #fff; }
+  .btn-raise { background: #3fb950; color: #fff; }
+  .btn-open { background: #3fb950; color: #fff; }
+  .btn-4b-bluff { background: #d2991d; color: #000; }
+  .btn-check { background: #8b949e; color: #fff; }
+
+  .feedback { width: 520px; max-width: 100%; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+
+  .back-link { margin-top: 32px; font-size: 12px; }
+  .back-link a { color: #8b949e; text-decoration: none; }
+  .back-link a:hover { color: #a855f7; }
+</style>
+</head>
+<body>
+
+<h1>⚔️ 邊緣牌攻防 · AJ / AQ / KQ / ATo</h1>
+<div class="sub">翻前翻後 — 這些牌「會打」和「不會打」就是贏家和輸家的差距</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('all')" id="modeAll">🎲 全部混合</button>
+  <button class="mode-btn" onclick="setMode('preflop')" id="modePre">🃏 翻前決策</button>
+  <button class="mode-btn" onclick="setMode('postflop')" id="modePost">🟩 翻後決策</button>
+</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="board-label">—— H E R O ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div id="boardArea">
+    <div class="board-label">—— B O A R D ——</div>
+    <div class="cards" id="boardCards"></div>
+  </div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">你的決定？</div>
+<div class="actions" id="actions"></div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextHand()">下一題 →</button>
+
+<div class="back-link"><a href="index.html">← 回到筆記</a></div>
+
+<script src="deck.js"></script>
+<script>
+// ─── Scenarios ───
+const SCENARIOS = {
+  preflop: [
+    {
+      id: "pf1", title: "翻前",
+      hero: "AJo", heroCards: [{rank:'A',suit:'s'},{rank:'J',suit:'d'}],
+      pos: "UTG", spot: "你在 UTG，100bb 有效籌碼。NL10 常規桌。",
+      actions: [{label:"Open 2.5bb", key:"open"}, {label:"Fold", key:"fold"}],
+      answer: "fold", reason: "AJo UTG 太弱。J 踢腳被 AJ+/AQ+/AK 統治。你的筆記：AJo HJ+ 才 open。"
+    },
+    {
+      id: "pf2", title: "翻前",
+      hero: "AJo", heroCards: [{rank:'A',suit:'h'},{rank:'J',suit:'c'}],
+      pos: "HJ", spot: "你在 HJ，前面全棄。100bb。",
+      actions: [{label:"Open 2.5bb", key:"open"}, {label:"Fold", key:"fold"}],
+      answer: "open", reason: "AJo HJ 剛好進 open 範圍。Hijack 是最早可以 open AJo 的位置。"
+    },
+    {
+      id: "pf3", title: "翻前",
+      hero: "AJo", heroCards: [{rank:'A',suit:'c'},{rank:'J',suit:'s'}],
+      pos: "CO", spot: "你在 CO open 2.5bb → BTN 3-bet 到 8bb。BB 還沒動。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "fold", reason: "AJo vs 3-bet → fold。你的筆記：AJo 被 AK/AQ 統治。IP call 也是燒錢——中了 A 不知道領先還落後。"
+    },
+    {
+      id: "pf4", title: "翻前",
+      hero: "AJs", heroCards: [{rank:'A',suit:'s'},{rank:'J',suit:'s'}],
+      pos: "CO", spot: "你在 CO open 2.5bb → SB 3-bet 到 10bb。你有位置。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "call", reason: "AJs IP vs 3-bet → call。同花 + 位置 = 翻後能打。AJs 的 flush equity 讓它比 AJo 強一個檔次。"
+    },
+    {
+      id: "pf5", title: "翻前",
+      hero: "AJs", heroCards: [{rank:'A',suit:'h'},{rank:'J',suit:'h'}],
+      pos: "BTN", spot: "你在 BTN open → BB 3-bet 到 9bb。BB 是 reg（3-bet ~9%）。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet Bluff", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "call", reason: "AJs IP 絕大多數 flat。偶爾 4-bet bluff，但 AJs 太強不適合 pure bluff——flat 保留翻後價值更好。vs reg 的 BB 3-bet 範圍偏寬，call 是 +EV。"
+    },
+    {
+      id: "pf6", title: "翻前",
+      hero: "AQo", heroCards: [{rank:'A',suit:'d'},{rank:'Q',suit:'c'}],
+      pos: "UTG", spot: "你在 UTG open 2.5bb → MP 3-bet 到 8bb。CO/BTN/ blinds 還沒動。",
+      actions: [{label:"Call OOP", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "fold", reason: "AQo OOP vs 3-bet → fold。筆記說得清楚：AQo IP call，OOP fold。對手的 MP 3-bet 範圍 = QQ+/AK 為主，AQo 大幅落後。"
+    },
+    {
+      id: "pf7", title: "翻前",
+      hero: "AQo", heroCards: [{rank:'A',suit:'s'},{rank:'Q',suit:'h'}],
+      pos: "BTN", spot: "你在 BTN open 2.5bb → SB 3-bet 到 10bb。你有位置。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "call", reason: "AQo IP vs SB 3-bet → call。BTN open 範圍寬，SB 3-bet 有 bluff。AQo 有位置翻後可打。"
+    },
+    {
+      id: "pf8", title: "翻前",
+      hero: "AQs", heroCards: [{rank:'A',suit:'d'},{rank:'Q',suit:'d'}],
+      pos: "CO", spot: "你在 CO open → BTN 3-bet 到 8bb。Blinds 還沒動。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "call", reason: "AQs IP → 必 call。同花 + 兩高張，翻後潛力大。偶爾 4-bet 也行，但 default 是 call。"
+    },
+    {
+      id: "pf9", title: "翻前",
+      hero: "KQo", heroCards: [{rank:'K',suit:'h'},{rank:'Q',suit:'d'}],
+      pos: "HJ", spot: "你在 HJ open 2.5bb → CO 3-bet 到 8bb。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "fold", reason: "KQo vs 3-bet → fold。筆記：KQ 是菜鳥陷阱，自以為 AK 小弟。offsuit 沒 flush equity，中了 K/Q 都在猜領先還落後。"
+    },
+    {
+      id: "pf10", title: "翻前",
+      hero: "KQs", heroCards: [{rank:'K',suit:'c'},{rank:'Q',suit:'c'}],
+      pos: "BTN", spot: "你在 BTN open → SB 3-bet 到 10bb。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "call", reason: "KQs IP → call。不適合當 4-bet bluff——KQs 太強，flat 保留翻後價值更好。block KK/QQ 但這不是 4-bet 的好理由。"
+    },
+    {
+      id: "pf11", title: "翻前",
+      hero: "ATo", heroCards: [{rank:'A',suit:'c'},{rank:'T',suit:'s'}],
+      pos: "HJ", spot: "你在 HJ open 2.5bb → BB 3-bet 到 9bb。OOP。",
+      actions: [{label:"Call", key:"call"}, {label:"4-Bet", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "fold", reason: "ATo vs 3-bet → fold，OOP 更是秒棄。T 踢腳被 AJ+ 全面統治。中了 A 不知道自己在哪——對手的 AK/AQ/AJ 全碾你。"
+    },
+    {
+      id: "pf12", title: "翻前",
+      hero: "KQs", heroCards: [{rank:'K',suit:'h'},{rank:'Q',suit:'h'}],
+      pos: "BB", spot: "BTN open 2.5bb，SB fold。你在 BB 拿 KQs。BTN 是 reg（ATS ~40%）。",
+      actions: [{label:"3-Bet", key:"raise"}, {label:"Call", key:"call"}, {label:"Fold", key:"fold"}],
+      answer: "raise", reason: "KQs BB vs BTN steal → 3-bet。KQs 在 3-bet 範圍是 value，不是 bluff。vs BTN wide open，3-bet 直接拿 fold equity + 翻後主動權。"
+    },
+  ],
+  postflop: [
+    {
+      id: "po1", title: "翻後",
+      hero: "AJs", heroCards: [{rank:'A',suit:'s'},{rank:'J',suit:'s'}],
+      board: [{rank:'K',suit:'h'},{rank:'7',suit:'d'},{rank:'3',suit:'c'}],
+      pos: "SB (OOP)", spot: "你 SB 3-bet，BTN cold-call。翻牌 K♠7♦3♣。你 miss。底池 20bb。",
+      actions: [{label:"C-Bet ½ pot", key:"bet"}, {label:"Check", key:"check"}],
+      answer: "check", reason: "K-high 面上不要 c-bet AJs。對手 cold-call 3-bet range 裡 KQ/KJs 密度高。你的 A blocker 擋了 AK 但對手沒有 AK——他有 Kx。這是筆記 15.6 的經典案例。"
+    },
+    {
+      id: "po2", title: "翻後",
+      hero: "AJs", heroCards: [{rank:'A',suit:'d'},{rank:'J',suit:'d'}],
+      board: [{rank:'8',suit:'c'},{rank:'4',suit:'h'},{rank:'2',suit:'s'}],
+      pos: "SB (OOP)", spot: "你 SB 3-bet，BTN cold-call。翻牌 8♣4♥2♠ 低乾燥。你 miss。底池 20bb。",
+      actions: [{label:"C-Bet ½ pot", key:"bet"}, {label:"Check", key:"check"}],
+      answer: "bet", reason: "低乾燥面 c-bet。雙方都 miss，但你是 aggressor → range advantage 碾壓。A-high + 兩 overs 有 equity，bet 直接收 pot。"
+    },
+    {
+      id: "po3", title: "翻後",
+      hero: "AQo", heroCards: [{rank:'A',suit:'c'},{rank:'Q',suit:'s'}],
+      board: [{rank:'A',suit:'h'},{rank:'9',suit:'d'},{rank:'4',suit:'c'}],
+      pos: "BTN (IP)", spot: "你 BTN open，BB call。翻牌 A♥9♦4♣ 乾燥。你中 TPTK。底池 6bb，對手 check。",
+      actions: [{label:"Bet ⅓ pot", key:"small"}, {label:"Bet ⅔ pot", key:"medium"}, {label:"Check back", key:"check"}],
+      answer: "small", reason: "A-high 乾燥面 TPTK → 小注。你大幅領先，小注讓對手用弱 Ax/9x/medium pair 跟。不需要打大——你自己筆記：bet 是為了讓他用弱牌付錢，不是為了嚇跑他。"
+    },
+    {
+      id: "po4", title: "翻後",
+      hero: "AQo", heroCards: [{rank:'A',suit:'s'},{rank:'Q',suit:'h'}],
+      board: [{rank:'A',suit:'d'},{rank:'K',suit:'d'},{rank:'T',suit:'d'}],
+      pos: "BTN (IP)", spot: "你 BTN open，BB call。翻牌 A♦K♦T♦ 全方塊。你中 TPTK 但牌面極濕。底池 6bb，對手 check。",
+      actions: [{label:"Bet ½ pot", key:"bet"}, {label:"Check back", key:"check"}],
+      answer: "check", reason: "AKT 全同花面，你的 TPTK 不是堅果。對手 range 裡有大量 flush/straight combos。check back 控池，轉牌 reassess。打出去被 check-raise 就難受了。"
+    },
+    {
+      id: "po5", title: "翻後",
+      hero: "KQo", heroCards: [{rank:'K',suit:'d'},{rank:'Q',suit:'c'}],
+      board: [{rank:'K',suit:'h'},{rank:'7',suit:'s'},{rank:'2',suit:'d'}],
+      pos: "HJ (IP)", spot: "你 HJ open，BB call。翻牌 K♥7♠2♦ 乾燥。你中 TPTK。底池 6bb，對手 check，你 bet 4bb，對手 call。轉牌 T♣，對手 check。",
+      actions: [{label:"Bet ⅔ pot", key:"bet"}, {label:"Check back", key:"check"}],
+      answer: "bet", reason: "轉牌 T♣ 是 blank——沒完成任何 draw。繼續 value bet。對手的 Kx 弱踢腳（KJ/KT/K9）會繼續跟。"
+    },
+    {
+      id: "po6", title: "翻後",
+      hero: "KQo", heroCards: [{rank:'K',suit:'s'},{rank:'Q',suit:'h'}],
+      board: [{rank:'K',suit:'c'},{rank:'J',suit:'d'},{rank:'8',suit:'c'}],
+      pos: "CO (IP)", spot: "你 CO open，BB call。翻牌 K♣J♦8♣。你 TPTK。你 bet ⅔，對手 call。轉牌 T♠ → 對手 donk bet ¾ pot。",
+      actions: [{label:"Call", key:"call"}, {label:"Fold", key:"fold"}, {label:"Raise", key:"raise"}],
+      answer: "fold", reason: "轉牌 T♠ 完成了 Q9(16) 和 97s(4) 的順子。BB donk bet ¾ pot on KJ8T = 極強。你的 TPTK 瞬間變成 bluff catcher。NL10 的 turn donk = 有貨，棄。"
+    },
+    {
+      id: "po7", title: "翻後",
+      hero: "KQs", heroCards: [{rank:'K',suit:'s'},{rank:'Q',suit:'s'}],
+      board: [{rank:'J',suit:'s'},{rank:'T',suit:'h'},{rank:'4',suit:'s'}],
+      pos: "BTN (IP)", spot: "你 BTN open，BB call。翻牌 J♠T♥4♠。你中 flush draw + 兩 overs + gutshot（A/Q 均可成順）。底池 6bb，對手 check。",
+      actions: [{label:"Bet ⅔ pot", key:"bet"}, {label:"Check back", key:"check"}],
+      answer: "bet", reason: "怪物 draw——flush + double gutter。bet 建立底池，轉牌中了可以繼續打。對手 fold → 直接收 pot。對手 call → 你有 15+ outs。"
+    },
+    {
+      id: "po8", title: "翻後",
+      hero: "ATo", heroCards: [{rank:'A',suit:'d'},{rank:'T',suit:'c'}],
+      board: [{rank:'A',suit:'s'},{rank:'9',suit:'h'},{rank:'5',suit:'d'}],
+      pos: "HJ (IP)", spot: "你 HJ open，BB call。翻牌 A♠9♥5♦。你中 top pair T kicker。底池 6bb，對手 check。你 bet 4bb，對手 raise 到 12bb。",
+      actions: [{label:"Call", key:"call"}, {label:"Fold", key:"fold"}, {label:"Re-Raise", key:"raise"}],
+      answer: "fold", reason: "ATo 在 A-high 面被 check-raise → fold。NL10 翻牌 check-raise = 兩對+（A9/A5/55/99）。你的 T 踢腳太弱，call 下去轉牌河牌更貴。"
+    },
+    {
+      id: "po9", title: "翻後",
+      hero: "AJs", heroCards: [{rank:'A',suit:'c'},{rank:'J',suit:'c'}],
+      board: [{rank:'A',suit:'h'},{rank:'8',suit:'s'},{rank:'3',suit:'d'}],
+      pos: "BTN (IP)", spot: "你 BTN open，BB 3-bet，你 call。翻牌 A♥8♠3♦。你中 TPTK。底池 20bb，對手 c-bet 10bb。",
+      actions: [{label:"Call", key:"call"}, {label:"Raise", key:"raise"}, {label:"Fold", key:"fold"}],
+      answer: "call", reason: "TPTK IP vs c-bet → call。不要 raise——你 raise 只會被比你大的牌（AK/AA/88/33）接，比你小的全跑。call 保留對手 bluff 的空間。"
+    },
+    {
+      id: "po10", title: "翻後",
+      hero: "KQs", heroCards: [{rank:'K',suit:'d'},{rank:'Q',suit:'d'}],
+      board: [{rank:'Q',suit:'s'},{rank:'9',suit:'h'},{rank:'6',suit:'c'}],
+      pos: "CO (IP)", spot: "你 CO open，BB call。翻牌 Q♠9♥6♣。你中 top pair Q kicker。底池 6bb，對手 check，你 bet 4bb，對手 call。轉牌 2♦ blank。對手 check，你 bet 10bb，對手 call。河牌 A♣，對手 lead ¾ pot。",
+      actions: [{label:"Call", key:"call"}, {label:"Fold", key:"fold"}],
+      answer: "fold", reason: "A♣ 河牌 + donk lead = 對手有 A。他最有可能是 AQ（翻牌中 Q 跟兩街，河牌中 A）。次要可能是 busted draw 轉 bluff——但 NL10 河牌 donk 幾乎全是 value。Q kicker 不夠好，棄。"
+    },
+    {
+      id: "po11", title: "翻後",
+      hero: "AQo", heroCards: [{rank:'A',suit:'h'},{rank:'Q',suit:'d'}],
+      board: [{rank:'A',suit:'c'},{rank:'T',suit:'s'},{rank:'7',suit:'h'},{rank:'3',suit:'d'}],
+      pos: "UTG (IP)", spot: "你 UTG open，BTN call。翻牌 A♣T♠7♥。你 bet ⅔，對手 call。轉牌 3♦ blank。你 bet ⅔，對手 call。河牌 J♥。底池 40bb。",
+      actions: [{label:"Bet ½ pot", key:"bet"}, {label:"Check back", key:"check"}],
+      answer: "check", reason: "河牌 J 完成了 KQ(16)。你的 TPTK 從 value 變成 thin value。check back 控池——對手可能有 AJ/AT/JT 兩對或 KQ 順子。bet 只會被比你大的跟。"
+    },
+  ]
+};
+
+// Flatten all
+const ALL = [...SCENARIOS.preflop, ...SCENARIOS.postflop];
+
+let correct = 0, wrong = 0, streak = 0, currentMode = 'all';
+let queue = [], current = null, answered = false;
+let usedInStreak = new Set();
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode' + mode.charAt(0).toUpperCase() + mode.slice(1)).classList.add('active');
+  resetStats();
+  startNewRound();
+}
+
+function resetStats() {
+  correct = 0; wrong = 0; streak = 0;
+  usedInStreak = new Set();
+  updateScore();
+}
+
+function startNewRound() {
+  let pool = currentMode === 'preflop' ? SCENARIOS.preflop
+           : currentMode === 'postflop' ? SCENARIOS.postflop
+           : ALL;
+  // Remove already used
+  const available = pool.filter(s => !usedInStreak.has(s.id));
+  if (available.length === 0) { usedInStreak = new Set(); queue = shuffleArray([...pool]); }
+  else { queue = shuffleArray([...available]); }
+  nextHand();
+}
+
+function nextHand() {
+  if (queue.length === 0) { startNewRound(); return; }
+  current = queue.pop();
+  usedInStreak.add(current.id);
+  answered = false;
+
+  // Render hero cards
+  document.getElementById('heroCards').innerHTML = current.heroCards.map(c => cardHTML(c)).join('');
+
+  // Render board
+  const boardArea = document.getElementById('boardArea');
+  if (current.board) {
+    boardArea.style.display = 'block';
+    document.getElementById('boardCards').innerHTML = current.board.map(c => cardHTML(c)).join('');
+  } else {
+    boardArea.style.display = 'none';
+  }
+
+  // Spot info
+  document.getElementById('spotInfo').innerHTML = `<strong>位置：${current.pos}</strong><br>${current.spot}`;
+
+  // Actions
+  document.getElementById('actions').innerHTML = current.actions.map(a => {
+    let cls = 'btn ';
+    if (a.key === 'call') cls += 'btn-call';
+    else if (a.key === 'fold') cls += 'btn-fold';
+    else if (a.key === 'raise') cls += 'btn-raise';
+    else if (a.key === 'open') cls += 'btn-open';
+    else if (a.key === 'bet' || a.key === 'medium') cls += 'btn-raise';
+    else if (a.key === 'small') cls += 'btn-call';
+    else if (a.key === 'check') cls += 'btn-check';
+    return `<button class="${cls}" onclick="answer('${a.key}')">${a.label}</button>`;
+  }).join('');
+
+  document.getElementById('stepLabel').textContent = '你的決定？';
+  document.getElementById('feedback').classList.remove('show', 'correct', 'wrong');
+  document.getElementById('nextBtn').classList.remove('show');
+  // Re-enable buttons
+  document.querySelectorAll('#actions .btn').forEach(b => b.disabled = false);
+}
+
+function answer(key) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('#actions .btn').forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('feedback');
+  const isCorrect = key === current.answer;
+  if (isCorrect) {
+    correct++; streak++;
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ 正確！<div class="reason">${current.reason}</div>`;
+  } else {
+    wrong++; streak = 0;
+    fb.className = 'feedback show wrong';
+    const correctLabel = current.actions.find(a => a.key === current.answer)?.label || current.answer;
+    fb.innerHTML = `❌ 錯誤。正確答案是 <strong>${correctLabel}</strong><div class="reason">${current.reason}</div>`;
+  }
+  document.getElementById('nextBtn').classList.add('show');
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total > 0 ? Math.round(correct / total * 100) + '%' : '--';
+  document.getElementById('streak').textContent = streak;
+}
+
+// Init
+startNewRound();
+</script>
+</body>
+</html>
