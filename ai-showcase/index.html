@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 创作成果展示</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          serif: ['"Noto Serif SC"', '"Songti SC"', 'Georgia', 'serif'],
+          sans: ['"PingFang SC"', '"Hiragino Sans GB"', 'system-ui', '-apple-system', 'sans-serif'],
+        },
+        colors: {
+          cream:  { DEFAULT: '#FDF8F0', dark: '#F5EDE0', darker: '#EBE0CC' },
+          warm:   { brown: '#5C3D2E', 'brown-light': '#8B7355', gold: '#C9A96E', 'gold-light': '#E8D5B7' },
+          sage:   { DEFAULT: '#9CAF88', light: '#E8EFE4', dark: '#7D9B6E' },
+          paper:  '#FBF3E4',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* ── warm academic base ── */
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #FDF8F0;
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 70%);
+    color: #5C3D2E;
+  }
+
+  /* ── section divider ornament ── */
+  .section-ornament {
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-ornament::before,
+  .section-ornament::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, #C9A96E, transparent);
+  }
+  .section-ornament .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #C9A96E; flex-shrink: 0;
+  }
+
+  /* ── video card "thumbnail" ── */
+  .video-thumb {
+    position: relative;
+    background: linear-gradient(135deg, #5C3D2E 0%, #8B7355 40%, #C9A96E 100%);
+    border-radius: 0.5rem 0.5rem 0 0;
+    overflow: hidden;
+  }
+  .video-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(255,255,255,0.06) 0%, transparent 50%),
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.02) 2px,
+        rgba(255,255,255,0.02) 4px
+      );
+  }
+  .video-thumb .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .video-link:hover .play-overlay {
+    transform: scale(1.08);
+  }
+
+  /* ── card hover lift ── */
+  .card-hover {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(92,61,46,0.12);
+  }
+
+  /* ── audio player restyle ── */
+  .audio-card audio {
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+  }
+  .audio-card audio::-webkit-media-controls-panel {
+    background-color: #F5EDE0;
+  }
+  .audio-card audio::-webkit-media-controls-play-button {
+    filter: invert(0.3) sepia(1) saturate(3) hue-rotate(10deg);
+  }
+
+  /* ── subtle link underline ── */
+  .warm-link {
+    background-image: linear-gradient(to right, #C9A96E, #C9A96E);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 0.3s ease;
+  }
+  .warm-link:hover {
+    background-size: 100% 1px;
+  }
+
+  /* ── pulse dot for "generating" ── */
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .generating-dot {
+    animation: pulse-dot 1.6s ease-in-out infinite;
+  }
+</style>
+</head>
+<body class="font-sans min-h-screen">
+
+<div class="max-w-4xl mx-auto px-5 py-10 sm:py-16">
+
+  <!-- ═══════════════ HEADER ═══════════════ -->
+  <header class="text-center mb-16 sm:mb-20">
+    <div class="inline-flex items-center gap-2 mb-3 text-warm-brown-light/60 text-sm tracking-widest uppercase">
+      <i data-lucide="sparkles" class="w-4 h-4"></i>
+      <span>Artificial Intelligence</span>
+      <i data-lucide="sparkles" class="w-4 h-4"></i>
+    </div>
+
+    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-warm-brown tracking-tight mb-4">
+      AI 创作成果展示
+    </h1>
+
+    <p class="text-lg sm:text-xl text-warm-brown-light font-serif mb-3">
+      张育铭 <span class="text-warm-gold mx-2">·</span> 北京城市学院
+    </p>
+
+    <p class="text-sm sm:text-base text-warm-brown-light/70 max-w-lg mx-auto leading-relaxed">
+      以AI之力，探索数智传播的边界——从理论思辨到视听创作，让技术为思想发声。
+    </p>
+
+    <!-- ornament -->
+    <div class="section-ornament mt-10 max-w-xs mx-auto">
+      <span class="dot"></span>
+    </div>
+  </header>
+
+  <!-- ═══════════════ SECTION 1: AI Explainer Videos ═══════════════ -->
+  <section class="mb-16 sm:mb-20">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-8 h-8 rounded-lg bg-sage-light flex items-center justify-center flex-shrink-0">
+        <i data-lucide="video" class="w-4 h-4 text-sage-dark"></i>
+      </div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-warm-brown">
+        AI 解说视频
+      </h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6 sm:gap-8">
+      <!-- Video Card 1 -->
+      <a href="https://assets.listenhub.ai/listenhub-public-prod/storybook-video/6a1636175ea42e073f40f86f.mp4"
+         target="_blank" rel="noopener"
+         class="video-link block bg-white rounded-xl overflow-hidden shadow-sm border border-cream-darker card-hover group">
+        <div class="video-thumb h-44 sm:h-48 flex items-center justify-center">
+          <div class="play-overlay">
+            <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center
+                        ring-1 ring-white/30 group-hover:bg-white/30 transition-colors">
+              <i data-lucide="play" class="w-7 h-7 text-white fill-white ml-0.5"></i>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <h3 class="font-serif text-lg font-semibold text-warm-brown leading-snug">
+              AI如何重构数智传播
+            </h3>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-sage-light text-sage-dark whitespace-nowrap flex-shrink-0">
+              专业解说版
+            </span>
+          </div>
+          <div class="flex items-center gap-4 text-xs text-warm-brown-light/70 mb-3">
+            <span class="flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3"></i> 苏哲 配音</span>
+            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 2分26秒</span>
+          </div>
+          <p class="text-sm text-warm-brown-light/80 leading-relaxed mb-3">
+            以专业解说风格，深入探讨人工智能如何重构数字智能传播领域，涵盖核心技术、应用场景与未来趋势。
+          </p>
+          <span class="inline-flex items-center gap-1 text-sm text-warm-gold warm-link font-medium">
+            观看视频 <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+      </a>
+
+      <!-- Video Card 2 -->
+      <a href="https://assets.listenhub.ai/listenhub-public-prod/storybook-video/6a1639955ea42e073f4130b9.mp4"
+         target="_blank" rel="noopener"
+         class="video-link block bg-white rounded-xl overflow-hidden shadow-sm border border-cream-darker card-hover group">
+        <div class="video-thumb h-44 sm:h-48 flex items-center justify-center">
+          <div class="play-overlay">
+            <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center
+                        ring-1 ring-white/30 group-hover:bg-white/30 transition-colors">
+              <i data-lucide="play" class="w-7 h-7 text-white fill-white ml-0.5"></i>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <h3 class="font-serif text-lg font-semibold text-warm-brown leading-snug">
+              AI时代的哈贝马斯之问
+            </h3>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-sage-light text-sage-dark whitespace-nowrap flex-shrink-0">
+              哈贝马斯理论版
+            </span>
+          </div>
+          <div class="flex items-center gap-4 text-xs text-warm-brown-light/70 mb-3">
+            <span class="flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3"></i> 晓曼 配音</span>
+            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 2分01秒</span>
+          </div>
+          <p class="text-sm text-warm-brown-light/80 leading-relaxed mb-3">
+            从哈贝马斯交往行为理论出发，审视AI时代传播伦理与公共领域重构，兼具学术深度与人文关怀。
+          </p>
+          <span class="inline-flex items-center gap-1 text-sm text-warm-gold warm-link font-medium">
+            观看视频 <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ornament divider -->
+  <div class="section-ornament max-w-xs mx-auto mb-16 sm:mb-20">
+    <span class="dot"></span>
+  </div>
+
+  <!-- ═══════════════ SECTION 2: AI Podcasts & Audio ═══════════════ -->
+  <section class="mb-16 sm:mb-20">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-8 h-8 rounded-lg bg-sage-light flex items-center justify-center flex-shrink-0">
+        <i data-lucide="headphones" class="w-4 h-4 text-sage-dark"></i>
+      </div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-warm-brown">
+        AI 播客与音频
+      </h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6 sm:gap-8">
+      <!-- Audio 1: 苏哲 -->
+      <div class="audio-card bg-white rounded-xl p-5 sm:p-6 shadow-sm border border-cream-darker card-hover">
+        <div class="flex items-start gap-4 mb-4">
+          <div class="w-10 h-10 rounded-full bg-warm-gold-light flex items-center justify-center flex-shrink-0">
+            <i data-lucide="volume-2" class="w-5 h-5 text-warm-brown"></i>
+          </div>
+          <div>
+            <h3 class="font-serif text-lg font-semibold text-warm-brown">AI如何重构数智传播</h3>
+            <p class="text-sm text-warm-brown-light/70 mt-0.5">
+              <span class="flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3"></i> 苏哲 配音</span>
+            </p>
+          </div>
+        </div>
+        <p class="text-sm text-warm-brown-light/80 leading-relaxed mb-4">
+          专业解说风格，深入浅出地剖析AI对数字智能传播领域的深刻影响，适合课堂教学与学术场景。
+        </p>
+        <audio controls preload="metadata"
+               src="https://assets.listenhub.ai/listenhub-public-prod/storybook/6a1636175ea42e073f40f86f.mp3"
+               class="w-full">
+        </audio>
+      </div>
+
+      <!-- Audio 2: 晓曼 -->
+      <div class="audio-card bg-white rounded-xl p-5 sm:p-6 shadow-sm border border-cream-darker card-hover">
+        <div class="flex items-start gap-4 mb-4">
+          <div class="w-10 h-10 rounded-full bg-warm-gold-light flex items-center justify-center flex-shrink-0">
+            <i data-lucide="volume-2" class="w-5 h-5 text-warm-brown"></i>
+          </div>
+          <div>
+            <h3 class="font-serif text-lg font-semibold text-warm-brown">AI时代的哈贝马斯之问</h3>
+            <p class="text-sm text-warm-brown-light/70 mt-0.5">
+              <span class="flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3"></i> 晓曼 配音</span>
+            </p>
+          </div>
+        </div>
+        <p class="text-sm text-warm-brown-light/80 leading-relaxed mb-4">
+          哈贝马斯理论视角，温婉知性的学术对话，探讨AI时代交往理性与公共领域重构的深层命题。
+        </p>
+        <audio controls preload="metadata"
+               src="https://assets.listenhub.ai/listenhub-public-prod/storybook/6a1639955ea42e073f4130b7.mp3"
+               class="w-full">
+        </audio>
+      </div>
+    </div>
+  </section>
+
+  <!-- ornament divider -->
+  <div class="section-ornament max-w-xs mx-auto mb-16 sm:mb-20">
+    <span class="dot"></span>
+  </div>
+
+  <!-- ═══════════════ SECTION 3: Other AI Projects ═══════════════ -->
+  <section class="mb-16 sm:mb-20">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-8 h-8 rounded-lg bg-sage-light flex items-center justify-center flex-shrink-0">
+        <i data-lucide="flask-conical" class="w-4 h-4 text-sage-dark"></i>
+      </div>
+      <h2 class="font-serif text-2xl sm:text-3xl font-semibold text-warm-brown">
+        其他 AI 项目
+      </h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6 sm:gap-8">
+      <!-- Project 1: ProustAI -->
+      <div class="bg-white rounded-xl p-6 shadow-sm border border-cream-darker card-hover">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="brain" class="w-5 h-5 text-warm-gold"></i>
+          </div>
+          <h3 class="font-serif text-xl font-semibold text-warm-brown">ProustAI</h3>
+        </div>
+        <p class="text-sm text-warm-brown-light/80 leading-relaxed mb-4">
+          普鲁斯特式AI对话系统——融合火山引擎大模型与MiniMax技术，通过细腻的追问与回忆式对话，探索记忆、时间与自我认知的深度交互体验。
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="text-xs px-2.5 py-1 rounded-full bg-cream-dark text-warm-brown-light">火山引擎</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-cream-dark text-warm-brown-light">MiniMax</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-cream-dark text-warm-brown-light">NLP 对话系统</span>
+        </div>
+      </div>
+
+      <!-- Project 2: AgenTank -->
+      <div class="bg-white rounded-xl p-6 shadow-sm border border-cream-darker card-hover">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="trophy" class="w-5 h-5 text-warm-gold"></i>
+          </div>
+          <h3 class="font-serif text-xl font-semibold text-warm-brown">AgenTank</h3>
+        </div>
+        <p class="text-sm text-warm-brown-light/80 leading-relaxed mb-4">
+          AI杯赛参赛项目，聚焦AI技术在创意内容生成、智能传播策略与跨模态交互领域的创新应用，展现前沿探索与实践能力。
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="text-xs px-2.5 py-1 rounded-full bg-cream-dark text-warm-brown-light">AI 竞赛</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-cream-dark text-warm-brown-light">创意生成</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-cream-dark text-warm-brown-light">智能传播</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ornament divider -->
+  <div class="section-ornament max-w-xs mx-auto mb-12"></div>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="text-center">
+    <p class="text-sm text-warm-brown-light/60 font-serif">
+      AI 重构数智传播 <span class="text-warm-gold mx-2">·</span> 2026
+    </p>
+    <p class="text-xs text-warm-brown-light/40 mt-1">
+      张育铭 · 北京城市学院
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
