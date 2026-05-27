@@ -439,6 +439,8 @@
             <a href="oop-miss-drill.html" class="nav-link drill-link" target="_blank">💨 OOP 3-Bet Miss</a>
             <a href="flop-cbet-drill.html" class="nav-link drill-link" target="_blank">🃏 翻牌 C-bet 决策</a>
             <a href="turn-barrel-drill.html" class="nav-link drill-link" target="_blank">🔄 转牌 Barrel 决策</a>
+            <a href="spr-drill.html" class="nav-link drill-link" target="_blank">📐 SPR 决策</a>
+            <a href="multiway-drill.html" class="nav-link drill-link" target="_blank">👥 多人底池决策</a>
             <div class="nav-section">📖 笔记目录</div>
             <a href="#1-心态与纪律" class="nav-link">1. 心态与纪律</a>            <a href="#2-资金管理" class="nav-link">2. 资金管理</a>            <a href="#3-基础概念一-概率-赔率与期望值" class="nav-link">3. 基础概念一：概率、赔率与期望值</a>            <a href="#4-基础概念二-范围与-gto" class="nav-link">4. 基础概念二：范围与 GTO</a>            <a href="#5-基础概念三-从-gto-到剥削打法" class="nav-link">5. 基础概念三：从 GTO 到剥削打法</a>            <a href="#6-始计篇-nl10-翻前铁律" class="nav-link">6. 始计篇：NL10 翻前铁律</a>            <a href="#7-兵势篇-nl10-的隐形与欺骗" class="nav-link">7. 兵势篇：NL10 的隐形与欺骗</a>            <a href="#9-翻前范围详解" class="nav-link">9. 翻前范围详解</a>            <a href="#10-翻后牌面分类与打法" class="nav-link">10. 翻后牌面分类与打法</a>            <a href="#11-核心概念深度解析" class="nav-link">11. 核心概念深度解析</a>            <a href="#12-转牌决策体系" class="nav-link">12. 转牌决策体系</a>            <a href="#13-价值下注" class="nav-link">13. 价值下注</a>            <a href="#14-river-bluff-什麼時候轉詐唬" class="nav-link">14. River Bluff — 什麼時候轉詐唬</a>            <a href="#15-多人底池策略" class="nav-link">15. 多人底池策略</a>            <a href="#16-nl10-线上实战调整" class="nav-link">16. NL10 线上实战调整</a>            <a href="#17-牌桌选择" class="nav-link">17. 牌桌选择</a>            <a href="#18-进阶-玩家分类与针对性策略" class="nav-link">18. 进阶：玩家分类与针对性策略</a>            <a href="#19-公共牌阻挡效应-board-blockers" class="nav-link">19. 公共牌阻挡效应（Board Blockers）</a>            <a href="#20-手牌选择与隐含赔率" class="nav-link">20. 手牌选择与隐含赔率</a>            <a href="#21-大牌翻后透明化与翻前纪律" class="nav-link">21. 大牌翻后透明化与翻前纪律</a>            <a href="#22-overbet-与防-overbet" class="nav-link">22. Overbet 与防 Overbet</a>            <a href="#23-bet-size-即语言-從讀牌到讀人" class="nav-link">23. Bet Size 即语言：從讀牌到讀人</a>            <a href="#24-牌面分類-底池類型-sb-vs-bb-範圍" class="nav-link">24. 牌面分類 × 底池類型 + SB vs BB 範圍</a>            <a href="#25-bb-sb-盲注位防守系統" class="nav-link">25. BB/SB 盲注位防守系統</a>            <a href="#26-特定手牌專題-邊緣牌的攻防" class="nav-link">26. 特定手牌專題 — 邊緣牌的攻防</a>
             <a href="#27-donk-bet-翻前-caller-的翻牌先手" class="nav-link">27. Donk Bet — 翻前 Caller 的翻牌先手</a>
@@ -447,6 +449,8 @@
             <a href="#30-probe-bet-delayed-c-bet" class="nav-link">30. Probe Bet + Delayed C-bet</a>
             <a href="#31-3-bet-pot-翻後專項" class="nav-link">31. 3-Bet Pot 翻後專項</a>
             <a href="#32-手牌閱讀系統-逐街窄化範圍" class="nav-link">32. 手牌閱讀系統 — 逐街窄化範圍</a>
+            <a href="#33-solver-與工具入門-從感覺到數據" class="nav-link">33. Solver 與工具入門</a>
+            <a href="#34-研究方法論-如何獨立復盤一手牌" class="nav-link">34. 研究方法論 — 獨立復盤</a>
     </div>
   </nav>
 
@@ -454,7 +458,7 @@
     <div class="hero">
       <h1>扑克深度学习笔记 — NL10 6-max 线上（公开版）</h1>
       <div class="hero-meta">
-        <span><span class="dot dot-green"></span> 32 章</span>
+        <span><span class="dot dot-green"></span> 34 章</span>
         <span><span class="dot dot-cyan"></span> NL10 6-Max 现金桌</span>
         <span>GG Poker · GTO 理论 + 实战</span>
       </div>
@@ -6600,6 +6604,41 @@
             <h4>32.5 NL10 讀牌速查</h4>
             <table><thead><tr><th>對手類型</th><th>翻牌 Call</th><th>轉牌 Call</th><th>河牌 Bet</th></tr></thead><tbody><tr><td>魚（VPIP 40%+）</td><td>任何中了/任何 draw</td><td>中了頂對+</td><td>有貨（很少 bluff）</td></tr><tr><td>Reg（VPIP 20-28%）</td><td>中等對+、draw、A-high</td><td>TPTK+、強 draw</td><td>平衡</td></tr><tr><td>NIT（VPIP < 18%）</td><td>頂對+</td><td>頂對好踢腳+</td><td>堅果</td></tr></tbody></table>
             <blockquote><strong>終極口訣</strong>：「不是猜他拿什麼，是縮小他可能的範圍。每條街砍一半，河牌剩 10-20 combos。」</blockquote>
+            <hr>
+      </section>      <section id="33-solver-與工具入門-從感覺到數據" class="chapter">
+        <h2>33. Solver 與工具入門 — 從「感覺」到「數據」</h2>
+            <blockquote><strong>核心問題</strong>：你已經有大量理論知識。下一步是用工具把理論變成精確數字。</blockquote>
+            <h4>33.1 工具全景圖</h4>
+            <table><thead><tr><th>工具</th><th>做什麼</th><th>什麼時候用</th><th>費用</th></tr></thead><tbody><tr><td><strong>Equilab</strong></td><td>Equity 計算：手牌 vs 範圍勝率</td><td>每一手復盤的第一步</td><td>免費</td></tr><tr><td><strong>Flopzilla</strong></td><td>Range 分析：翻牌對手中了多少？</td><td>研究牌面 texture vs 範圍</td><td>$25 一次性</td></tr><tr><td><strong>GTO+</strong></td><td>Solver：GTO 最優策略</td><td>深度研究特定 spot</td><td>$75 一次性</td></tr><tr><td><strong>PioSolver</strong></td><td>Solver（更強更貴）</td><td>專業研究</td><td>$250+</td></tr><tr><td><strong>HRC</strong></td><td>翻前範圍計算</td><td>建構翻前範圍</td><td>有免費版</td></tr></tbody></table>
+            <blockquote><strong>NL10 路線</strong>：Equilab（必備）→ Flopzilla（強烈推薦）→ GTO+（升 NL25 時買）。</blockquote>
+            <h4>33.2 Equilab：每一手復盤的起點</h4>
+            <p>復盤三步：</p>
+            <table><thead><tr><th>問題</th><th>Equilab 怎麼回答</th><th>例子</th></tr></thead><tbody><tr><td>「我翻牌領先嗎？」</td><td>你的牌 vs 他繼續的範圍</td><td>AJo on A72r vs BB call → ~78%</td></tr><tr><td>「轉牌我該繼續嗎？」</td><td>轉牌後的 equity</td><td>同上，turn T → ~65%</td></tr><tr><td>「河牌能 value bet 嗎？」</td><td>河牌 equity vs calling range</td><td>你的 hand vs 他河牌會跟的範圍</td></tr></tbody></table>
+            <p><strong>節奏</strong>：每天 1-2 手，用 Equilab 復盤，寫一句話結論。</p>
+            <h4>33.3 Solver 入門：什麼時候開始</h4>
+            <blockquote><strong>誠實建議：NL10 不需要 solver。</strong> Equilab + Flopzilla 足夠打到 NL25。</blockquote>
+            <table><thead><tr><th>階段</th><th>用什麼</th></tr></thead><tbody><tr><td>NL10 盈利中</td><td>Equilab + Flopzilla 足夠</td></tr><tr><td>NL10 穩定 5+ bb/100</td><td>可以買 GTO+（$75）</td></tr><tr><td>準備升 NL25</td><td>GTO+ 必備</td></tr></tbody></table>
+            <p>Solver 的價值不是「每手牌都跑」——是<strong>跑一個 spot，學一個 pattern，然後舉一反三。</strong></p>
+            <h4>33.4 推薦的學習節奏</h4>
+            <table><thead><tr><th>頻率</th><th>做什麼</th><th>花多久</th></tr></thead><tbody><tr><td>每 session 後</td><td>Equilab 復盤 1-2 手</td><td>5 分鐘</td></tr><tr><td>每週</td><td>Flopzilla 分析一個 spot</td><td>20 分鐘</td></tr><tr><td>每月</td><td>GTO+ 跑一個 spot</td><td>1 小時</td></tr></tbody></table>
+            <blockquote><strong>核心</strong>：「工具是顯微鏡，不是拐杖。用完要關掉，回到牌桌用學到的 pattern 打。」</blockquote>
+            <hr>
+      </section>      <section id="34-研究方法論-如何獨立復盤一手牌" class="chapter">
+        <h2>34. 研究方法論 — 如何獨立復盤一手牌</h2>
+            <blockquote><strong>核心問題</strong>：打完一手牌，你怎麼知道自己打對還是打錯？</blockquote>
+            <h4>34.1 復盤的五個層次</h4>
+            <table><thead><tr><th>層次</th><th>你做什麼</th><th>例子</th></tr></thead><tbody><tr><td><strong>L0</strong>：結果導向</td><td>「我輸了 → 我打錯了」</td><td>AA 被 bad beat → 「AA 真爛」 ❌</td></tr><tr><td><strong>L1</strong>：單街檢查</td><td>「這條街的決定對嗎？」</td><td>「翻牌 c-bet 對，但他 raise 我該 fold」</td></tr><tr><td><strong>L2</strong>：全街串聯</td><td>翻前→翻→轉→河每個決定連起來</td><td>你的檢測點</td></tr><tr><td><strong>L3</strong>：範圍驗證</td><td>用 Solver/Equilab 驗證偏離</td><td>數據驅動</td></tr><tr><td><strong>L4</strong>：模式識別</td><td>發現重複錯誤，加一條新規則</td><td>在筆記裡歸檔</td></tr></tbody></table>
+            <h4>34.2 復盤三步法</h4>
+            <p><strong>Step 1：還原（2分鐘）</strong> — 不看結果，重建每條街決策點。寫下來。</p>
+            <p><strong>Step 2：逐街檢查（5分鐘）</strong> — 每街三問：有 +EV 嗎？有更好的決定嗎？和策略一致嗎？</p>
+            <p><strong>Step 3：抽象規則（1分鐘）</strong> — 寫一句話，能用在下一次。</p>
+            <h4>34.3 復盤模板</h4>
+            <pre><code>## Hand Review: [日期] [手牌] [位置]<br><br>### 場景<br>- 位置: BTN open, BB call<br>- 有效碼: 100bb<br>- 手牌: A♠J♠<br><br>### 逐街<br>| 街 | 動作 | 我的決定 | 更好？ | 符合策略？ |<br>|----|------|---------|--------|----------|<br>| 翻前 | open 2.5bb | ✅ | - | ✅ |<br>| 翻牌 A72r | c-bet ½ | ✅ | ⅓ 更好 | ⚠️ |<br>| 轉牌 T | bet ⅔ | ⚠️ | check 控池 | ❌ |<br>| 河牌 3 | check-fold | ✅ | - | ✅ |<br><br>### Equilab 驗證<br>- 翻牌 equity: 78% → c-bet ✅<br>- 轉牌 equity: 65% → 可 bet ½ 就夠<br><br>### 學到的規則<br>「A-high 乾燥面 TPTK → 翻牌 ⅓，轉牌 check 控池或 ½。」</code></pre>
+            <h4>34.4 哪些牌值得復盤</h4>
+            <table><thead><tr><th>優先</th><th>場景</th><th>為什麼</th></tr></thead><tbody><tr><td>🔴 最高</td><td>你輸了大底池（> 40bb）</td><td>最貴的錯誤</td></tr><tr><td>🟡 中</td><td>你不確定該 fold 還是 call</td><td>灰色地帶是進步空間</td></tr><tr><td>🟢 低</td><td>贏了大底池但不知道是否打對</td><td>可能只是運氣好</td></tr><tr><td>⚪ 不復盤</td><td>標準 cooler（AA vs KK pre）</td><td>沒東西可學</td></tr></tbody></table>
+            <h4>34.5 NL10 復盤節奏</h4>
+            <table><thead><tr><th>頻率</th><th>做什麼</th></tr></thead><tbody><tr><td>每 session</td><td>復盤 1 手最困惑的牌（用模板）</td></tr><tr><td>每週</td><td>復盤 3-5 手，找 pattern</td></tr><tr><td>每月</td><td>對照數據審計，驗證改善是否反映在 win rate</td></tr></tbody></table>
+            <blockquote><strong>終極心法</strong>：「復盤不是為了判斷這手牌打對打錯——是為了下一手不再犯同樣的錯。」</blockquote>
             <hr>
       </section>
   </main>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多人底池決策 | NL10/25 虛實篇</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'SF Mono', 'Monaco', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { font-size: 20px; color: #d2991d; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; }
+
+  .mode-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+  .mode-btn { padding: 8px 20px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: #8b949e; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .mode-btn.active { background: #d2991d; color: #000; border-color: #d2991d; font-weight: bold; }
+
+  .scorebar { display: flex; gap: 32px; margin-bottom: 20px; font-size: 14px; }
+  .scorebar span { color: #8b949e; } .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+
+  .table { background: #1a5c2a; border-radius: 120px; width: 560px; max-width: 100%; padding: 28px 24px 24px; margin-bottom: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3); position: relative; }
+
+  .player-count-badge {
+    display: block; text-align: center; margin-bottom: 8px;
+  }
+  .player-count-badge .pill {
+    display: inline-block; padding: 8px 28px; border-radius: 30px;
+    font-size: 18px; font-weight: bold; letter-spacing: 1px;
+  }
+  .pill.way3 { background: rgba(88,166,255,0.2); color: #58a6ff; border: 1px solid rgba(88,166,255,0.4); }
+  .pill.way4 { background: rgba(248,81,73,0.2); color: #f85149; border: 1px solid rgba(248,81,73,0.4); }
+
+  .section-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 8px; }
+  .cards-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; }
+
+  .card { display: inline-flex !important; align-items: center; justify-content: center; width: 56px; height: 80px; border-radius: 6px; background: #fff; color: #000; font-size: 22px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0,0,0,0.4); }
+  .card .card-inner { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .card .rank { font-size: 22px; }
+  .card .suit { font-size: 14px; margin-top: -2px; }
+  .card.red { color: #d32f2f; }
+  .card.black { color: #1a1a1a; }
+
+  .board-cards .card { width: 42px; height: 60px; }
+  .board-cards .card .rank { font-size: 17px; }
+  .board-cards .card .suit { font-size: 12px; margin-top: -1px; }
+
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px 16px; margin-top: 4px; }
+
+  .step-label { text-align: center; font-size: 14px; color: #d2991d; margin: 16px 0 10px; font-weight: bold; }
+
+  .actions { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+  .btn { padding: 12px 22px; border-radius: 8px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.1s, opacity 0.15s; font-family: inherit; }
+  .btn:hover { transform: scale(1.04); } .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+  .btn-check { background: #30363d; color: #8b949e; }
+  .btn-bet33 { background: #1f6feb; color: #fff; }
+  .btn-bet50 { background: #238636; color: #fff; }
+  .btn-bet66 { background: #9e6a03; color: #fff; }
+  .btn-bet75 { background: #da3633; color: #fff; }
+  .btn-call { background: #238636; color: #fff; }
+  .btn-fold { background: #da3633; color: #fff; }
+  .btn-raise { background: #d2991d; color: #000; }
+
+  .feedback { width: 560px; max-width: 100%; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+  .feedback .correct-answer { color: #ffa726; font-weight: bold; }
+
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+
+  .progress { font-size: 12px; color: #8b949e; text-align: center; margin-top: 8px; }
+  .progress .n { color: #d2991d; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>👥 多人底池 · 虛實篇</h1>
+<div class="sub">價值遞減 · 隱含賠率 · 位置放大 — 3-way+ 必須調整的 20 個思維</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" id="modeAll" onclick="setMode('all')">🎲 全部</button>
+  <button class="mode-btn" id="mode3way" onclick="setMode('3way')">👥 3-Way</button>
+  <button class="mode-btn" id="mode4way" onclick="setMode('4way')">👥👥 4-Way+</button>
+</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+</div>
+
+<div class="table">
+  <div class="player-count-badge" id="playerBadge"></div>
+
+  <div class="section-label">—— H E R O ——</div>
+  <div class="cards-row hero-cards" id="heroCards"></div>
+
+  <div class="section-label">—— F L O P ——</div>
+  <div class="cards-row board-cards" id="boardCards"></div>
+
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">你的決定？</div>
+<div class="actions" id="actions"></div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextScenario()">下一題 →</button>
+<div class="progress" id="progress"></div>
+
+<script src="deck.js"></script>
+<script>
+// ============================================================
+// SCENARIO POOL — 20 multiway decision spots
+// ============================================================
+const SCENARIOS = [
+  // ─── CBET SCENARIOS ───
+  // 1. 3-way, TPTK (AK on A72r) → bet ½, still strong
+  {
+    id:1, tag:'3way', actionType:'cbet',
+    hero:[{rank:'A',suit:'d'},{rank:'K',suit:'c'}],
+    board:[{rank:'A',suit:'s'},{rank:'7',suit:'h'},{rank:'2',suit:'d'}],
+    players:3, handLabel:'AKo · TPTK',
+    positionLabel:'你在 BTN open 2.5bb，SB + BB call',
+    desc:'Pot ~7.5bb · 翻前 raiser（你有範圍優勢）<br>Action: SB check → BB check → 輪到你。',
+    correct:'bet50',
+    reason:'A-high 乾燥彩虹面，3-way 中 TPTK 仍然是強價值牌。不需要降速——你的範圍優勢 + 牌力優勢雙重領先。<b>½ pot</b> 從對手的弱 Ax、中小對子拿價值，同時控制 pot 規模。兩個對手在 A72r 上太難有比你強的牌。'
+  },
+  // 2. 3-way, overcards+gutshot on wet board → bet ¾
+  {
+    id:2, tag:'3way', actionType:'cbet',
+    hero:[{rank:'A',suit:'h'},{rank:'K',suit:'d'}],
+    board:[{rank:'J',suit:'s'},{rank:'T',suit:'s'},{rank:'8',suit:'h'}],
+    players:3, handLabel:'AKo · Overcards + Gutshot',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · J♠T♠8♥ 雙色連接面（極濕）<br>Action: SB check → BB check → 輪到你。',
+    correct:'bet75',
+    reason:'JT8 雙色面是史上最濕的翻牌之一。你的 AK 有兩張 overcards + gutshot to broadway（任何 Q），equity 很不錯但極脆弱。<b>Must bet ¾</b>——給對手的聽牌（同花、順子）定價，打出 fold equity，同時 build pot 為你 hit 到 broadway 做準備。Check back = 免費讓兩個對手實現 equity = 自殺。'
+  },
+  // 3. 3-way, second pair (KJ on A-high) → check, weak
+  {
+    id:3, tag:'3way', actionType:'cbet',
+    hero:[{rank:'K',suit:'c'},{rank:'J',suit:'s'}],
+    board:[{rank:'A',suit:'h'},{rank:'K',suit:'s'},{rank:'7',suit:'d'}],
+    players:3, handLabel:'KJo · Second Pair',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · A♥K♠7♦<br>Action: SB check → BB check → 輪到你。',
+    correct:'check',
+    reason:'Second pair（中對）在 3-way 中幾乎沒有 value bet 的空間。任何 Ax（兩個對手的範圍裡有很多）都不會 fold；比你差的牌（7x、中小對子）很難在 A-high 面上繼續。<b>Check back，看免費轉牌。</b>如果轉牌改善就繼續，miss 就放棄。多人的 value threshold 就是這麼高。'
+  },
+  // 4. 4-way, TPTK → check, never bet TPTK 4-way
+  {
+    id:4, tag:'4way', actionType:'cbet',
+    hero:[{rank:'A',suit:'d'},{rank:'K',suit:'s'}],
+    board:[{rank:'A',suit:'h'},{rank:'7',suit:'s'},{rank:'2',suit:'d'}],
+    players:4, handLabel:'AKo · TPTK',
+    positionLabel:'你在 BTN open，SB + BB + MP call（4 人！）',
+    desc:'Pot ~10bb · A♥7♠2♦ 彩虹乾燥面<br>Action: 全部 check 到你。',
+    correct:'check',
+    reason:'這可能是本 drill 最重要的教訓：<b>4-way 中 TPTK 不是 value hand。</b>你需要在 4 個人裡有最好的牌才能 value bet——概率驟降。任何 c-bet 只會被比你強的牌（set / 兩對）call 或 raise，弱的牌全部 fold。<b>Check back，保護你的 stack。</b>TPTK = 控池牌，不是 bet 牌。'
+  },
+  // 5. 3-way, flush draw IP facing bet → call (good implied odds)
+  {
+    id:5, tag:'3way', actionType:'face_bet',
+    hero:[{rank:'K',suit:'h'},{rank:'Q',suit:'h'}],
+    board:[{rank:'J',suit:'h'},{rank:'7',suit:'h'},{rank:'2',suit:'s'}],
+    players:3, handLabel:'K♥Q♥ · Flush Draw + Overcards',
+    positionLabel:'MP bets ½ pot，CO calls，你在 BTN',
+    desc:'Pot ~12bb（bet 後）· J♥7♥2♠ 有 ♥ 聽花<br>對手 bet 6bb，一人 call。你拿二階堅果同花聽牌 + 兩張 overcards。',
+    correct:'call',
+    reason:'你的 K♥Q♥ 在 J♥7♥2♠ 上有 9 個 ♥ outs + 可能的 K/Q outs（如果對手是 Jx）。<b>Standard call。</b>3-way 中同花聽牌的 implied odds 非常好——多人意味著更大的 pot + 更多人願意在 hit 後支付你。不要 raise（你的 equity 不夠做 semi-bluff raise，且你在 IP，免費保留位置優勢）。'
+  },
+  // 6. 4-way, flush draw facing bet + 2 calls → call
+  {
+    id:6, tag:'4way', actionType:'face_bet',
+    hero:[{rank:'A',suit:'s'},{rank:'5',suit:'s'}],
+    board:[{rank:'K',suit:'s'},{rank:'9',suit:'s'},{rank:'3',suit:'h'}],
+    players:4, handLabel:'A♠5♠ · Nut Flush Draw',
+    positionLabel:'UTG bets ⅔ pot，MP calls，CO calls，你在 BTN',
+    desc:'Pot ~28bb（已膨脹！）· K♠9♠3♥<br>你持有堅果同花聽牌，pot 超大。',
+    correct:'call',
+    reason:'這是你夢寐以求的 spot：<b>4-way 超大 pot + 堅果聽牌 + 位置。</b>你需要的 pot odds 在這裡不依賴 direct odds——implied odds 在 4-way 中極高（兩三個人可能在 hit flush 後支付）。<b>Call，不要 raise。</b>你的 A-high 不是 best hand，不需要保護 equity——等 hit，然後榨乾他們。'
+  },
+  // 7. 3-way, air on any board → fold
+  {
+    id:7, tag:'3way', actionType:'face_bet',
+    hero:[{rank:'Q',suit:'c'},{rank:'J',suit:'d'}],
+    board:[{rank:'K',suit:'s'},{rank:'8',suit:'h'},{rank:'4',suit:'c'}],
+    players:3, handLabel:'QJo · Complete Air',
+    positionLabel:'SB bets ½ pot，BB folds，你在 BTN',
+    desc:'Pot ~12bb · K♠8♥4♣ 乾燥面<br>你完全 miss，沒有任何 draw。',
+    correct:'fold',
+    reason:'<b>Multiway 第一鐵律：不 bluff。</b>在乾燥的 K84 面上，SB 的 donk bet 在 3-way 中幾乎總是 value（Kx+）。你的 QJ 沒有任何 equity、沒有位置、沒有 blocker value（SB 的 Kx 範圍不因你的 Q/J 而改變）。<b>秒 fold，省下籌碼打下一手。</b>多人池的 bluff = 慈善捐款。'
+  },
+  // 8. 3-way, set on dry → bet ½, still the coconuts
+  {
+    id:8, tag:'3way', actionType:'cbet',
+    hero:[{rank:'5',suit:'h'},{rank:'5',suit:'c'}],
+    board:[{rank:'5',suit:'d'},{rank:'7',suit:'h'},{rank:'2',suit:'s'}],
+    players:3, handLabel:'55 · Bottom Set',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · 5♦7♥2♠ 彩虹乾燥<br>Action: SB check → BB check → 輪到你。',
+    correct:'bet50',
+    reason:'Set 在任何人數的底池都是怪物。在 3-way 的乾燥面上，<b>½ pot</b> 是完美的 sizing——讓 7x、88-TT、A7 等牌繼續，同時開始 build pot 為轉牌河牌的大注鋪路。不需要慢打（多人池中給 free card 的代價太高），也不需要超大注（會趕走所有比你差的牌）。'
+  },
+  // 9. 4-way, set on wet → bet ¾, protect
+  {
+    id:9, tag:'4way', actionType:'cbet',
+    hero:[{rank:'8',suit:'d'},{rank:'8',suit:'c'}],
+    board:[{rank:'J',suit:'s'},{rank:'T',suit:'s'},{rank:'8',suit:'h'}],
+    players:4, handLabel:'88 · Bottom Set',
+    positionLabel:'你在 BTN open，SB + BB + MP call（4 人！）',
+    desc:'Pot ~10bb · J♠T♠8♥ 雙色連接面<br>Action: 全部 check 到你。',
+    correct:'bet75',
+    reason:'4-way + wet board + set = <b>你必須保護你的牌。</b>JT8 面上任何 Q/9/7/♠ 都是你的噩夢——而四個玩家意味著有大量的順子聽牌和同花聽牌組合。<b>Bet ¾ pot，毫不留情。</b>讓聽牌付出最高代價。如果被 raise，你還有 redraw 到 full house，可以 happily get it in。'
+  },
+  // 10. 3-way, overpair (AA on J83) → bet ⅔
+  {
+    id:10, tag:'3way', actionType:'cbet',
+    hero:[{rank:'A',suit:'s'},{rank:'A',suit:'h'}],
+    board:[{rank:'J',suit:'s'},{rank:'8',suit:'c'},{rank:'3',suit:'d'}],
+    players:3, handLabel:'AA · Overpair',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · J♠8♣3♦ 彩虹<br>Action: SB check → BB check → 輪到你。',
+    correct:'bet66',
+    reason:'AA 在 J83 彩虹面上在 3-way 中非常強。只有 set（JJ/88/33）領先你——總共 9 個組合。對手的繼續範圍裡主要是 Jx、聽順（T9）、中對子。<b>⅔ pot</b>是好的 sizing——比 ½ 從 Jx 拿更多價值，但不至於大到只有比你強的牌才繼續。Overpair 在 3-way 乾燥面上值得這個價。'
+  },
+  // 11. 4-way, overpair (KK) → bet ½, careful
+  {
+    id:11, tag:'4way', actionType:'cbet',
+    hero:[{rank:'K',suit:'s'},{rank:'K',suit:'h'}],
+    board:[{rank:'Q',suit:'s'},{rank:'7',suit:'h'},{rank:'2',suit:'d'}],
+    players:4, handLabel:'KK · Overpair',
+    positionLabel:'你在 BTN open，SB + BB + MP call（4 人！）',
+    desc:'Pot ~10bb · Q♠7♥2♦ 彩虹<br>Action: 全部 check 到你。',
+    correct:'bet50',
+    reason:'KK 在 4-way 中仍然是 value hand——但<b>必須降速。</b>四個玩家中有人中 set (QQ/77/22) 的概率已經不能忽略。與 3-way 的 ⅔ 不同，4-way 中你的 edge 更薄。<b>½ pot</b>平衡了價值（對手的 Qx 仍會 call）和風險控制（保持 pot 在可控範圍）。如果被 check-raise，你可以考慮 fold——在 4-way 的 check-raise 太 polar。'
+  },
+  // 12. 3-way, two pair on connected → bet ¾
+  {
+    id:12, tag:'3way', actionType:'cbet',
+    hero:[{rank:'J',suit:'h'},{rank:'T',suit:'h'}],
+    board:[{rank:'J',suit:'s'},{rank:'T',suit:'s'},{rank:'8',suit:'d'}],
+    players:3, handLabel:'J♥T♥ · Top Two Pair',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · J♠T♠8♦ 雙色連接面<br>Action: SB check → BB check → 輪到你。',
+    correct:'bet75',
+    reason:'Top two 在 3-way 濕面上是強牌但極度脆弱——任何 Q/9/7/♠ 都會讓你的牌變成垃圾。對手的範圍裡充滿了這些聽牌。<b>Bet ¾，果斷保護。</b>對手的繼續範圍（draws + Jx + Tx）非常寬，大注的 EV 在這裡最大化。不要慢打——two pair 在連接面上的 equity 衰減得比你想象中更快。'
+  },
+  // 13. 3-way, gutshot facing bet → fold
+  {
+    id:13, tag:'3way', actionType:'face_bet',
+    hero:[{rank:'7',suit:'c'},{rank:'6',suit:'d'}],
+    board:[{rank:'J',suit:'h'},{rank:'T',suit:'s'},{rank:'8',suit:'c'}],
+    players:3, handLabel:'76o · Gutshot',
+    positionLabel:'MP bets ¾ pot，你在 BTN，SB 尚未行動',
+    desc:'Pot ~15bb · J♥T♠8♣<br>你需要一張 9 才能成順（4 outs），且 SB 在你後面還沒行動。',
+    correct:'fold',
+    reason:'Gutshot 在 3-way 中是最糟糕的聽牌——<b>只有 4 個 outs，且不是全部 clean。</b>即使 hit 到 9，對手的 QJ/Q9/KQ 組成更大的順子。而且 SB 在你後面——你可能 call 了之後被 squeeze。<b>直接 fold，不要為了 4 個 dirty outs 冒險。</b>多人的聽牌價值來自 draw to the nuts，不是 gutshot。'
+  },
+  // 14. 4-way, bottom pair facing bet → fold
+  {
+    id:14, tag:'4way', actionType:'face_bet',
+    hero:[{rank:'5',suit:'c'},{rank:'3',suit:'c'}],
+    board:[{rank:'K',suit:'s'},{rank:'7',suit:'h'},{rank:'3',suit:'d'}],
+    players:4, handLabel:'53s · Bottom Pair',
+    positionLabel:'CO bets ½ pot，BTN calls，你在 BB',
+    desc:'Pot ~16bb · K♠7♥3♦<br>底對 3，踢腳 5——最弱的 made hand。',
+    correct:'fold',
+    reason:'Bottom pair 在 4-way 中<b>幾乎從不是最好的牌。</b>你需要跑贏三個人——任何 Kx/7x/更好的 3x/口袋對子都領先你。你的 5 個 outs（三條或兩對）即使在 hit 之後也未必是 nuts。<b>直接 fold，零猶豫。</b>省下來的籌碼比你 hit 之後贏的概率更值錢。'
+  },
+  // 15. 3-way, top pair weak kicker → check
+  {
+    id:15, tag:'3way', actionType:'cbet',
+    hero:[{rank:'Q',suit:'c'},{rank:'8',suit:'d'}],
+    board:[{rank:'Q',suit:'s'},{rank:'T',suit:'h'},{rank:'4',suit:'d'}],
+    players:3, handLabel:'Q8o · Top Pair Weak Kicker',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · Q♠T♥4♦<br>Action: SB check → BB check → 輪到你。',
+    correct:'check',
+    reason:'Q8 在 Q-high 面上中了頂對，但踢腳太弱。<b>在 3-way 中這不是 value hand。</b>兩個對手的繼續範圍裡有大量的 Qx（QT/QJ/Q9/KQ/AQ），全部領先你的 Q8。比你差的牌（T9/JT/中小對子）在你 bet 時幾乎全部 fold。<b>Check back = 最好的選擇。</b>把這手牌當作 showdown value + bluff catcher，不是 value bettor。'
+  },
+  // 16. 3-way, facing bet with TPTK → call, don't raise
+  {
+    id:16, tag:'3way', actionType:'face_bet',
+    hero:[{rank:'A',suit:'h'},{rank:'K',suit:'c'}],
+    board:[{rank:'A',suit:'s'},{rank:'8',suit:'h'},{rank:'3',suit:'d'}],
+    players:3, handLabel:'AKo · TPTK',
+    positionLabel:'MP bets ⅔ pot，CO folds，你在 BTN',
+    desc:'Pot ~17bb · A♠8♥3♦ 彩虹<br>你不是 aggressor——MP 在 3-way 中主動下注。',
+    correct:'call',
+    reason:'當 3-way 中前面有人 bet 時，<b>TPTK 應該 call，不是 raise。</b>MP 的 donk bet 在 A-high 面上是很 polar 的——要么是比你強的牌（set/A8/A3），要么是想保護的弱 Ax。Raise 只會讓比你差的牌 fold、比你好的牌 re-raise。<b>Flat call，保持 pot 可控 + 位置優勢</b>，在轉牌河牌再做決定。'
+  },
+  // 17. 4-way, bet + 2 calls, you have draw → call with odds
+  {
+    id:17, tag:'4way', actionType:'face_bet',
+    hero:[{rank:'9',suit:'s'},{rank:'8',suit:'s'}],
+    board:[{rank:'J',suit:'s'},{rank:'7',suit:'h'},{rank:'2',suit:'s'}],
+    players:4, handLabel:'9♠8♠ · Flush Draw + Backdoor Straight',
+    positionLabel:'UTG bets ½ pot，MP calls，CO calls，你在 BTN',
+    desc:'Pot ~30bb（超大！）· J♠7♥2♠<br>你持有 ♠ flush draw，3 個人已經放錢進來。',
+    correct:'call',
+    reason:'這就是 implied odds 的天堂：<b>4-way、大 pot、堅果方向的聽牌。</b>你只需要 ~20% equity 就可以 call（direct pot odds 已經接近），而你的 ♠ draw 有 ~36% 到河牌 hit。加上三人中至少一人在 hit flush 後會支付你的 implied odds——<b>easy call。</b>不要 raise（你的 9-high 不是 best hand，且你不想被 3-bet 趕走）。'
+  },
+  // 18. 3-way, you're aggressor, flop misses everyone → c-bet ⅓
+  {
+    id:18, tag:'3way', actionType:'cbet',
+    hero:[{rank:'A',suit:'d'},{rank:'5',suit:'d'}],
+    board:[{rank:'8',suit:'s'},{rank:'6',suit:'h'},{rank:'2',suit:'c'}],
+    players:3, handLabel:'A5s · Air',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · 8♠6♥2♣ 超低彩虹面<br>Action: SB check → BB check → 輪到你。',
+    correct:'bet33',
+    reason:'862r 是非常有利於 raiser 的乾燥面——對手的 defend range 裡幾乎沒有強牌（沒有兩對，set 只有 88/66/22，且頻率低）。<b>3-way 中這種面仍然可以 c-bet ⅓。</b>小注足以讓兩個對手的 random air（overcards、weak backdoor draws）fold，而你只需要 ~25% fold equity 就能 break even。<b>這是 3-way 中少數可以 bluff 的場景——低成本、高回報。</b>'
+  },
+  // 19. 4-way, you're aggressor, whiffed → check
+  {
+    id:19, tag:'4way', actionType:'cbet',
+    hero:[{rank:'K',suit:'s'},{rank:'Q',suit:'h'}],
+    board:[{rank:'J',suit:'d'},{rank:'7',suit:'c'},{rank:'2',suit:'s'}],
+    players:4, handLabel:'KQo · Air',
+    positionLabel:'你在 BTN open，SB + BB + MP call（4 人！）',
+    desc:'Pot ~10bb · J♦7♣2♠ 彩虹<br>Action: 全部 check 到你。',
+    correct:'check',
+    reason:'<b>4-way 中永遠不要 c-bet air。</b>你需要同時 bluff 過三個人——概率上至少一人有牌（Jx、set、中對子）的可能性極高。KQ 的 blocker value（block KJ/QJ）在這裡不夠用，因為三人中任一人有 AJo/77/22 等牌都不會被你的 blocker 影響。<b>Check and give up。</b>4-way c-bet air = 把自己的籌碼均分給三個對手。'
+  },
+  // 20. 3-way, nut flush draw + overcards → bet ½, semi-bluff OK
+  {
+    id:20, tag:'3way', actionType:'cbet',
+    hero:[{rank:'A',suit:'s'},{rank:'K',suit:'s'}],
+    board:[{rank:'Q',suit:'s'},{rank:'7',suit:'h'},{rank:'2',suit:'s'}],
+    players:3, handLabel:'A♠K♠ · Nut Flush Draw + Overcards',
+    positionLabel:'你在 BTN open，SB + BB call',
+    desc:'Pot ~7.5bb · Q♠7♥2♠<br>Action: SB check → BB check → 輪到你。你有堅果 ♠ draw + 兩張 overcards。',
+    correct:'bet50',
+    reason:'A♠K♠ 在 Q♠7♥2♠ 上是 semi-bluff 的夢幻手牌：9 張 ♠ outs（堅果！）+ 可能的 6 張 A/K outs（如果對手是 Qx）+ fold equity。<b>在 3-way 中，這種 equity 怪獸值得 ½ pot。</b>你有 ~50% equity vs 任何一手牌（除了 set），而對手的 continue range 在這個乾燥+聽花面上很窄。<b>3-way semi-bluff YES，4-way NO——這就是界線。</b>'
+  }
+];
+
+// ============================================================
+// MODE FILTERS
+// ============================================================
+const MODE_LABELS = { all:'全部', '3way':'3-Way', '4way':'4-Way+' };
+
+// ============================================================
+// GAME STATE
+// ============================================================
+let mode = 'all';
+let pool = [];
+let currentIndex = 0;
+let correct = 0, wrong = 0, streak = 0;
+let answered = false;
+let current = null;
+
+// ============================================================
+// SHUFFLE & FILTER
+// ============================================================
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildPool() {
+  let filtered = mode === 'all' ? SCENARIOS : SCENARIOS.filter(s => s.tag === mode);
+  if (filtered.length === 0) filtered = SCENARIOS;
+  pool = shuffleArray([...filtered]);
+  currentIndex = 0;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderScenario() {
+  if (pool.length === 0) buildPool();
+  if (currentIndex >= pool.length) buildPool();
+
+  answered = false;
+  current = pool[currentIndex];
+  currentIndex++;
+
+  // Player count badge
+  const is3 = current.players <= 3;
+  document.getElementById('playerBadge').innerHTML =
+    `<span class="pill ${is3 ? 'way3' : 'way4'}">${is3 ? '👥 3-WAY' : '👥👥 4-WAY'}</span>`;
+
+  // Cards
+  document.getElementById('heroCards').innerHTML = current.hero.map(c => cardHTML(c)).join('');
+  document.getElementById('boardCards').innerHTML = current.board.map(c => cardHTML(c)).join('');
+
+  // Spot info
+  document.getElementById('spotInfo').innerHTML = `
+    <div style="margin-bottom:4px;">${current.positionLabel}</div>
+    <div>${current.desc}</div>
+    <div style="color:#8b949e;font-size:12px;margin-top:4px;">
+      手牌: <b>${current.handLabel}</b> · ${current.players} 人底池
+    </div>
+  `;
+
+  // Actions
+  if (current.actionType === 'cbet') {
+    document.getElementById('stepLabel').textContent = 'CBET 還是 CHECK？';
+    document.getElementById('actions').innerHTML = `
+      <button class="btn btn-check" onclick="answer('check')">☑️ Check</button>
+      <button class="btn btn-bet33" onclick="answer('bet33')">💰 ⅓ Pot</button>
+      <button class="btn btn-bet50" onclick="answer('bet50')">💰 ½ Pot</button>
+      <button class="btn btn-bet66" onclick="answer('bet66')">💰 ⅔ Pot</button>
+      <button class="btn btn-bet75" onclick="answer('bet75')">💰 ¾ Pot</button>
+    `;
+  } else {
+    document.getElementById('stepLabel').textContent = 'CALL · FOLD · RAISE？';
+    document.getElementById('actions').innerHTML = `
+      <button class="btn btn-call" onclick="answer('call')">📞 Call</button>
+      <button class="btn btn-fold" onclick="answer('fold')">🏳️ Fold</button>
+      <button class="btn btn-raise" onclick="answer('raise')">🚀 Raise</button>
+    `;
+  }
+
+  // Clear feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+
+  // Hide next
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  // Progress
+  const done = correct + wrong;
+  const remain = pool.length - currentIndex + 1;
+  document.getElementById('progress').innerHTML =
+    `本輪已完成 <span class="n">${done}</span> 題 · 池中剩餘 <span class="n">${Math.max(0, remain)}</span> 題`;
+}
+
+// ============================================================
+// ANSWER
+// ============================================================
+function answer(action) {
+  if (answered) return;
+  answered = true;
+
+  document.querySelectorAll('#actions .btn').forEach(b => b.disabled = true);
+
+  const isCorrect = action === current.correct;
+  const fb = document.getElementById('feedback');
+
+  const actionLabels = {
+    check:'Check', bet33:'Bet ⅓ Pot', bet50:'Bet ½ Pot', bet66:'Bet ⅔ Pot', bet75:'Bet ¾ Pot',
+    call:'Call', fold:'Fold', raise:'Raise'
+  };
+  const yourLabel = actionLabels[action] || action;
+  const correctLabel = actionLabels[current.correct] || current.correct;
+
+  if (isCorrect) {
+    correct++; streak++;
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <span style="color:#3fb950">正確！</span>${yourLabel} 是這個多人 spot 的最佳選擇。<div class="reason">${current.reason}</div>`;
+  } else {
+    wrong++; streak = 0;
+    fb.className = 'feedback show wrong';
+    fb.innerHTML = `❌ 你選了 ${yourLabel}，但正確答案是 <span class="correct-answer">${correctLabel}</span>。<div class="reason">${current.reason}</div>`;
+  }
+
+  updateScore();
+  document.getElementById('nextBtn').className = 'next-btn show';
+  document.getElementById('nextBtn').focus();
+}
+
+// ============================================================
+// SCORE
+// ============================================================
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total > 0 ? (correct / total * 100).toFixed(0) + '%' : '--';
+  document.getElementById('streak').textContent = streak;
+  saveScore();
+}
+
+function saveScore() {
+  localStorage.setItem('multiwayDrill_score', JSON.stringify({ correct, wrong, streak }));
+}
+
+function loadScore() {
+  const s = JSON.parse(localStorage.getItem('multiwayDrill_score') || '{}');
+  correct = s.correct || 0;
+  wrong = s.wrong || 0;
+  streak = s.streak || 0;
+  updateScore();
+}
+
+// ============================================================
+// MODE SWITCHING
+// ============================================================
+function setMode(m) {
+  mode = m;
+  document.getElementById('modeAll').className = 'mode-btn' + (m === 'all' ? ' active' : '');
+  document.getElementById('mode3way').className = 'mode-btn' + (m === '3way' ? ' active' : '');
+  document.getElementById('mode4way').className = 'mode-btn' + (m === '4way' ? ' active' : '');
+  buildPool();
+  renderScenario();
+}
+
+// ============================================================
+// NEXT
+// ============================================================
+function nextScenario() {
+  renderScenario();
+}
+
+// ============================================================
+// KEYBOARD SHORTCUTS
+// ============================================================
+document.addEventListener('keydown', e => {
+  if (answered) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextScenario();
+    }
+    return;
+  }
+  if (current && current.actionType === 'cbet') {
+    switch (e.key) {
+      case '1': answer('check'); break;
+      case '2': answer('bet33'); break;
+      case '3': answer('bet50'); break;
+      case '4': answer('bet66'); break;
+      case '5': answer('bet75'); break;
+    }
+  } else if (current && current.actionType === 'face_bet') {
+    switch (e.key) {
+      case '1': answer('call'); break;
+      case '2': answer('fold'); break;
+      case '3': answer('raise'); break;
+    }
+  }
+});
+
+// ============================================================
+// BOOT
+// ============================================================
+loadScore();
+buildPool();
+renderScenario();
+</script>
+</body>
+</html>

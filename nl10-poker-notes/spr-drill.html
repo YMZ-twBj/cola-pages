@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPR 决策训练 | Stack-to-Pot Ratio Drills</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'SF Mono', 'Monaco', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { font-size: 20px; color: #d2991d; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: #8b949e; margin-bottom: 24px; text-align: center; max-width: 560px; line-height: 1.6; }
+  .mode-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+  .mode-btn { padding: 8px 16px; border-radius: 6px; border: 1px solid #30363d; background: #21262d; color: #8b949e; font-size: 13px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .mode-btn.active { background: #d2991d; color: #000; border-color: #d2991d; font-weight: bold; }
+  .scorebar { display: flex; gap: 24px; margin-bottom: 20px; font-size: 14px; flex-wrap: wrap; justify-content: center; }
+  .scorebar span { color: #8b949e; } .scorebar .val { color: #c9d1d9; font-weight: bold; }
+  .scorebar .good { color: #3fb950; } .scorebar .bad { color: #f85149; } .scorebar .streak { color: #d2991d; }
+  .scorebar .remaining { color: #58a6ff; }
+  .table { background: #1a5c2a; border-radius: 90px; width: 540px; max-width: 100%; padding: 24px 20px 28px; margin-bottom: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.3); position: relative; }
+  .spr-badge { text-align: center; margin-bottom: 12px; }
+  .spr-badge .pill { display: inline-block; padding: 4px 18px; border-radius: 20px; font-size: 15px; font-weight: bold; letter-spacing: 1px; }
+  .spr-badge .pill.low { background: rgba(63,185,80,0.2); color: #3fb950; border: 1px solid #3fb950; }
+  .spr-badge .pill.med { background: rgba(210,153,29,0.2); color: #d2991d; border: 1px solid #d2991d; }
+  .spr-badge .pill.high { background: rgba(248,81,73,0.2); color: #f85149; border: 1px solid #f85149; }
+  .stack-info { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+  .board-label { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 6px; }
+  .cards { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .card { width: 52px; height: 74px; border-radius: 6px; background: #fff; color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1; }
+  .card.red { color: #d32f2f; } .card.black { color: #1a1a1a; }
+  .card .rank { font-size: 22px; } .card .suit { font-size: 14px; margin-top: -2px; }
+  .board-flop { display: flex; justify-content: center; gap: 8px; margin: 8px 0; }
+  .board-flop .card { width: 42px; height: 60px; font-size: 16px; }
+  .spot-info { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; line-height: 2; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .step-label { text-align: center; font-size: 14px; color: #d2991d; margin: 12px 0 6px; font-weight: bold; }
+  .options { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; justify-content: center; max-width: 560px; }
+  .opt-btn { padding: 10px 20px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; transition: transform 0.1s, background 0.15s, border-color 0.15s; }
+  .opt-btn:hover { transform: scale(1.03); background: #30363d; border-color: #58a6ff; }
+  .opt-btn:active { transform: scale(0.97); }
+  .opt-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .opt-btn.correct-pick { background: rgba(63,185,80,0.2); border-color: #3fb950; color: #3fb950; }
+  .opt-btn.wrong-pick { background: rgba(248,81,73,0.2); border-color: #f85149; color: #f85149; }
+  .feedback { width: 540px; max-width: 100%; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; margin-bottom: 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: rgba(63,185,80,0.12); border: 1px solid #3fb950; }
+  .feedback.wrong { background: rgba(248,81,73,0.12); border: 1px solid #f85149; }
+  .feedback .reason { color: #8b949e; font-size: 12px; margin-top: 6px; }
+  .next-btn { padding: 10px 40px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; font-size: 14px; cursor: pointer; font-family: inherit; display: none; }
+  .next-btn.show { display: inline-block; } .next-btn:hover { background: #30363d; }
+  .street-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 4px; background: rgba(88,166,255,0.15); color: #58a6ff; }
+  .category-tag { display: inline-block; font-size: 11px; margin-left: 6px; padding: 2px 6px; border-radius: 4px; }
+  .category-tag.low { background: rgba(63,185,80,0.15); color: #3fb950; }
+  .category-tag.med { background: rgba(210,153,29,0.15); color: #d2991d; }
+  .category-tag.high { background: rgba(248,81,73,0.15); color: #f85149; }
+</style>
+</head>
+<body>
+
+<h1>⚡ SPR 決策訓練</h1>
+<div class="sub">Stack-to-Pot Ratio 決定你怎麼打 · 低 SPR = 簡單粗暴 · 高 SPR = 小心行事<br>核心法則：SPR 越低，手牌強度要求越低；SPR 越高，越不要拿中等牌打光</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('all')" id="modeAll">🎲 All (20)</button>
+  <button class="mode-btn" onclick="setMode('low')" id="modeLow">🏔 低 SPR (1-3)</button>
+  <button class="mode-btn" onclick="setMode('med')" id="modeMed">⛰ 中 SPR (4-6)</button>
+  <button class="mode-btn" onclick="setMode('high')" id="modeHigh">🗻 高 SPR (7+)</button>
+</div>
+
+<div class="scorebar">
+  <span>✅ <span class="val good" id="correctN">0</span></span>
+  <span>❌ <span class="val bad" id="wrongN">0</span></span>
+  <span>📊 <span class="val" id="pct">--</span></span>
+  <span>🔥 <span class="val streak" id="streak">0</span></span>
+  <span>📋 <span class="val remaining" id="remaining">0/0</span></span>
+</div>
+
+<div class="table">
+  <div class="spr-badge" id="sprBadge"></div>
+  <div class="stack-info" id="stackInfo"></div>
+  <div class="board-label">—— H E R O ——</div>
+  <div class="cards" id="heroCards"></div>
+  <div class="board-section">
+    <div class="board-label">—— B O A R D ——</div>
+    <div class="board-flop" id="boardCards"></div>
+  </div>
+  <div class="spot-info" id="spotInfo"></div>
+</div>
+
+<div class="step-label" id="stepLabel">你的決定？</div>
+<div class="options" id="optionsArea"></div>
+
+<div class="feedback" id="feedback"></div>
+<button class="next-btn" id="nextBtn" onclick="nextScenario()">下一題 →</button>
+
+<script src="deck.js"></script>
+<script>
+// ── SPR Scenarios ──────────────────────────────────────────
+
+const SCENARIOS = [
+  // ═══ LOW SPR (1–3) ═══
+  {
+    id: 1, spr: 1.5, category: 'low',
+    position: 'BTN',
+    hero: [{rank:'A',suit:'s'},{rank:'A',suit:'h'}],
+    board: [{rank:'K',suit:'s'},{rank:'T',suit:'d'},{rank:'3',suit:'c'}],
+    street: 'flop',
+    situation: '4-bet pot。你 BTN 4-bet 3x，CO 跟注。<br>Pot: 28bb · Eff stack: 42bb · SPR 1.5<br>你是翻前侵略者，先行動。',
+    options: ['Bet ½ pot (~14bb)', 'Bet ⅓ pot (~9bb)', 'Check (慢打)', 'Jam all-in (42bb)'],
+    correct: 0,
+    explanation: 'SPR 1.5：overpair 就是 nuts。Bet ½ pot → 轉牌輕鬆推，兩條街剛好打完。低 SPR 不用保護手牌，也別慢打——免費牌比你省下來的半注貴多了。直接 jam 會讓比你差的牌全部跑光。'
+  },
+  {
+    id: 2, spr: 2, category: 'low',
+    position: 'CO',
+    hero: [{rank:'A',suit:'d'},{rank:'K',suit:'h'}],
+    board: [{rank:'J',suit:'s'},{rank:'9',suit:'d'},{rank:'4',suit:'c'}],
+    street: 'flop',
+    situation: '4-bet pot。你 CO 4-bet，BTN 跟注。<br>Pot: 34bb · Eff stack: 68bb · SPR 2<br>完全 miss 的翻牌。你是翻前侵略者。',
+    options: ['C-bet ⅓ pot (~11bb)', 'C-bet ½ pot (~17bb)', 'Check，放棄', 'Jam all-in (68bb)'],
+    correct: 0,
+    explanation: 'SPR 2，miss 了但 c-bet ⅓ pot 仍然可以——小注碼就夠了，對手在 4-bet pot 裡沒有中牌也會怕。如果被 call，關閉後門，轉牌 check-fold。別把空氣打成 bluff jam——4-bet pot 裡對手的範圍很強。'
+  },
+  {
+    id: 13, spr: 1, category: 'low',
+    position: 'BB',
+    hero: [{rank:'5',suit:'c'},{rank:'5',suit:'d'}],
+    board: [{rank:'J',suit:'s'},{rank:'8',suit:'d'},{rank:'3',suit:'c'}],
+    street: 'flop',
+    situation: '3-bet pot。BTN open → 你 BB 3-bet → BTN call。<br>Pot: 24bb · Eff stack: 24bb · SPR 1<br>你中了底對。翻牌你先行動。',
+    options: ['Bet ½ pot 然後 commit', 'Check-call 一發', 'Jam all-in (24bb)', 'Check-fold'],
+    correct: 2,
+    explanation: 'SPR 1：任何 pair 都夠好。直接 jam 24bb 進 24bb pot——對手可能拿 A-high 或兩高張接你。低 SPR 沒有操作空間，有牌就推，不糾結。'
+  },
+  {
+    id: 14, spr: 3, category: 'low',
+    position: 'BB',
+    hero: [{rank:'8',suit:'d'},{rank:'7',suit:'d'}],
+    board: [{rank:'8',suit:'s'},{rank:'7',suit:'h'},{rank:'K',suit:'s'}],
+    street: 'flop',
+    situation: 'SRP。你 BB defend，BTN open 2.5x。<br>Pot: 12bb · Eff stack: 36bb · SPR 3<br>翻牌 8s 7h Ks（聽花面），你中了底兩對。你先行動。',
+    options: ['Bet ½ pot (~6bb)', 'Check-raise', 'Jam all-in (36bb)', 'Check-call，轉牌再決定'],
+    correct: 2,
+    explanation: 'SPR 3 + 聽花面 + 兩對 = 直接 jam。聽花面和順子面讓你的兩對很脆弱，SPR 又太低，慢慢打只會讓對手便宜實現 equity。36bb 進 12bb pot 看起來大，但 SPR 3 就是這個玩法——把難題丟給對面。'
+  },
+  {
+    id: 17, spr: 2.5, category: 'low',
+    position: 'BTN',
+    hero: [{rank:'K',suit:'c'},{rank:'K',suit:'d'}],
+    board: [{rank:'9',suit:'s'},{rank:'6',suit:'d'},{rank:'4',suit:'c'}],
+    street: 'flop',
+    situation: '3-bet pot。你 BTN 3-bet，SB call。<br>Pot: 20bb · Eff stack: 50bb · SPR 2.5<br>SB donk bet 8bb (40% pot)。你拿 KK overpair。',
+    options: ['Call，轉牌再評估', 'Raise to 20bb', 'Jam all-in (50bb)', 'Fold (!)'],
+    correct: 2,
+    explanation: 'SPR 2.5 + overpair + 被 donk = jam。在低 SPR 3-bet pot 裡，donk bet 往往來自頂對或聽牌——對這些牌 KK 都大幅領先。call 會讓便宜轉牌出現，raise 非 all-in 會在轉牌留下奇怪的 SPR。直接推，拿滿價值。'
+  },
+
+  // ═══ MEDIUM SPR (4–6) ═══
+  {
+    id: 3, spr: 4, category: 'med',
+    position: 'BTN',
+    hero: [{rank:'A',suit:'d'},{rank:'K',suit:'s'}],
+    board: [{rank:'A',suit:'h'},{rank:'7',suit:'d'},{rank:'2',suit:'c'}],
+    street: 'flop',
+    situation: '3-bet pot。你 BTN 3-bet，BB call。<br>Pot: 22bb · Eff stack: 88bb · SPR 4<br>翻牌 A72 彩虹，你中 TPTK。你先行動。',
+    options: ['Bet ½ pot (~11bb)，規劃三條街', 'Bet ¾ pot (~17bb)', 'Check，慢打', 'Jam all-in (88bb)'],
+    correct: 0,
+    explanation: 'SPR 4：TPTK 強但需要規劃。Bet ½ pot 三條街（11bb → 轉牌 22bb → 河牌 33bb），剛好打光。不要 check 慢打——A-high 乾燥面對手很難趕上，你要主動建池。'
+  },
+  {
+    id: 4, spr: 4.5, category: 'med',
+    position: 'BTN',
+    hero: [{rank:'Q',suit:'c'},{rank:'Q',suit:'d'}],
+    board: [{rank:'J',suit:'s'},{rank:'8',suit:'h'},{rank:'3',suit:'c'}],
+    street: 'flop',
+    situation: '3-bet pot。你 BTN 3-bet，CO call。<br>Pot: 20bb · Eff stack: 90bb · SPR 4.5<br>翻牌 J83 彩虹，overpair QQ。你先行動。',
+    options: ['Bet ⅓ pot (~7bb)', 'Bet ½ pot (~10bb)', 'Bet ⅔ pot (~13bb)', 'Check'],
+    correct: 2,
+    explanation: 'SPR 4.5 + overpair：可以下大注。Bet ⅔ pot，目標是對手的 Jx 和 TT/99 這類牌拿價值。SPR 夠低到你可以 commit，但還不需要 all-in——用 ⅔ 把 pot 建起來，轉牌繼續。'
+  },
+  {
+    id: 5, spr: 5, category: 'med',
+    position: 'CO',
+    hero: [{rank:'A',suit:'s'},{rank:'K',suit:'s'}],
+    board: [{rank:'Q',suit:'s'},{rank:'7',suit:'s'},{rank:'2',suit:'d'}],
+    street: 'flop',
+    situation: '3-bet pot。你 CO 3-bet，BTN call。<br>Pot: 18bb · Eff stack: 90bb · SPR 5<br>翻牌 Qs 7s 2d。你拿 AKs（nut flush draw + 2 高張）。你先行動。',
+    options: ['Bet ½ pot (~9bb)', 'Check-call', 'Jam all-in (90bb) semi-bluff', 'Bet ½ pot，被 raise 就推'],
+    correct: 2,
+    explanation: 'SPR 5 + nut flush draw + 2 overs = semi-bluff jam 完美 spot。你大約有 9 張花 + 6 張高張 ≈ 15 outs，對上頂對也有 ~54% equity。在這個 SPR，jam 的 fold equity + equity 讓這個 move 非常 +EV。讓對手拿 JJ/TT 這種牌痛苦決定。'
+  },
+  {
+    id: 15, spr: 6, category: 'med',
+    position: 'CO',
+    hero: [{rank:'A',suit:'c'},{rank:'K',suit:'h'}],
+    board: [{rank:'A',suit:'s'},{rank:'J',suit:'d'},{rank:'4',suit:'c'},{rank:'9',suit:'h'}],
+    street: 'turn',
+    situation: 'SRP。你 CO open → BTN call。<br>Flop As Jd 4c：你 bet ¾ pot，BTN call。<br>Turn 9h：你 bet ⅔ pot，BTN check-raise 3x。<br>Pot: 42bb · Eff stack: 252bb → 你還要放 ~60bb 進去。',
+    options: ['Call，看河牌', 'Fold', 'Re-raise all-in', 'Call 轉牌，fold 河牌'],
+    correct: 1,
+    explanation: 'SPR 6 被 check-raise 在轉牌 = 這是一大筆錢。TPTK 在對手 check-raise 面前基本是死牌——NL10/25 的轉牌 check-raise 幾乎永遠是兩對+。不要英雄 call 然後在河牌繼續被剝削。SPR 越高，你的 fold button 要越靈敏。'
+  },
+  {
+    id: 19, spr: 4, category: 'med',
+    position: 'CO',
+    hero: [{rank:'J',suit:'s'},{rank:'T',suit:'s'}],
+    board: [{rank:'9',suit:'s'},{rank:'8',suit:'s'},{rank:'2',suit:'d'}],
+    street: 'flop',
+    situation: 'SRP。你 CO open → BB call。<br>Pot: 12bb · Eff stack: 48bb · SPR 4<br>翻牌 9s 8s 2d：你中 flush draw + OESD（15 outs combo draw）。你先行動。',
+    options: ['Bet ½ pot (~6bb)，被 raise 就推', 'Check-call，控制 pot', 'Bet small ⅓ pot', 'Check-raise all-in'],
+    correct: 0,
+    explanation: 'SPR 4 + combo draw（15 outs）= 你可以很激進。Bet ½ pot，如果被 raise 就直接推。你對上任何牌都有至少 50% equity，甚至領先一些 one pair 手牌。combo draw 在 SPR 4 的 spot 是自動 commit——不要把它打成被動的 check-call。'
+  },
+
+  // ═══ HIGH SPR (7+) ═══
+  {
+    id: 6, spr: 12, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'A',suit:'d'},{rank:'K',suit:'c'}],
+    board: [{rank:'A',suit:'h'},{rank:'7',suit:'s'},{rank:'2',suit:'d'}],
+    street: 'flop',
+    situation: 'SRP。你 BTN open → BB call。<br>Pot: 6bb · Eff stack: 72bb · SPR 12<br>翻牌 A72 彩虹。TPTK。BB check。',
+    options: ['Bet ⅓ pot (~2bb)', 'Bet ½ pot (~3bb)', 'Bet ¾ pot (~4.5bb)', 'Check back'],
+    correct: 1,
+    explanation: 'SPR 12：TPTK 要規劃三條街的價值。Bet ½ pot × 3 = 3bb → 6bb → 12bb，剛好打進 72bb 的 stack（還剩 51bb）。不要下太大——乾燥 A-high 面你不需要保護手牌，你需要讓對手的弱 A 和 middle pair 跟得動。'
+  },
+  {
+    id: 7, spr: 15, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'A',suit:'c'},{rank:'J',suit:'c'}],
+    board: [{rank:'J',suit:'s'},{rank:'T',suit:'s'},{rank:'8',suit:'d'}],
+    street: 'flop',
+    situation: 'SRP。你 BTN open → BB call。<br>Pot: 6bb · Eff stack: 90bb · SPR 15<br>翻牌 Js Ts 8d（濕面，聽花+聽順）。TPTK 但 board 很危險。BB check。',
+    options: ['Bet ¾ pot (~4.5bb)，但被 raise 就 fold', 'Bet ½ pot (~3bb)', 'Check back，pot control', 'Bet ½ pot，被 raise 就推'],
+    correct: 0,
+    explanation: 'SPR 15 + 濕面：你需要 bet 大一點來保護手牌和拿價值（對手有很多 draw 會跟），但核心紀律是：被 raise 就要 fold。在這個 SPR，對手 raise 代表兩對+ 或 monster draw——TPTK 不夠好。可以 bet 拿價值，但絕不能為這手牌打光 90bb。'
+  },
+  {
+    id: 8, spr: 10, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'K',suit:'h'},{rank:'K',suit:'s'}],
+    board: [{rank:'7',suit:'d'},{rank:'5',suit:'c'},{rank:'2',suit:'h'}],
+    street: 'flop',
+    situation: 'SRP。你 BTN open → BB call。<br>Pot: 6bb · Eff stack: 60bb · SPR 10<br>翻牌 752 彩虹（超乾）。Overpair KK。BB check。',
+    options: ['Bet ½ pot (~3bb) × 3 條街', 'Bet ¾ pot (~4.5bb)', 'Check back，慢打', 'Bet ⅓ pot (~2bb)'],
+    correct: 0,
+    explanation: 'SPR 10 + 超乾面 + overpair：經典的 bet ½ pot × 3。3bb → 6bb → 12bb，打到河牌 pot 是 42bb，你推剩下 ~39bb——完美的幾何級數。乾燥面對手要嘛有牌要嘛沒有，你不需要保護，只需要慢慢建池拿價值。'
+  },
+  {
+    id: 9, spr: 8, category: 'high',
+    position: 'CO',
+    hero: [{rank:'A',suit:'h'},{rank:'9',suit:'h'}],
+    board: [{rank:'K',suit:'s'},{rank:'9',suit:'d'},{rank:'4',suit:'c'}],
+    street: 'flop',
+    situation: 'SRP。你 CO open → BTN call。<br>Pot: 8bb · Eff stack: 64bb · SPR 8<br>翻牌 Ks 9d 4c（乾面）。你中第二對 + top kicker。你先行動。',
+    options: ['Bet ½ pot (~4bb)', 'Check-call，pot control', 'Bet ¾ pot (~6bb)', 'Check-raise'],
+    correct: 1,
+    explanation: 'SPR 8 + 第二對：這是需要 pot control 的經典 spot。你有一點 showndown value，但不夠強到建一個大 pot。Check-call 一發，控制 pot size——中等牌力 + 中等 SPR = pot control。別把自己的中等牌打成像 nuts。'
+  },
+  {
+    id: 10, spr: 13, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'A',suit:'d'},{rank:'K',suit:'d'}],
+    board: [{rank:'A',suit:'h'},{rank:'7',suit:'s'},{rank:'4',suit:'s'},{rank:'8',suit:'s'}],
+    street: 'turn',
+    situation: 'SRP。你 BTN open → BB call。<br>Flop Ah 7s 4s：你 bet ½ pot，BB call。<br>Turn 8s（同花完成！）。BB check。<br>Pot: 12bb · Eff stack: 156bb → 你剩 ~145bb。SPR ~12。',
+    options: ['Bet ½ pot (~6bb)，繼續拿價值', 'Check back，看免費河牌', 'Bet ¾ pot (~9bb)', 'Overbet jam'],
+    correct: 1,
+    explanation: 'SPR 12，轉牌同花完成，你只有 TPTK。Check back！對手叫了 flop 後範圍裡有大量 flush draw——現在那些 draw 都到了。SPR 太深，不值得用一對打光。check 回來看河牌，如果對手河牌大注，輕鬆 fold。深 SPR 的第一原則是：不要拿 one pair 打光。'
+  },
+  {
+    id: 11, spr: 9, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'8',suit:'c'},{rank:'8',suit:'h'}],
+    board: [{rank:'8',suit:'s'},{rank:'5',suit:'d'},{rank:'2',suit:'c'}],
+    street: 'flop',
+    situation: 'SRP。你 BTN open → BB call。<br>Pot: 6bb · Eff stack: 54bb · SPR 9<br>翻牌 852 彩虹（超乾）。你中頂 set。BB check。',
+    options: ['Bet ⅓ pot (~2bb)，慢打', 'Bet ¾ pot (~4.5bb)，幾何級數', 'Check back，隱藏牌力', 'Overbet 1.5x pot'],
+    correct: 1,
+    explanation: 'SPR 9 + 頂 set + 乾面：用幾何級數建池。Bet ¾ pot = 4.5bb → 轉牌 pot 15bb，bet ¾ = 11bb → 河牌 pot 37bb，推剩下 38bb。乾燥面慢打是浪費——對手沒有東西能趕上你，你必須自己建池。Set 不是用來 slow play 的，是用來 stack 對手的。'
+  },
+  {
+    id: 12, spr: 11, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'K',suit:'s'},{rank:'Q',suit:'s'}],
+    board: [{rank:'A',suit:'s'},{rank:'T',suit:'s'},{rank:'5',suit:'d'}],
+    street: 'flop',
+    situation: 'SRP。你 BTN open → BB call。<br>Pot: 6bb · Eff stack: 66bb · SPR 11<br>翻牌 As Ts 5d。BB donk bet 4bb (67% pot)。你拿 KQs（second nut flush draw）。',
+    options: ['Call (~4bb)，便宜看轉牌', 'Raise to 12bb', 'Fold', 'Jam all-in (66bb)'],
+    correct: 0,
+    explanation: 'SPR 11 + flush draw IP：call 就對了。你有位置 + 不錯的 implied odds——中了花可以拿大價值。但不要 raise：flush draw 不是 made hand，在 SPR 11 你沒有必要建一個大 pot。把 flush draw 打成 bluff raise 是低級錯誤——耐心等。'
+  },
+  {
+    id: 16, spr: 20, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'A',suit:'c'},{rank:'K',suit:'d'}],
+    board: [{rank:'A',suit:'s'},{rank:'K',suit:'s'},{rank:'T',suit:'d'}],
+    street: 'flop',
+    situation: 'SRP。你 BTN open → BB call。<br>Pot: 6bb · Eff stack: 120bb · SPR 20<br>翻牌 As Ks Td（連接面，聽花+聽順）。你中頂兩對。BB check。',
+    options: ['Bet ¾ pot (~4.5bb)，但被 raise 可以 fold', 'Bet ½ pot (~3bb)', 'Check back，pot control', 'Bet ½ pot，被 raise 就 re-raise all-in'],
+    correct: 0,
+    explanation: 'SPR 20：頂兩對很強，但連接面上有 QJ（已成順）、聽花和多種 combo draw。Bet ¾ pot 拿價值和保護手牌。但如果被 raise——認真考慮 fold。SPR 20 時對手願意放 120bb 進來，你要非常尊重。頂兩對在 SPR 20 不是 nuts。'
+  },
+  {
+    id: 18, spr: 7, category: 'high',
+    position: 'BTN',
+    hero: [{rank:'6',suit:'s'},{rank:'5',suit:'s'}],
+    board: [{rank:'J',suit:'h'},{rank:'9',suit:'d'},{rank:'4',suit:'c'},{rank:'2',suit:'h'}],
+    street: 'turn',
+    situation: 'SRP。你 BTN open → BB call。<br>Flop Jh 9d 4c：你 c-bet ½ pot，BB call。<br>Turn 2h（blank）。BB check。<br>Pot: 12bb · Eff stack: 84bb → 你剩 ~78bb。SPR ~6.5。你只有 6-high。',
+    options: ['Barrel ⅔ pot (~8bb)', 'Check back，放棄', 'Barrel ½ pot (~6bb)', 'Overbet jam'],
+    correct: 1,
+    explanation: 'SPR 7 + 完全空氣 + blank turn = give up。對手在 J94 flop 跟了你的 c-bet——他的範圍裡有大量 Jx、9x、甚至 slow play 的 set。2h 是 blank，你的 story 沒有變強。與其把錢丟進一個不該贏的 pot，不如保存 stack 等更好的 spot。好的 barrel 需要 scare card 或 blocker——你兩個都沒有。'
+  },
+  {
+    id: 20, spr: 14, category: 'high',
+    position: 'CO',
+    hero: [{rank:'A',suit:'h'},{rank:'K',suit:'c'}],
+    board: [{rank:'A',suit:'d'},{rank:'7',suit:'c'},{rank:'2',suit:'h'},{rank:'9',suit:'s'},{rank:'3',suit:'d'}],
+    street: 'river',
+    situation: 'SRP。你 CO open → BTN call。<br>Flop Ad 7c 2h：你 bet ½ pot，BTN call。<br>Turn 9s：你 bet ½ pot，BTN call。<br>River 3d（blank，全 rainbow）。BTN overbet 1.5x pot (45bb into 30bb)。<br>Pot: 30bb · Eff stack: 420bb → SPR ~14。你的 TPTK 面對巨型 overbet。',
+    options: ['Call (45bb)', 'Fold', 'Raise', 'Tank-call'],
+    correct: 1,
+    explanation: 'SPR 14 + 對手河牌 overbet 1.5x pot = 幾乎永遠不是 bluff。NL10/25 的對手在深 SPR 下河牌 overbet 的範圍極度 polarize——value 端是 set/two pair/bluff-catch，bluff 端極少。TPTK 在這種 spot 是 pure bluff catcher，而且對手的 bluff 頻率遠低於 GTO。省下 45bb，等更好的 spot。深 SPR 的第一紀律：不要拿 one pair 去 hero call 大注。'
+  }
+];
+
+// ── State ──────────────────────────────────────────────────
+const SPR_CATEGORY_NAMES = { low: '🏔 低 SPR', med: '⛰ 中 SPR', high: '🗻 高 SPR' };
+let mode = 'all';
+let correct = 0, wrong = 0, streak = 0;
+let answered = false;
+let currentScenario = null;
+let questionOrder = [];
+let questionIndex = 0;
+
+// ── Helpers ────────────────────────────────────────────────
+
+function cardHTML(c) {
+  const color = SUIT_COLORS[c.suit];
+  return `<div class="card ${color}"><span class="rank">${c.rank}</span><span class="suit">${SUIT_SYMBOLS[c.suit]}</span></div>`;
+}
+
+function renderBoard(board) { return board.map(c => cardHTML(c)).join(''); }
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── Scenario Engine ────────────────────────────────────────
+
+function filteredScenarios() {
+  if (mode === 'all') return SCENARIOS;
+  return SCENARIOS.filter(s => s.category === mode);
+}
+
+function pickNextScenario() {
+  if (questionIndex >= questionOrder.length) {
+    // Reshuffle
+    questionOrder = shuffleArray(filteredScenarios());
+    questionIndex = 0;
+  }
+  return questionOrder[questionIndex];
+}
+
+// ── Render ─────────────────────────────────────────────────
+
+function renderScenario() {
+  answered = false;
+  currentScenario = pickNextScenario();
+
+  // SPR badge
+  const catClass = currentScenario.category;
+  const badge = document.getElementById('sprBadge');
+  badge.innerHTML = `<span class="pill ${catClass}">⚡ SPR: ${currentScenario.spr}</span>`;
+
+  // Stack info
+  document.getElementById('stackInfo').innerHTML =
+    `<span class="category-tag ${catClass}">${SPR_CATEGORY_NAMES[catClass]}</span> ${currentScenario.position} · ${currentScenario.street === 'flop' ? 'Flop' : currentScenario.street === 'turn' ? 'Turn' : 'River'} decision`;
+
+  // Cards
+  document.getElementById('heroCards').innerHTML = renderBoard(currentScenario.hero);
+  document.getElementById('boardCards').innerHTML = renderBoard(currentScenario.board);
+
+  // Situation
+  document.getElementById('spotInfo').innerHTML = currentScenario.situation;
+
+  // Step label
+  document.getElementById('stepLabel').textContent = '你的決定？';
+
+  // Options
+  const optsDiv = document.getElementById('optionsArea');
+  optsDiv.innerHTML = currentScenario.options.map((opt, i) =>
+    `<button class="opt-btn" onclick="answer(${i})">${opt}</button>`
+  ).join('');
+
+  // Reset feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  // Update remaining count
+  updateRemaining();
+}
+
+// ── Answer ─────────────────────────────────────────────────
+
+function answer(chosenIndex) {
+  if (answered) return;
+  answered = true;
+
+  const opts = document.querySelectorAll('.opt-btn');
+  opts.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === currentScenario.correct) btn.classList.add('correct-pick');
+    if (i === chosenIndex && chosenIndex !== currentScenario.correct) btn.classList.add('wrong-pick');
+  });
+
+  const isCorrect = chosenIndex === currentScenario.correct;
+  const fb = document.getElementById('feedback');
+
+  if (isCorrect) {
+    correct++;
+    streak++;
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <span style="color:#3fb950">正確！</span><div class="reason">${currentScenario.explanation}</div>`;
+  } else {
+    wrong++;
+    streak = 0;
+    fb.className = 'feedback show wrong';
+    const correctLabel = currentScenario.options[currentScenario.correct];
+    fb.innerHTML = `❌ 你選了「${currentScenario.options[chosenIndex]}」，但正確是 <span style="color:#ffa726">「${correctLabel}」</span>。<div class="reason">${currentScenario.explanation}</div>`;
+  }
+
+  updateScore();
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+// ── Navigation ─────────────────────────────────────────────
+
+function nextScenario() {
+  questionIndex++;
+  renderScenario();
+}
+
+// ── Score ──────────────────────────────────────────────────
+
+function updateScore() {
+  document.getElementById('correctN').textContent = correct;
+  document.getElementById('wrongN').textContent = wrong;
+  const total = correct + wrong;
+  document.getElementById('pct').textContent = total > 0 ? (correct / total * 100).toFixed(0) + '%' : '--';
+  document.getElementById('streak').textContent = streak;
+  updateRemaining();
+  localStorage.setItem('sprDrill_score_' + mode, JSON.stringify({ correct, wrong, streak }));
+}
+
+function updateRemaining() {
+  const filtered = filteredScenarios();
+  const remaining = filtered.length - ((questionIndex) % filtered.length || 0);
+  document.getElementById('remaining').textContent = `${questionIndex + 1}/${filtered.length}${mode === 'all' ? '' : ' (此模式)'}`;
+}
+
+function loadScore() {
+  const s = JSON.parse(localStorage.getItem('sprDrill_score_' + mode) || '{}');
+  correct = s.correct || 0;
+  wrong = s.wrong || 0;
+  streak = s.streak || 0;
+  updateScore();
+}
+
+// ── Mode ───────────────────────────────────────────────────
+
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.add('active');
+  questionOrder = shuffleArray(filteredScenarios());
+  questionIndex = 0;
+  loadScore();
+  renderScenario();
+}
+
+// ── Init ───────────────────────────────────────────────────
+
+loadScore();
+questionOrder = shuffleArray(filteredScenarios());
+questionIndex = 0;
+renderScenario();
+</script>
+</body>
+</html>
