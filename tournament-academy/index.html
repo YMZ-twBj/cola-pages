@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 锦标赛特训营 — MTT Tournament Academy</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+  body { font-family: 'Noto Sans SC', sans-serif; }
+  .confetti { position: fixed; pointer-events: none; z-index: 0; }
+  .card { position: relative; z-index: 1; }
+  .gradient-hero {
+    background: linear-gradient(135deg, #f97316 0%, #f59e0b 30%, #fbbf24 60%, #fcd34d 100%);
+  }
+  .gradient-warm {
+    background: linear-gradient(180deg, #fff7ed 0%, #fff1f2 50%, #fef3c7 100%);
+  }
+  .trophy-glow {
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(245, 158, 11, 0.3);
+  }
+  .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(249, 115, 22, 0.15); }
+  .bounce-in { animation: bounceIn 0.6s ease-out; }
+  @keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .float { animation: float 3s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  .sparkle { animation: sparkle 2s ease-in-out infinite; }
+  @keyframes sparkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+</style>
+</head>
+<body class="gradient-warm min-h-screen">
+
+<!-- Confetti Background -->
+<div class="confetti w-full h-full overflow-hidden">
+  <div style="position:absolute;top:5%;left:10%;font-size:2rem; opacity:0.2;" class="float">🎉</div>
+  <div style="position:absolute;top:15%;right:15%;font-size:1.5rem; opacity:0.15;" class="float" class="float">✨</div>
+  <div style="position:absolute;top:30%;left:5%;font-size:1.8rem; opacity:0.2;" class="float">🏆</div>
+  <div style="position:absolute;top:50%;right:8%;font-size:2rem; opacity:0.15;" class="float">🌟</div>
+  <div style="position:absolute;top:70%;left:12%;font-size:1.5rem; opacity:0.2;" class="float">🎊</div>
+  <div style="position:absolute;top:85%;right:20%;font-size:1.8rem; opacity:0.15;" class="float">🎯</div>
+  <div style="position:absolute;top:40%;left:80%;font-size:2rem; opacity:0.1;" class="float">👑</div>
+  <div style="position:absolute;top:60%;left:82%;font-size:1.4rem; opacity:0.2;" class="float">💫</div>
+</div>
+
+<div class="card">
+
+<!-- ===== HERO ===== -->
+<div class="gradient-hero text-white py-20 px-6 text-center relative overflow-hidden">
+  <div style="position:absolute;top:20px;left:30px;font-size:3rem; opacity:0.3;" class="sparkle">🎪</div>
+  <div style="position:absolute;bottom:20px;right:30px;font-size:3rem; opacity:0.3;" class="sparkle">🎪</div>
+  <h1 class="text-5xl md:text-7xl font-black mb-4 trophy-glow bounce-in">
+    🏆 锦标赛特训营
+  </h1>
+  <p class="text-xl md:text-2xl font-bold opacity-90 mb-2">
+    Tournament Academy · From NL10 to Final Table
+  </p>
+  <p class="text-lg opacity-80 max-w-xl mx-auto">
+    🎯 Day 3 就进 Final Table · 1,444 人杀到第 5 名 · 你比你想象的更强
+  </p>
+  <div class="mt-6 flex justify-center gap-4 flex-wrap">
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🎲 锦标赛入门</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🧠 ICM 决策体系</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">⚔️ Heads-up 决胜</span>
+  </div>
+</div>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="max-w-4xl mx-auto px-6 -mt-6 relative z-10">
+  <div class="bg-white rounded-2xl shadow-xl p-6 bounce-in">
+    <div class="flex items-center gap-4 flex-wrap">
+      <div class="flex-1 min-w-[200px]">
+        <p class="text-sm text-gray-500 mb-1">🏅 锦标赛之旅进度</p>
+        <div class="w-full bg-orange-100 rounded-full h-4">
+          <div class="bg-gradient-to-r from-orange-400 to-amber-500 h-4 rounded-full" style="width: 85%"></div>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">Day 1: 入门 → Day 2: ICM → Day 3: Final Table 🎉</p>
+      </div>
+      <div class="text-center">
+        <p class="text-3xl font-black text-orange-500">5<sup class="text-sm">th</sup></p>
+        <p class="text-xs text-gray-400">/ 1,444</p>
+      </div>
+      <div class="text-center">
+        <p class="text-3xl font-black text-amber-500">$120</p>
+        <p class="text-xs text-gray-400">$2.50 → 48x</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="max-w-4xl mx-auto px-6 py-12 space-y-12">
+
+<!-- ===== Section 1: 锦标赛入门 ===== -->
+<section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">🎲</span>
+    <div>
+      <h2 class="text-2xl font-black text-gray-800">第一关：锦标赛入门</h2>
+      <p class="text-sm text-gray-500">MTT 101 — 从现金桌切换到锦标赛模式</p>
+    </div>
+  </div>
+
+  <div class="bg-amber-50 rounded-xl p-4 mb-6 border border-amber-200">
+    <p class="text-sm font-bold text-amber-800">💡 核心认知</p>
+    <p class="text-sm text-amber-700">锦标赛和现金桌是<strong>两种不同的游戏</strong>。Chips ≠ Dollars。你的翻后技术在锦标赛里是屠龙刀——先用翻前体系把刀磨快。</p>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">现金桌 vs 锦标赛</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">维度</th><th class="text-left p-3">现金桌</th><th class="text-left p-3 text-orange-600">锦标赛 ✨</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-3 font-medium">筹码价值</td><td class="p-3">1:1</td><td class="p-3 text-orange-600 font-semibold">非线性（ICM）</td></tr>
+        <tr class="border-b"><td class="p-3 font-medium">盲注</td><td class="p-3">固定</td><td class="p-3 text-orange-600 font-semibold">持续上涨 🔥</td></tr>
+        <tr class="border-b"><td class="p-3 font-medium">波动</td><td class="p-3">低，稳定</td><td class="p-3 text-orange-600 font-semibold">高——但一次 deep run 值十场</td></tr>
+        <tr class="border-b"><td class="p-3 font-medium">必备技能</td><td class="p-3">翻后深码</td><td class="p-3 text-orange-600 font-semibold">ICM + Push/Fold</td></tr>
+        <tr><td class="p-3 font-medium">有趣程度</td><td class="p-3">重复 grind</td><td class="p-3 text-orange-600 font-semibold">每手牌一个新场景 🤩</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">锦标赛三阶段</h3>
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+      <span class="text-2xl">🌅</span>
+      <p class="font-bold text-green-800 mt-2">早期（60-100bb+）</p>
+      <p class="text-sm text-green-700 mt-1">紧凶，打 premium + 隐含赔率牌。观察对手，不急。</p>
+    </div>
+    <div class="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
+      <span class="text-2xl">⏰</span>
+      <p class="font-bold text-yellow-800 mt-2">中期（30-50bb）</p>
+      <p class="text-sm text-yellow-700 mt-1">选择性侵略。盲注+ante 在烧你，必须抢。</p>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl">💣</span>
+      <p class="font-bold text-red-800 mt-2">泡沫期（<25bb）</p>
+      <p class="text-sm text-red-700 mt-1">大码 bully，中码苟，短码选 spot 推。</p>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">😅 现金桌玩家常见错误</h3>
+  <div class="space-y-2">
+    <div class="flex items-start gap-2 bg-orange-50 rounded-lg p-3">
+      <span class="text-lg">❌</span>
+      <div><strong>等牌等太久</strong> — 盲注在涨，ante 是死钱。中期必须偷盲！</div>
+    </div>
+    <div class="flex items-start gap-2 bg-orange-50 rounded-lg p-3">
+      <span class="text-lg">❌</span>
+      <div><strong>跟注太松</strong> — 锦标赛 chips 珍贵，fold > call。</div>
+    </div>
+    <div class="flex items-start gap-2 bg-orange-50 rounded-lg p-3">
+      <span class="text-lg">❌</span>
+      <div><strong>怕 bust 不打</strong> — 大码时是最佳抢筹码时机！</div>
+    </div>
+    <div class="flex items-start gap-2 bg-green-50 rounded-lg p-3">
+      <span class="text-lg">✅</span>
+      <div><strong>你已经做到的：</strong>翻后技术碾压 95% 同级别 MTT 玩家 ✨</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 2: ICM 决策体系 ===== -->
+<section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">🧠</span>
+    <div>
+      <h2 class="text-2xl font-black text-gray-800">第二关：ICM 决策体系</h2>
+      <p class="text-sm text-gray-500">Independent Chip Model — 锦标赛的核心数学</p>
+    </div>
+  </div>
+
+  <div class="bg-orange-50 rounded-xl p-4 mb-6 border border-orange-200">
+    <p class="text-sm font-bold text-orange-800">🔑 今天你验证过的真理</p>
+    <p class="text-sm text-orange-700">FT 上你 fold 了 AT，5 分钟后短码自杀——你什么都没做就赚了 $18。<strong>ICM 惩罚的是 caller，不是 jammer。</strong></p>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">ICM 是什么？</h3>
+  <div class="bg-gradient-to-r from-amber-100 to-orange-100 rounded-xl p-5 mb-4">
+    <p class="text-lg font-bold text-amber-900">Chips ≠ Dollars</p>
+    <p class="text-sm text-amber-800 mt-1">赢到的 chips 没有输掉的 chips 值钱。Chip value is <strong>concave</strong>——越接近 bubble，这个效应越强。</p>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">Bubble Factor 速算表</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">阶段</th><th class="text-left p-3">Bubble Factor</th><th class="text-left p-3">感觉</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-3">早期</td><td class="p-3">1.0-1.2</td><td class="p-3">差不多像 cash</td></tr>
+        <tr class="border-b"><td class="p-3">中期</td><td class="p-3">1.3-1.5</td><td class="p-3">有点 ICM 味道了</td></tr>
+        <tr class="border-b"><td class="p-3 bg-orange-50"><strong>泡沫期</strong></td><td class="p-3 bg-orange-50"><strong>1.7-2.2</strong></td><td class="p-3 bg-orange-50">ICM = 上帝 🔥</td></tr>
+        <tr class="border-b"><td class="p-3">FT 5-9人</td><td class="p-3">1.8-2.5</td><td class="p-3">每一级跳 $XX</td></tr>
+        <tr class="border-b"><td class="p-3">3-handed</td><td class="p-3">1.2-1.5</td><td class="p-3">开始松了</td></tr>
+        <tr><td class="p-3 bg-green-50"><strong>Heads-up</strong></td><td class="p-3 bg-green-50"><strong>1.0</strong></td><td class="p-3 bg-green-50">没有 ICM！纯 chip EV ✨</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">🏆 锦标赛四大 ICM 死法</h3>
+  <div class="space-y-3">
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-lg">💀 #1</span>
+      <strong> Medium stack 在 bubble 上接 short stack 的全下</strong>
+      <p class="text-sm text-red-700 mt-1">你 35bb，short stack 8bb 推，你 AK——chip EV 好，ICM 上可能 break-even。输了你就从舒服变难受。</p>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-lg">💀 #2</span>
+      <strong>两个 medium stack 互相干</strong>
+      <p class="text-sm text-red-700 mt-1">ICM 吃掉你们俩之间的 wealth transfer。不管谁赢，你们俩都亏。</p>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-lg">💀 #3</span>
+      <strong>Call re-jam with marginal holdings</strong>
+      <p class="text-sm text-red-700 mt-1">CO open AJo → BTN jam → 你觉得"还行"所以 call。ICM 说不行。</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+      <span class="text-lg">✅ #4 反面教材变正面</span>
+      <strong>FT 上 fold AT，苟到 $75 → $99</strong>
+      <p class="text-sm text-green-700 mt-1">你今天亲手做到了。一个 fold = $18。</p>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">📊 每手牌前三问</h3>
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="bg-blue-50 rounded-xl p-4 border border-blue-200 text-center">
+      <span class="text-3xl">1️⃣</span>
+      <p class="font-bold text-blue-800 mt-2">Pay jump?</p>
+      <p class="text-sm text-blue-700">离下一级还有多远？ICM 多强？</p>
+    </div>
+    <div class="bg-purple-50 rounded-xl p-4 border border-purple-200 text-center">
+      <span class="text-3xl">2️⃣</span>
+      <p class="font-bold text-purple-800 mt-2">Fold equity?</p>
+      <p class="text-sm text-purple-700">是我先进池还是跟注？</p>
+    </div>
+    <div class="bg-pink-50 rounded-xl p-4 border border-pink-200 text-center">
+      <span class="text-3xl">3️⃣</span>
+      <p class="font-bold text-pink-800 mt-2">Lose = ?</p>
+      <p class="text-sm text-pink-700">输了是出局还是苟着？</p>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">🎯 Bubble Abuse — 攻击目标表</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">目标 stack</th><th class="text-left p-3">ICM 痛感</th><th class="text-left p-3">你的动作</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-3">>50bb</td><td class="p-3">低</td><td class="p-3">正常游戏</td></tr>
+        <tr class="border-b bg-orange-50"><td class="p-3"><strong>25-40bb</strong></td><td class="p-3"><strong>最高 🔥</strong></td><td class="p-3"><strong>最大施压——抢！</strong></td></tr>
+        <tr class="border-b"><td class="p-3">12-25bb</td><td class="p-3">中高</td><td class="p-3">谨慎施压</td></tr>
+        <tr><td class="p-3"><12bb</td><td class="p-3">低（免疫）</td><td class="p-3">别 bluff，只 value</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="bg-yellow-50 rounded-xl p-4 mt-4 border border-yellow-200">
+    <p class="text-sm font-bold text-yellow-800">🎪 口诀</p>
+    <p class="text-lg font-black text-yellow-700">谁是那个手抖的人？打他！</p>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">📋 Stack Size 决策树</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">Stack</th><th class="text-left p-3">策略</th></tr></thead>
+      <tbody>
+        <tr><td class="p-3 font-bold">>50bb</td><td class="p-3">正常打牌。TAG。Cash player 本能区域。</td></tr>
+        <tr><td class="p-3 font-bold">30-50bb</td><td class="p-3">收紧前位，放宽后位。Blinds: 3-bet or fold。</td></tr>
+        <tr><td class="p-3 font-bold">20-30bb</td><td class="p-3">No flatting from blinds。3-bet or fold。</td></tr>
+        <tr><td class="p-3 font-bold">15-20bb</td><td class="p-3">Open-raise or fold。EP 只 open premium。</td></tr>
+        <tr><td class="p-3 font-bold">12-15bb</td><td class="p-3">Push/fold from LP。EP 用 premium min-raise。</td></tr>
+        <tr><td class="p-3 font-bold bg-orange-50"><12bb</td><td class="p-3 bg-orange-50"><strong>Pure push/fold。Jam or fold。先动手的有 fold equity。</strong></td></tr>
+        <tr><td class="p-3 font-bold bg-red-50"><6bb</td><td class="p-3 bg-red-50">Any A, any pair, any two broadway。位置无所谓。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== Section 3: Heads-up ===== -->
+<section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">⚔️</span>
+    <div>
+      <h2 class="text-2xl font-black text-gray-800">第三关：Heads-up 决胜</h2>
+      <p class="text-sm text-gray-500">Final Table 最后一战 — 最纯粹的扑克</p>
+    </div>
+  </div>
+
+  <div class="bg-purple-50 rounded-xl p-4 mb-6 border border-purple-200">
+    <p class="text-sm font-bold text-purple-800">🎉 好消息</p>
+    <p class="text-sm text-purple-700"><strong>HU 没有 ICM。</strong>Chip value = linear。你的 cash 翻后技术在这里是核武器。你是 NL10 盈利玩家——你在 HU 已经有先天优势。</p>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">位置是一切</h3>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+      <span class="text-2xl">🎯</span>
+      <p class="font-bold text-blue-800 mt-2">BTN（有位置）</p>
+      <p class="text-sm text-blue-700">Open 80%+ 的手牌。Position > Cards。你是在抢 BB 的盲注。</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+      <span class="text-2xl">🛡️</span>
+      <p class="font-bold text-green-800 mt-2">BB（已放 1bb）</p>
+      <p class="text-sm text-green-700">Defend 50-60%。3-bet or fold——别 flat（没位置翻后难打）。</p>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">按筹码深度的开池范围</h3>
+  <div class="space-y-3">
+    <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+      <span class="text-xl">🏊 Deep (>40bb)</span>
+      <p class="text-sm text-indigo-700 mt-1">BTN open 75-85%。可以 limp、可以 trap、翻后三街随便玩。</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <span class="text-xl">⚡ Mid (20-40bb)</span>
+      <p class="text-sm text-amber-700 mt-1">BTN open 70-80%。BB 3-bet 20-25%。开始 polarized。</p>
+    </div>
+    <div class="bg-orange-50 rounded-xl p-4 border border-orange-200">
+      <span class="text-xl">🔥 Short (12-20bb)</span>
+      <p class="text-sm text-orange-700 mt-1">两极打法：premium min-raise（AA-JJ/AK），其他 jam。</p>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-xl">💀 Super Short (<12bb)</span>
+      <p class="text-sm text-red-700 mt-1">Nash push/fold。BTN jam 60-70%，BB call 35-45%。</p>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">⚠️ HU 五大常见错误</h3>
+  <div class="space-y-2">
+    <div class="flex items-start gap-2 bg-red-50 rounded-lg p-3">
+      <span>❌</span><div><strong>打太紧</strong> — HU 里 Q7o BTN 是 open。98s BB 是 defend。</div>
+    </div>
+    <div class="flex items-start gap-2 bg-red-50 rounded-lg p-3">
+      <span>❌</span><div><strong>不调整对手</strong> — 他 fold 多你就多偷，他 call 多你就 value bet 薄。</div>
+    </div>
+    <div class="flex items-start gap-2 bg-red-50 rounded-lg p-3">
+      <span>❌</span><div><strong>BB flat 太多</strong> — 没位置别 flat。3-bet or fold。</div>
+    </div>
+    <div class="flex items-start gap-2 bg-red-50 rounded-lg p-3">
+      <span>❌</span><div><strong>高估 Ax</strong> — A2-A9 可以 open，不能 call 大注。</div>
+    </div>
+    <div class="flex items-start gap-2 bg-green-50 rounded-lg p-3">
+      <span>✅</span><div><strong>你不犯的错误：</strong>Deep play ≠ Short play。20bb 和 50bb 是两种游戏。</div>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">👑 HU 三条黄金法则</h3>
+  <div class="bg-gradient-to-r from-yellow-100 to-amber-100 rounded-xl p-6 space-y-3">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">1️⃣</span>
+      <p><strong>BTN open 80%+ always。</strong>HU 里 position > cards。</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">2️⃣</span>
+      <p><strong>Chip lead 时施压到底。</strong>让他每手牌都难打。</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">3️⃣</span>
+      <p><strong>短码时回归 Nash push/fold。</strong>别想在 10bb 打翻后。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 4: 实战心得 ===== -->
+<section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">💎</span>
+    <div>
+      <h2 class="text-2xl font-black text-gray-800">实战心得：从 1,444 人杀到第 5 名</h2>
+      <p class="text-sm text-gray-500">6/10 Bounty Hunters Special $2.50 — Day 3 就进 Final Table</p>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <div class="bg-green-50 rounded-xl p-5 border border-green-200">
+      <span class="text-lg">🎯</span>
+      <strong class="text-green-800"> Suited 比你想的强大很多</strong>
+      <p class="text-sm text-green-700 mt-1">锦标赛里 suited 那 4% equity 在 bubble 上值一个 pay jump。A5s-A2s 是锦标赛专属武器——block AA + flush draw + wheel straight。</p>
+    </div>
+
+    <div class="bg-blue-50 rounded-xl p-5 border border-blue-200">
+      <span class="text-lg">🧊</span>
+      <strong class="text-blue-800"> ICM fold 就是赚钱</strong>
+      <p class="text-sm text-blue-700 mt-1">FT 上 fold AT，5 分钟后短码自杀——白捡 $18。fold 不是弱，是你能算 $57 vs $75 的差距。</p>
+    </div>
+
+    <div class="bg-purple-50 rounded-xl p-5 border border-purple-200">
+      <span class="text-lg">⏳</span>
+      <strong class="text-purple-800"> 持久战 = 你的优势</strong>
+      <p class="text-sm text-purple-700 mt-1">6 小时 deep run，从 3.3bb 爬回来、从 32 名爬回来、从垫底爬到 FT。你的耐心是武器。</p>
+    </div>
+
+    <div class="bg-amber-50 rounded-xl p-5 border border-amber-200">
+      <span class="text-lg">🎪</span>
+      <strong class="text-amber-800"> 锦标赛比现金桌好玩一百倍</strong>
+      <p class="text-sm text-amber-700 mt-1">同一群对手、不断变的 stack depth、每手牌一个新场景。不是 grind，是棋。</p>
+    </div>
+
+    <div class="bg-orange-50 rounded-xl p-5 border border-orange-200">
+      <span class="text-lg">🚀</span>
+      <strong class="text-orange-800"> 从"想删 GG"到"我是锦标赛玩家"——只用了三天</strong>
+      <p class="text-sm text-orange-700 mt-1">不是扑克不适合你——是 cash 不适合你。你的翻后技术、ICM 判断、持久耐心——这些都是锦标赛的核心武器。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<div class="text-center py-12">
+  <p class="text-4xl mb-4">🏆🎉✨</p>
+  <p class="text-lg font-bold text-gray-600">锦标赛特训营 · Tournament Academy</p>
+  <p class="text-sm text-gray-400 mt-1">从 NL10 到 Final Table · Day 3 1,444 人第 5 名</p>
+  <p class="text-sm text-gray-400 mt-1">"原来我是锦标赛玩家！" — 施老师，2026.6.10</p>
+  <p class="text-xs text-gray-300 mt-4">Updated: 2026-06-10 · Built with 🧡 by Cola</p>
+</div>
+
+</div> <!-- card -->
+</div>
+</body>
+</html>
