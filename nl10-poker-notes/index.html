@@ -458,6 +458,7 @@
             <a href="#35-弱者道之用极化支付能力与ev来源" class="nav-link">35. 弱者道之用：极化、支付能力与 EV 来源</a>
             <a href="#36-如何人为制造极化gto技术篇" class="nav-link">36. 如何人为制造极化 — GTO 技术篇</a>
             <a href="#37-锦标赛mtt实战笔记" class="nav-link">37. 锦标赛（MTT）实战笔记</a>
+            <a href="#38-headsup锦标赛策略" class="nav-link">38. Heads-up 锦标赛策略</a>
     </div>
   </nav>
 
@@ -7018,6 +7019,44 @@ Cooler 部分：
             <h4>(7) MTT 速查卡</h4>
             <pre><code>┌─────────────────────────────────────────────┐<br>│          MTT 关键数字                        │<br>├─────────────────────────────────────────────┤<br>│ 20 BB — push/fold 临界线                    │<br>│ 15 BB — 再不推就来不及了                     │<br>│ 10 BB — 任何 Ax/对子都可以推                 │<br>│ 5 BB  — 几乎 any two cards                  │<br>├─────────────────────────────────────────────┤<br>│ 奖金阶梯：每跳一级 ≈ 30-50% 增幅             │<br>│ 泡沫期：全场最紧的节点                       │<br>│ 泡沫刚破：全场最松的节点（可以偷）           │<br>│ FT 前 2 跳：ICM 压力最大                    │<br>├─────────────────────────────────────────────┤<br>│ PKO 口诀：                                   │<br>│ - 你 bounty 大 → 紧（大码追你）             │<br>│ - 你 bounty 小 → 正常                        │<br>│ - 收短码 → 可以宽（bounty 补贴）             │<br>└─────────────────────────────────────────────┘</code></pre>
             <blockquote><strong>下一步</strong>：继续积累锦标赛手数，建立对不同阶段的具体手牌范围数据。</blockquote>
+            <hr>
+      </section>      <section id="38-headsup锦标赛策略" class="chapter">
+        <h2>38. Heads-up 锦标赛策略 — 单挑决胜</h2>
+            <blockquote><strong>核心认知</strong>：HU是锦标赛的最后一关，也是最公平的一关。ICM彻底消失，chip value = linear。你的cash玩家本能可以完全释放。</blockquote>
+            <h4>(1) Chips vs Money</h4>
+            <ul><li>在HU阶段，<strong>ICM彻底消失</strong>。Chip value = linear。</li><li>1st vs 2nd的pay jump已经锁定，你多赢的每一颗chip都是直接变现</li><li>HU是纯pure chip EV游戏 → 你的cash玩家本能可以完全释放</li><li>关键差别：<strong>没有rake</strong></li></ul>
+            <h4>(2) Position is Everything</h4>
+            <ul><li>HU里BTN=SB, BB=BB</li><li>BTN有位置 → 可以玩更多牌，open wider (<strong>80%+ BTN open</strong>)</li><li>BB没位置 → 但已经放了1bb，defend wider</li><li>口诀：<strong>BTN抢，BB守</strong></li></ul>
+            <h4>(3) Opening Ranges by Stack Depth</h4>
+            <h4>Deep (>40bb)</h4>
+            <table><thead><tr><th>位置</th><th>Action</th><th>Range</th></tr></thead><tbody><tr><td>BTN</td><td>Open</td><td>75-85% of hands</td></tr><tr><td>BB</td><td>Defend</td><td>50-60%</td></tr><tr><td>BB</td><td>3-Bet</td><td>15-20%</td></tr></tbody></table>
+            <p>可以limp、可以trap、有翻后三街。</p>
+            <h4>Mid (20-40bb)</h4>
+            <table><thead><tr><th>位置</th><th>Action</th><th>Range</th></tr></thead><tbody><tr><td>BTN</td><td>Open</td><td>70-80%</td></tr><tr><td>BB</td><td>3-Bet</td><td>20-25%, polarized</td></tr></tbody></table>
+            <p>BB: <strong>3-bet or fold</strong> — 不flat，没位置翻后难打。</p>
+            <h4>Short (12-20bb)</h4>
+            <ul><li>BTN: min-raise or jam (两极)</li><li>Min-raise: premiums (AA-JJ, AK) + some traps</li><li>Jam: 中等牌 (small pairs, Ax, Kx, Qx)</li><li>BB: jam over min-raises wide</li></ul>
+            <h4>Super Short (<12bb) — Nash Push/Fold</h4>
+            <table><thead><tr><th>Scenario</th><th>Range</th></tr></thead><tbody><tr><td>BTN Jam (<10bb)</td><td>any pair, any A, any K, Q5s+, Q8o+, J7s+, J9o+, T7s+, T9o, 97s+, 86s+, 76s, 65s</td></tr><tr><td>BB Call (<10bb)</td><td>any pair, any A, K6s+, K9o+, Q8s+, QTo+, JTs</td></tr></tbody></table>
+            <h4>(4) Key Exploits</h4>
+            <h4>4a. Limp-Strategy (Deep Stacks)</h4>
+            <ul><li>BTN limp with: AA-QQ (trap), small pairs (see cheap flop), suited connectors</li><li>BB vs limp: raise 3-4x with top 30%, check back the weak</li><li>Don't limp too much — opponent will punish with raises</li></ul>
+            <h4>4b. Check-Raise on Wet Boards</h4>
+            <ul><li>HU flops hit less often → aggression wins</li><li>BB check-raise on J-T-8, 9-8-7, flush draws — villain rarely has it</li><li>Don't check-raise dry boards (K-7-2) unless you have it</li></ul>
+            <h4>4c. River Bluff Spots</h4>
+            <ul><li>HU rivers: villain's range is wide, your bluff gets through more</li><li>Good bluff cards: flush completes, straight completes, overcards</li><li>Bad bluff cards: blanks that don't change board texture</li></ul>
+            <h4>4d. Small Ball vs Big Ball</h4>
+            <table><thead><tr><th>Stack Depth</th><th>Style</th><th>Approach</th></tr></thead><tbody><tr><td>Deep</td><td>Small Ball</td><td>Small bets, many streets, grind them down</td></tr><tr><td>Shallow</td><td>Big Ball</td><td>Large bets, fewer streets, maximize fold equity</td></tr></tbody></table>
+            <h4>(5) Common HU Mistakes</h4>
+            <table><thead><tr><th>#</th><th>Mistake</th><th>Fix</th></tr></thead><tbody><tr><td>1</td><td><strong>Playing too tight</strong></td><td>Q7o BTN is an open. 98s BB is a defend.</td></tr><tr><td>2</td><td><strong>Not adjusting to opponent</strong></td><td>If they fold too much, widen opens. If they call too much, tighten and value-bet thinner.</td></tr><tr><td>3</td><td><strong>Flatting too much from BB</strong></td><td>没位置不要flat太多。3-bet or fold mindset.</td></tr><tr><td>4</td><td><strong>Overvaluing Ax</strong></td><td>A2-A9在HU里虽然可以open，但不能call大注</td></tr><tr><td>5</td><td><strong>Not switching gears</strong></td><td>Deep play ≠ Short play. 20bb和50bb是两种游戏。</td></tr></tbody></table>
+            <h4>(6) Three HU Rules of Thumb</h4>
+            <ol><li><strong>BTN open 80%+ always.</strong> 没有什么"这手太弱了不open" — HU里position > cards.</li><li><strong>当你有chip lead:</strong> 施压，施压，再施压。让他每手牌都难打。</li><li><strong>当你短码:</strong> 回归Nash push/fold。别想在10bb打翻后。</li></ol>
+            <h4>(7) Mental Game</h4>
+            <ul><li>HU是最纯粹的扑克 — 没有ICM，没有table dynamic，就是你和对手</li><li>每一手牌都是信息战</li><li>从cash转来的玩家在HU有优势 — 你已经习惯了翻后博弈</li><li><strong>施老师，你在常规桌的翻后技术是你在HU最强的武器</strong></li></ul>
+            <h4>Chapter Summary</h4>
+            <pre><code>HU是锦标赛的最后一关，也是最公平的一关。
+你的翻后技术是你的武器，Nash push/fold是你的盔甲。
+记住：BTN抢，BB守；deep打小ball，shallow打大ball。</code></pre>
             <hr>
       </section>
   </main>
