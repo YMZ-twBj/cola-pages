@@ -567,6 +567,142 @@
   </div>
 </section>
 
+<!-- ===== Section 1.6: 翻前开池三维框架 ===== -->
+<section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">📐</span>
+    <div>
+      <h2 class="text-2xl font-black text-gray-800">翻前开池三维框架</h2>
+      <p class="text-sm text-gray-500">Open% = 位置基础范围 × 码量系数 × ICM压强系数</p>
+    </div>
+  </div>
+
+  <div class="bg-gradient-to-r from-orange-100 to-amber-100 rounded-xl p-5 mb-6">
+    <p class="text-sm font-bold text-orange-800">🎯 核心公式</p>
+    <p class="text-3xl font-black text-orange-600 my-2">Open% = 位置基础 × 码量系数 × ICM系数</p>
+    <p class="text-sm text-orange-700">三个因子独立作用。不是死记硬背——是<strong>决策框架</strong>：到桌上扫一眼位置、扫一眼码量、扫一眼谁在发抖。</p>
+  </div>
+
+  <!-- 第一维：位置 -->
+  <h3 class="text-lg font-bold text-gray-700 mt-6 mb-3">🔹 第一维：位置 (Position)</h3>
+  <p class="text-sm text-gray-500 mb-3">以 40bb 为基准码量。位置越晚，范围越宽——<strong>UTG 到 BTN 差约 3 倍</strong>。</p>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">位置</th><th class="text-right p-3">开池%</th><th class="text-left p-3">典型手牌</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-3 font-bold">UTG</td><td class="p-3 text-right font-black text-gray-700">15-18%</td><td class="p-3 text-gray-500">55+, ATo+, KQo+, A2s+, 76s+</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">MP / HJ</td><td class="p-3 text-right font-black text-gray-700">20-22%</td><td class="p-3 text-gray-500">44+, A9o+, KJo+, 65s+, QTs+</td></tr>
+        <tr class="border-b bg-orange-50"><td class="p-3 font-bold text-orange-700">CO</td><td class="p-3 text-right font-black text-orange-600">28-36%</td><td class="p-3 text-gray-500">22+, A5o+, KTo+, QJo+, 54s+, K9s+</td></tr>
+        <tr class="border-b bg-amber-50"><td class="p-3 font-bold text-amber-700">BTN 🎯</td><td class="p-3 text-right font-black text-amber-600">40-51%</td><td class="p-3 text-gray-500">几乎所有 suited、大部分 Broadway、小对子</td></tr>
+        <tr><td class="p-3 font-bold">SB</td><td class="p-3 text-right font-black text-gray-700">30-42%</td><td class="p-3 text-gray-500">宽但需极化——BB 有位置</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 第二维：码量 -->
+  <h3 class="text-lg font-bold text-gray-700 mt-8 mb-3">🔸 第二维：码量 (Stack Depth)</h3>
+  <p class="text-sm text-gray-500 mb-3">以 40bb 为基准（系数=1.0）。<strong>浅码往高位牌集中，深码加 speculative hands。</strong></p>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">码量</th><th class="text-center p-3">系数</th><th class="text-left p-3">逻辑</th><th class="text-left p-3">范围变化</th></tr></thead>
+      <tbody>
+        <tr class="border-b bg-green-50"><td class="p-3 font-bold">50bb+</td><td class="p-3 text-center font-black">1.1-1.2</td><td class="p-3">深码 → 隐含赔率高 → 加 speculative</td><td class="p-3 text-green-700">+5-10%宽松</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">40bb</td><td class="p-3 text-center font-black">1.0</td><td class="p-3">基准</td><td class="p-3">—</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">30bb</td><td class="p-3 text-center font-black">0.90-0.95</td><td class="p-3">3-bet shove 威胁上升</td><td class="p-3">略收紧</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">25bb</td><td class="p-3 text-center font-black">0.85</td><td class="p-3">明显收紧，但仍可翻后</td><td class="p-3">-10%</td></tr>
+        <tr class="border-b bg-yellow-50"><td class="p-3 font-bold">20bb</td><td class="p-3 text-center font-black">0.70-0.80</td><td class="p-3"><strong>临界点</strong>：两极分化</td><td class="p-3 text-yellow-700">-20%，高位牌集中</td></tr>
+        <tr class="border-b bg-orange-50"><td class="p-3 font-bold">15bb</td><td class="p-3 text-center font-black">0.50</td><td class="p-3"><strong>不再"开池"</strong>——推或扔</td><td class="p-3 text-orange-700">-50%，push-fold 模式</td></tr>
+        <tr class="bg-red-50"><td class="p-3 font-bold"><12bb</td><td class="p-3 text-center font-black">push-fold</td><td class="p-3"><strong>Nash push/fold</strong></td><td class="p-3 text-red-700">仅 all-in，不再 min-raise</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="bg-yellow-50 rounded-xl p-4 mt-4 border border-yellow-200">
+    <p class="text-sm font-bold text-yellow-800">⚡ 关键提醒：Effective Stack</p>
+    <p class="text-sm text-yellow-700"><strong>按你和后面还没动的人中最短的那个算。</strong>你 BTN 80bb，SB 18bb，BB 22bb → effective = 18bb。不是用你的 80bb 开池范围。</p>
+  </div>
+
+  <!-- 第三维：ICM -->
+  <h3 class="text-lg font-bold text-gray-700 mt-8 mb-3">🔻 第三维：ICM 压强 — 筹码领先者的偷盲优势</h3>
+  <p class="text-sm text-gray-500 mb-3"><strong>锦标赛的灵魂。</strong>ICM 使短码的筹码比长码"值钱" → 长码可以<strong>无成本施压</strong>。</p>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">角色</th><th class="text-center p-3">ICM系数</th><th class="text-left p-3">开池调整</th></tr></thead>
+      <tbody>
+        <tr class="border-b bg-green-100"><td class="p-3 font-bold text-green-800">👑 Chip Leader（碾压全场）</td><td class="p-3 text-center font-black text-green-700">1.2-1.5</td><td class="p-3">大幅加宽——短码不敢跟你拼</td></tr>
+        <tr class="border-b bg-green-50"><td class="p-3 font-bold">📈 大筹码（top 3）</td><td class="p-3 text-center font-black">1.1-1.2</td><td class="p-3">适度加宽</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">⚖️ 均码</td><td class="p-3 text-center font-black">1.0</td><td class="p-3">标准</td></tr>
+        <tr class="border-b bg-orange-50"><td class="p-3 font-bold">📉 短码（20-30bb，FT）</td><td class="p-3 text-center font-black">0.70-0.80</td><td class="p-3">收紧——避免边缘 spot</td></tr>
+        <tr class="bg-red-50"><td class="p-3 font-bold">💀 极短（<15bb FT）</td><td class="p-3 text-center font-black">0.50</td><td class="p-3">等你推，不 open</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="font-bold text-gray-700 mt-6 mb-3">Chip Leader 偷盲三原则</h4>
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+      <span class="text-2xl">🎯</span>
+      <p class="font-bold text-green-800 mt-2">优先攻击中短码</p>
+      <p class="text-xs text-green-700 mt-1">15-25bb 的对手只能 fold/shave。他们的 shove 范围很窄 → 你 fold 很多手赚盲注。</p>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl">⚠️</span>
+      <p class="font-bold text-red-800 mt-2">别惹另一个大筹码</p>
+      <p class="text-xs text-red-700 mt-1">两个大码对撞，输的从第一掉到可能出局。ICM 惩罚两个大码之间的冲突。</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <span class="text-2xl">💨</span>
+      <p class="font-bold text-amber-800 mt-2">翻前效率最高</p>
+      <p class="text-xs text-amber-700 mt-1">短码翻后不敢缠斗。一枪 c-bet 基本拿下。翻前偷一圈盲注 = 多活一圈。</p>
+    </div>
+  </div>
+
+  <!-- 实战例子 -->
+  <h3 class="text-lg font-bold text-gray-700 mt-8 mb-3">🧮 实战推演</h3>
+  <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
+    <p class="font-bold text-blue-800 mb-2">场景：你 BTN chip leader 80bb · SB 18bb · BB 22bb · FT 7人</p>
+    <div class="space-y-2 text-sm">
+      <div class="flex items-center gap-2">
+        <span class="bg-blue-200 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">1</span>
+        <span><strong>位置基础</strong>：BTN → <span class="font-black text-blue-700">45%</span></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="bg-blue-200 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">2</span>
+        <span><strong>码量</strong>：对手 18-22bb（短码），他们只能 shove/fold → 系数 <span class="font-black text-blue-700">×0.85</span></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="bg-blue-200 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">3</span>
+        <span><strong>ICM</strong>：CL + FT → 系数 <span class="font-black text-blue-700">×1.2</span></span>
+      </div>
+      <div class="border-t border-blue-200 pt-2 mt-2">
+        <span class="text-lg font-black text-blue-800">≈ 46% 开池范围</span>
+        <span class="text-blue-600 ml-2 text-xs">（实际上可以更宽，因为短码 shove 范围窄 + 你 cover 他们）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 短码速查 -->
+  <h3 class="text-lg font-bold text-gray-700 mt-8 mb-3">🎲 短码 Push/Fold 速查（<15bb）</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">码量</th><th class="text-center p-3">BTN 推牌 %</th><th class="text-center p-3">SB 推牌 %</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-3 font-bold">10bb</td><td class="p-3 text-center font-black text-red-600">30-35%</td><td class="p-3 text-center font-black text-red-600">60-70%</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">12bb</td><td class="p-3 text-center font-black">25-30%</td><td class="p-3 text-center font-black">50-60%</td></tr>
+        <tr><td class="p-3 font-bold">15bb</td><td class="p-3 text-center font-black">20-25%</td><td class="p-3 text-center font-black">40-50%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-xs text-gray-400 mt-2">⚠️ 15-20bb 区间不放全推：强牌 min-raise，中等牌放推牌范围。</p>
+
+  <!-- 底线 -->
+  <div class="bg-gradient-to-r from-orange-100 via-amber-100 to-yellow-100 rounded-xl p-5 mt-6">
+    <p class="font-black text-orange-800 text-lg mb-2">🎪 口诀</p>
+    <p class="text-sm text-orange-700"><strong>位置是幅度最大的因子</strong>（UTG 15% → BTN 45%，差3倍）。<strong>码量决定方向</strong>（浅=紧，深=宽）。<strong>ICM 是锦标赛的灵魂</strong>——短码的恐惧 = 你的 EV 来源。</p>
+    <p class="text-sm text-orange-700 mt-1">禁忌：不要用"我 chip leader 所以开 80%"这种逻辑。加宽 20-30% 就够——过分 aggression 会被反制。</p>
+  </div>
+</section>
+
 <!-- ===== Section 2: ICM 决策体系 ===== -->
 <section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
   <div class="flex items-center gap-3 mb-6">
