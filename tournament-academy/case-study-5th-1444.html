@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study: 5th/1444 — 锦标赛特训营</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+  body { font-family: 'Noto Sans SC', sans-serif; background: linear-gradient(180deg, #fff7ed 0%, #fffbeb 100%); min-height: 100vh; }
+  .case-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-amber { background: #fef3c7; color: #92400e; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .bar-green { background: linear-gradient(90deg, #22c55e, #16a34a); }
+  .bar-red { background: linear-gradient(90deg, #ef4444, #dc2626); }
+  .bar-amber { background: linear-gradient(90deg, #f59e0b, #d97706); }
+  .stage-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body class="p-4 md:p-8">
+
+<div class="max-w-5xl mx-auto">
+
+<!-- Back link -->
+<a href="index.html" class="text-amber-600 hover:text-amber-800 text-sm font-bold mb-6 inline-block">← 返回锦标赛特训营</a>
+
+<!-- ===== HERO ===== -->
+<div class="case-card p-8 mb-6 bg-gradient-to-r from-amber-50 to-orange-50">
+  <h1 class="text-3xl md:text-4xl font-black text-gray-800 mb-2">📋 Case Study</h1>
+  <h2 class="text-xl md:text-2xl font-bold text-amber-600 mb-4">Bounty Hunters Special $2.50 [6-Max] — 第 5 名 / 1,444 人</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+    <div><span class="text-gray-400">日期</span><br><strong>2026-06-10</strong></div>
+    <div><span class="text-gray-400">时长</span><br><strong>6.5 小时</strong></div>
+    <div><span class="text-gray-400">总手数</span><br><strong>416 手</strong></div>
+    <div><span class="text-gray-400">VPIP</span><br><strong>30.5%</strong></div>
+    <div><span class="text-gray-400">参赛费</span><br><strong>$2.50</strong></div>
+    <div><span class="text-gray-400">奖金</span><br><strong class="text-amber-600">$99.55</strong></div>
+    <div><span class="text-gray-400">Bounty</span><br><strong class="text-green-600">+$21.20</strong></div>
+    <div><span class="text-gray-400">ROI</span><br><strong class="text-green-600 text-lg">+4,730%</strong></div>
+  </div>
+</div>
+
+<!-- ===== STACK PROGRESSION ===== -->
+<div class="case-card p-6 mb-6">
+  <h3 class="font-black text-gray-800 text-lg mb-4">📈 筹码量走势 (bb)</h3>
+  <div class="space-y-1">
+    <div class="flex text-[10px] text-gray-400 mb-1">
+      <span class="w-16 flex-shrink-0">Level</span><span class="flex-1">Stack</span><span class="w-12 text-right">bb</span>
+    </div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv3</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-green h-full rounded" style="width:35%"></div></div><span class="w-12 text-right font-bold">62.5</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv6</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-green h-full rounded" style="width:60%"></div></div><span class="w-12 text-right font-bold">107.7</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv9</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-amber h-full rounded" style="width:28%"></div></div><span class="w-12 text-right font-bold">50.4</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv13</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-red h-full rounded" style="width:11%"></div></div><span class="w-12 text-right font-bold text-red-600">18.8</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv14</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-green h-full rounded" style="width:51%"></div></div><span class="w-12 text-right font-bold text-green-600">90.6 ⬆</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv19</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-green h-full rounded" style="width:48%"></div></div><span class="w-12 text-right font-bold">84.3</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv22</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-green h-full rounded" style="width:40%"></div></div><span class="w-12 text-right font-bold">70.2</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv27</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-amber h-full rounded" style="width:27%"></div></div><span class="w-12 text-right font-bold">46.6</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv31</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-green h-full rounded" style="width:24%"></div></div><span class="w-12 text-right font-bold">42.7</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv32</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-green h-full rounded" style="width:23%"></div></div><span class="w-12 text-right font-bold">40.5 ⬆</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv34</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-red h-full rounded" style="width:4%"></div></div><span class="w-12 text-right font-bold text-red-600">7.4</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv35</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-amber h-full rounded" style="width:10%"></div></div><span class="w-12 text-right font-bold">17.4</span></div>
+    <div class="flex items-center gap-2 text-xs"><span class="w-16 flex-shrink-0 text-gray-500">Lv36</span><div class="flex-1 h-5 bg-gray-100 rounded overflow-hidden"><div class="bar-red h-full rounded" style="width:5%"></div></div><span class="w-12 text-right font-bold text-red-600">12.7→0</span></div>
+  </div>
+  <div class="flex gap-3 mt-4 text-[10px] text-gray-400">
+    <span>⬆ 关键翻倍点</span><span class="text-red-500">🔴 谷底</span><span class="text-green-600">🟢 峰值</span>
+  </div>
+</div>
+
+<!-- ===== VPIP BY STAGE ===== -->
+<div class="case-card p-6 mb-6">
+  <h3 class="font-black text-gray-800 text-lg mb-4">🎯 VPIP 按阶段</h3>
+  <div class="grid grid-cols-3 md:grid-cols-5 gap-3 text-center">
+    <div class="bg-green-50 rounded-xl p-3"><p class="text-xs text-gray-500">S1 早期深码</p><p class="font-black text-green-700 text-lg">41%</p><p class="text-[10px] text-gray-400">56手</p></div>
+    <div class="bg-amber-50 rounded-xl p-3"><p class="text-xs text-gray-500">S2 中期过渡</p><p class="font-black text-amber-700 text-lg">26%</p><p class="text-[10px] text-gray-400">81手</p></div>
+    <div class="bg-green-50 rounded-xl p-3"><p class="text-xs text-gray-500">S3 泡沫前</p><p class="font-black text-green-700 text-lg">36%</p><p class="text-[10px] text-gray-400">62手</p></div>
+    <div class="bg-amber-50 rounded-xl p-3"><p class="text-xs text-gray-500">S4 泡沫期</p><p class="font-black text-amber-700 text-lg">35%</p><p class="text-[10px] text-gray-400">71手</p></div>
+    <div class="bg-green-50 rounded-xl p-3"><p class="text-xs text-gray-500">S5 钱圈初期</p><p class="font-black text-green-700 text-lg">39%</p><p class="text-[10px] text-gray-400">46手</p></div>
+    <div class="bg-amber-50 rounded-xl p-3"><p class="text-xs text-gray-500">S6 深圈中段</p><p class="font-black text-amber-700 text-lg">25%</p><p class="text-[10px] text-gray-400">40手</p></div>
+    <div class="bg-red-50 rounded-xl p-3"><p class="text-xs text-gray-500">S7 FT泡沫</p><p class="font-black text-red-700 text-lg">15%</p><p class="text-[10px] text-gray-400">40手</p></div>
+    <div class="bg-red-50 rounded-xl p-3"><p class="text-xs text-gray-500">S8 FT</p><p class="font-black text-red-700 text-lg">13%</p><p class="text-[10px] text-gray-400">15手</p></div>
+    <div class="bg-red-50 rounded-xl p-3"><p class="text-xs text-gray-500">S9 3-handed</p><p class="font-black text-red-700 text-lg">0%</p><p class="text-[10px] text-gray-400">5手</p></div>
+  </div>
+  <p class="text-xs text-gray-400 mt-3">VPIP 从早期的 41% 逐步收紧到 FT 的 13%——完美符合「松→紧→紧上加紧」的锦标赛节奏。</p>
+</div>
+
+<!-- ===== STAGE BY STAGE ===== -->
+<div class="case-card p-6 mb-6">
+  <h3 class="font-black text-gray-800 text-lg mb-4">🔍 九阶段逐段分析</h3>
+
+  <!-- Stage 1 -->
+  <div class="mb-6 border-l-4 border-green-400 pl-4">
+    <h4 class="font-bold text-green-700">🌅 Stage 1: 早期深码 (Level 3-8, 62→58bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">56手 · VPIP 41% · 净变化 -4.7bb</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>QQ BTN triple up</strong> — 翻前 open、翻后 bet、turn 中 set。标准线。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>AQo CO → two pair</strong> — 翻后 thin value 精准。</div>
+      <div><span class="tag-amber text-xs px-2 py-0.5 rounded-full font-bold">⚠️ 注意</span> <strong>VPIP 41% 偏高</strong> — 十阶段建议早期 20-25%。41% 包含很多被动的盲注 defend，翻后处理得不错所以没崩。</div>
+    </div>
+  </div>
+
+  <!-- Stage 2 -->
+  <div class="mb-6 border-l-4 border-amber-400 pl-4">
+    <h4 class="font-bold text-amber-700">⚡ Stage 2: 中期过渡 (Level 9-15, 50→34bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">81手 · VPIP 26% · 净变化 -16bb</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-red text-xs px-2 py-0.5 rounded-full font-bold">❌ 失误</span> <strong>A7o BTN shove 输</strong> — 61.5bb 推 A7o？太松了。中期 CL 优势要稳，不是赌。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>AKo HJ shove 收盲</strong> — 40bb shove with AK 在中期拿 dead money，标准.</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 翻盘</span> <strong>QQ UTG shove → +33.8bb</strong> — 31bb 拿 QQ，翻前 4-bet shove，翻倍。从谷底(18.8bb)爬回安全区(90.6bb)。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>KJs CO shove → +18bb</strong> — 18.8bb open-shove KJs from CO，标准 push/fold。</div>
+    </div>
+  </div>
+
+  <!-- Stage 3 -->
+  <div class="mb-6 border-l-4 border-green-400 pl-4">
+    <h4 class="font-bold text-green-700">🔔 Stage 3: 泡沫前 (Level 16-22, 26→70bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">62手 · VPIP 36% · 净变化 +44.5bb 🔥</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 关键</span> <strong>66 BTN shove → +6bb</strong> — 15.4bb 推小对子，搏命但正确。赢了回到安全区。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 翻盘</span> <strong>JTs BB double → +24.6bb</strong> — 24bb 拿 JTs in BB，flop 中 gutshot + 两高张，turn 中顺。翻后打得漂亮。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>QQ two pair → +21bb</strong> — BTN 开池 QQ，翻后 thin value。</div>
+      <div><span class="tag-amber text-xs px-2 py-0.5 rounded-full font-bold">⚠️ 注意</span> <strong>AQo river bluff shove</strong> — A-high 在 river 推 all-in bluff。有胆量但高风险。好在这个阶段不是 bubble。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 扩张</span> <strong>ATs BTN shove → +27bb</strong> — 29bb 拿 ATs 被 3-bet 后 shove，翻牌中 A。从边缘回到主导地位。</div>
+    </div>
+  </div>
+
+  <!-- Stage 4 -->
+  <div class="mb-6 border-l-4 border-orange-400 pl-4">
+    <h4 class="font-bold text-orange-700">💣 Stage 4: 泡沫期 (Level 23-28, 60→42bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">71手 · VPIP 35% · 净变化 -18bb</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ ICM</span> <strong>Fold discipline</strong> — 泡沫期没有 catastrophic mistakes。活下来最重要。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>A4s BB shove → +5.3bb</strong> — 22.8bb BB shove with A4s，收盲成功。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>88 HJ shove → +5bb</strong> — 22.6bb 推 88，标准 push。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>AQs BB shove → +10bb</strong> — 18.3bb BB shove AQs。完美。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>Ad2d SB shove → +8bb</strong> — 33bb SB shove with A2s。激进的 steal，但在泡沫期对短码施压很有效。</div>
+    </div>
+  </div>
+
+  <!-- Stage 5 -->
+  <div class="mb-6 border-l-4 border-green-400 pl-4">
+    <h4 class="font-bold text-green-700">💰 Stage 5: 钱圈初期 (Level 29-31, 35→45bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">46手 · VPIP 39% · 净变化 +10bb</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 侵略</span> <strong>SB shove x4 (KTo, 82s, J6o, 93s)</strong> — 钱圈释放后疯狂 steal。VPIP 39%，SB 位置 shove 频率极高。这阶段把筹码从 30bb 滚到 44bb。</div>
+      <div><span class="tag-amber text-xs px-2 py-0.5 rounded-full font-bold">⚠️ 边缘</span> <strong>93s SB shove</strong> — 33bb shove with 93s？太宽了。chip leader 可以偷，但不至于推这种垃圾。好在没被接。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>99 HJ open</strong> — 42bb open 99，翻后处理得当。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>AKs BTN open</strong> — 38bb 拿 AK，标准。</div>
+    </div>
+  </div>
+
+  <!-- Stage 6 -->
+  <div class="mb-6 border-l-4 border-amber-400 pl-4">
+    <h4 class="font-bold text-amber-700">📈 Stage 6: 深圈中段 (Level 32-33, 41→18bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">40手 · VPIP 25% · 净变化 -22.5bb</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-amber text-xs px-2 py-0.5 rounded-full font-bold">⚠️ 滑坡</span> <strong>从 40bb 跌到 8bb</strong> — Level 32→33，筹码崩了。ATs SB flat 后 fold、A3s CO open 被 3-bet fold。翻后机会很少。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 活命</span> <strong>K5s SB shove → +4bb</strong> — 8.4bb shove K5s，翻后中 K。奇迹般地活了下来。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 恢复</span> <strong>AKs CO shove → +7bb</strong> — 17bb 推 AK。标准，收盲。</div>
+    </div>
+  </div>
+
+  <!-- Stage 7 -->
+  <div class="mb-6 border-l-4 border-red-400 pl-4">
+    <h4 class="font-bold text-red-700">🔮 Stage 7: FT 泡沫 (Level 34-35, 24→17bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">40手 · VPIP 15% · 净变化 -6.5bb</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 纪律</span> <strong>K9s SB fold</strong> — 9.8bb SB，有 K9s 但 fold。FT 泡沫，等人死。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 纪律</span> <strong>K4s BTN fold</strong> — 9.2bb BTN fold K4s！极为严格。FT 泡沫每手都要算。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 纪律</span> <strong>KTo BTN fold</strong> — 5.8bb BTN fold KTo！这就是 fold AT 赚 $18 的延伸。不是你不想打——是 ICM 不让你打。</div>
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 翻盘</span> <strong>AKo BB shove → +10bb</strong> — 5.4bb BB 拿到 AK，自动 shove。翻后赢了 pot 翻倍到 17bb。</div>
+    </div>
+  </div>
+
+  <!-- Stage 8 -->
+  <div class="mb-6 border-l-4 border-purple-400 pl-4">
+    <h4 class="font-bold text-purple-700">👑 Stage 8: Final Table (Level 36, 8→13→0bb)</h4>
+    <p class="text-sm text-gray-600 mb-2">15手 · VPIP 13% · 5th place</p>
+    <div class="space-y-2 text-sm">
+      <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 翻倍</span> <strong>KTs HJ shove → +8bb</strong> — 8.4bb shove KTs。标准的短码 push。翻后中 K，从 8bb 翻倍到 17bb。</div>
+      <div><span class="tag-blue text-xs px-2 py-0.5 rounded-full font-bold">📐 分析</span> <strong>99 BB shove → 撞TT，出局</strong> — 12.7bb BB，有人 open + call，Hero 拿 99 shove。按翻前三维框架：位置 BB（范围宽），码量 12.7bb（push-fold 模式），ICM FT（极高压）。99 在这个 spot 是 <span class="font-bold">接近 borderline 的决策</span>。FGS 说可以推（赢了变 26bb 有翻后可玩性），ICM 说边缘。TT 接是正常的——结果不好但决策本身没有大错。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WHAT WENT RIGHT ===== -->
+<div class="case-card p-6 mb-6 bg-gradient-to-r from-green-50 to-emerald-50">
+  <h3 class="font-black text-green-800 text-lg mb-4">✅ 做对了什么（这些让你走到第5名）</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-green-700">① 翻后技术碾压</p>
+      <p class="text-gray-600 mt-1">JTs flop gutshot → turn 中顺 double；QQ triple up 翻后三街 value；AQo river bluff 精准。你的 cash 翻后在早期和中期就是核武器。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-green-700">② ICM 纪律极强</p>
+      <p class="text-gray-600 mt-1">FT 泡沫连续三手 fold（K9s SB、K4s BTN、KTo BTN）。这三个 fold 放在 cash 里是不可能发生的。你在 MTT 里做到了。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-green-700">③ 钱圈释放后的侵略模式</p>
+      <p class="text-gray-600 mt-1">ITM 后连续 4 个 SB shove steal，VPIP 从 25% 跳回 39%。利滚利的完美演绎——用对手的钱圈恐惧偷盲积累筹码。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-green-700">④ 从谷底爬回来的韧性</p>
+      <p class="text-gray-600 mt-1">两次掉到 8bb 以下：Lv13(18.8bb) 和 Lv33(8.4bb)。两次都靠正确 push 活过来。锦标赛不是不掉血——是掉血了还能活。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-green-700">⑤ VPIP 曲线完美</p>
+      <p class="text-gray-600 mt-1">41%→26%→36%→35%→39%→25%→15%→13%→0%。早期松积累、中期适度、泡沫收紧、FT 极紧。这个曲线是教科书级的。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-green-700">⑥ 持久耐力</p>
+      <p class="text-gray-600 mt-1">6.5 小时、416 手。没有 tilt、没有情绪化决策。从 3.3bb 爬回来、从 32 名爬回来——耐心是你最大的武器。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ROOM FOR IMPROVEMENT ===== -->
+<div class="case-card p-6 mb-6 bg-gradient-to-r from-red-50 to-orange-50">
+  <h3 class="font-black text-red-800 text-lg mb-4">⚠️ 可以改进的地方</h3>
+  <div class="space-y-3 text-sm">
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-red-700">① A7o BTN shove at 61bb — 整体最大的失误</p>
+      <p class="text-gray-600 mt-1">61bb 深码推 A7o。这是 cash 思维的残留——"我 CL 了可以 bully"。但 MTT 里 61bb 的 CL 是通过偷盲积累的，不是通过 all-in 赌博。这手输了 61bb，直接让你从中期领先变成短码。教训：<strong>CL = 偷，不是推。</strong></p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-red-700">② 93s SB shove at 33bb — 钱圈释放过度</p>
+      <p class="text-gray-600 mt-1">ITM 后 steal 是对的，但 93s 太宽了。如果被接就白送。ITM 释放后的侵略要找对目标——优先攻击比你短、ICM 压力大的人。33bb 推 93s 不如 fold 等更好的 spot。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-red-700">③ Level 32→33 筹码崩塌 — 40bb→8bb</p>
+      <p class="text-gray-600 mt-1">连续 5 手无有效入池。翻后没有好 spot，所有 open 都被 3-bet 推回来。这个阶段的调整空间：<strong>更早用中强牌 shove（如 A5s-A9s、KTs）而不是等待完美的 open 机会。</strong>等你等到 8bb 就只能推任何 Ax 了。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-amber-700">④ 早期 VPIP 41% — 偏松但翻后兜住了</p>
+      <p class="text-gray-600 mt-1">十阶段建议早期 20-25%。你的 41% 靠翻后技术消化掉了边际牌。但如果翻后 run bad，这个 VPIP 会直接崩。建议收紧到 25-30%。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== KEY TAKEAWAY ===== -->
+<div class="case-card p-6 mb-6 bg-gradient-to-r from-amber-100 to-yellow-100">
+  <h3 class="font-black text-amber-800 text-lg mb-3">💡 终极教训</h3>
+  <p class="text-amber-900 leading-relaxed">
+    这场比赛的胜负手不在最后那手 99——在<strong>中期的 A7o shove 和 Level 32→33 的筹码崩塌</strong>。
+    如果你中期不丢那 61bb，你可能是 FT 的 chip leader 而不是 8bb 短码。
+    如果你 Level 32 更早用边缘牌 shove 抢盲，你不会从 40bb 跌到 8bb。
+  </p>
+  <p class="text-amber-900 leading-relaxed mt-3">
+    但更重要的是你<strong>做对了足够多的事</strong>所以活到了第 5 名：
+    FT 泡沫的三个 fold、钱圈后的四个 steal、两次从谷底的翻倍。
+    这不是运气——是 6.5 小时的纪律积累。
+  </p>
+  <p class="text-amber-900 font-bold mt-3">48x ROI 不是因为你跑马赢了——是因为你在 90% 的手牌里做出了正确的 fold 和正确的 steal。</p>
+</div>
+
+<p class="text-center text-xs text-gray-400 pb-8">Case Study · 锦标赛特训营 · 2026-06-11</p>
+
+</div>
+</body>
+</html>
