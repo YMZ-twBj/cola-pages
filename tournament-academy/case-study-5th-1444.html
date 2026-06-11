@@ -120,7 +120,7 @@
       <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 关键</span> <strong>66 BTN shove → +6bb</strong> — 15.4bb 推小对子，搏命但正确。赢了回到安全区。</div>
       <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 翻盘</span> <strong>JTs BB double → +24.6bb</strong> — 24bb 拿 JTs in BB，flop 中 gutshot + 两高张，turn 中顺。翻后打得漂亮。</div>
       <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ +EV</span> <strong>QQ two pair → +21bb</strong> — BTN 开池 QQ，翻后 thin value。</div>
-      <div><span class="tag-amber text-xs px-2 py-0.5 rounded-full font-bold">⚠️ 注意</span> <strong>AQo river bluff shove</strong> — A-high 在 river 推 all-in bluff。有胆量但高风险。好在这个阶段不是 bubble。</div>
+      <div><span class="tag-red text-xs px-2 py-0.5 rounded-full font-bold">❌ 失误</span> <strong>AQo triple barrel bluff</strong> — A-high 三枪 bluff 撞上对手坚果花。翻后技术好但选错了目标和时机。详见下方可改进③。</div>
       <div><span class="tag-green text-xs px-2 py-0.5 rounded-full font-bold">✅ 扩张</span> <strong>ATs BTN shove → +27bb</strong> — 29bb 拿 ATs 被 3-bet 后 shove，翻牌中 A。从边缘回到主导地位。</div>
     </div>
   </div>
@@ -190,7 +190,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
     <div class="bg-white rounded-xl p-4">
       <p class="font-bold text-green-700">① 翻后技术碾压</p>
-      <p class="text-gray-600 mt-1">JTs flop gutshot → turn 中顺 double；QQ triple up 翻后三街 value；AQo river bluff 精准。你的 cash 翻后在早期和中期就是核武器。</p>
+      <p class="text-gray-600 mt-1">JTs flop gutshot → turn 中顺 double；QQ triple up 翻后三街 value。cash 翻后在早期和中期就是核武器。</p>
     </div>
     <div class="bg-white rounded-xl p-4">
       <p class="font-bold text-green-700">② ICM 纪律极强</p>
@@ -228,11 +228,15 @@
       <p class="text-gray-600 mt-1">BB 只有 <strong>4.69bb</strong>，effective stack 是 4.69bb 不是 33bb。BB 快死了只拿 premium 接（~10-15%），fold equity 高达 85-90%。EV ≈ <strong>+1.93bb</strong>。这不是 gambol——是对短码 ICM 恐惧的<strong>结构性剥削</strong>。感谢施老师纠正。</p>
     </div>
     <div class="bg-white rounded-xl p-4">
-      <p class="font-bold text-red-700">③ Level 32→33 筹码崩塌 — 40bb→8bb</p>
-      <p class="text-gray-600 mt-1">连续 5 手无有效入池。翻后没有好 spot，所有 open 都被 3-bet 推回来。这个阶段的调整空间：<strong>更早用中强牌 shove（如 A5s-A9s、KTs）而不是等待完美的 open 机会。</strong>等你等到 8bb 就只能推任何 Ax 了。</p>
+      <p class="font-bold text-red-700">③ AQo triple barrel bluff — 三枪 air 送进坚果花</p>
+      <p class="text-gray-600 mt-1">Lv21 59bb，HJ open AQo → BTN flat → 翻牌 T92r c-bet → 转牌 K 再打半池 → 河牌 8c（完成同花）all-in bluff。BTN 拿 Ac5c 秒接。<strong>AQ 全 miss，零摊牌价值。短码 BTN 已经跟了两条街 commit 1/3 筹码——不会这时候 fold。</strong>正确路线：转牌 check-fold，最多打一枪 flop 就放弃。这手丢了 24bb。教训：<strong>triple barrel 选错了对手（短码 commit 后不 fold）和选错了时机（河牌完成了同花）。翻后技术好不等于每一枪都要打。</strong></p>
     </div>
     <div class="bg-white rounded-xl p-4">
-      <p class="font-bold text-amber-700">④ 早期 VPIP 41% — 偏松但翻后兜住了</p>
+      <p class="font-bold text-red-700">④ Level 32→37 筹码崩塌 — 29bb→5bb</p>
+      <p class="text-gray-600 mt-1">核心原因不是 card-dead——是<strong>82o SB steal（20bb偷19bb中长码）+ QTo BTN c-bet 被3bb短码K8o接杀</strong>。82o pre steal 选错对象（中长码 defend 得起、能 float 反推），翻后 OOP 中对又被 float。详见第七关偷盲纪律。修正：<strong>不偷中长码(15-25bb)，OOP steal 失败 flop check 认赔。</strong>A5o、KQs 开池正常——只有 82o 是可以避免的损失。</p>
+    </div>
+    <div class="bg-white rounded-xl p-4">
+      <p class="font-bold text-amber-700">⑤ 早期 VPIP 41% — 偏松但翻后兜住了</p>
       <p class="text-gray-600 mt-1">十阶段建议早期 20-25%。你的 41% 靠翻后技术消化掉了边际牌。但如果翻后 run bad，这个 VPIP 会直接崩。建议收紧到 25-30%。</p>
     </div>
   </div>
@@ -242,7 +246,7 @@
 <div class="case-card p-6 mb-6 bg-gradient-to-r from-amber-100 to-yellow-100">
   <h3 class="font-black text-amber-800 text-lg mb-3">💡 终极教训</h3>
   <p class="text-amber-900 leading-relaxed">
-    这场比赛的胜负手不在最后那手 99——在<strong>中期的 A7o ISO shove（对 AT 的 12bb jam，A7o 永远不该接）和 Level 32→33 的筹码崩塌</strong>。
+    这场比赛的胜负手不在最后那手 99——在<strong>中期的 A7o ISO shove（对 AT 的 12bb jam，A7o 永远不该接）、AQo 三枪 bluff 送坚果花、和 Level 32→37 82o 偷中长码崩塌</strong>。
     如果你中期不接那个 A7o ISO shove，你可能是 FT 的 chip leader 而不是 8bb 短码。
     如果你 Level 32 更早用边缘牌 shove 抢盲，你不会从 40bb 跌到 8bb。
   </p>
