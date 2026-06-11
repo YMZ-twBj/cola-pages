@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 锦标赛战绩分析器 — MTT Tournament Tracker</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fef3c7; }
+  .drop-zone { border: 3px dashed #f59e0b; transition: all 0.3s; }
+  .drop-zone.drag-over { border-color: #f97316; background: #fff7ed; transform: scale(1.02); }
+  .card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+<div class="max-w-6xl mx-auto">
+
+<!-- Header -->
+<div class="text-center mb-8">
+  <h1 class="text-4xl md:text-5xl font-black text-amber-600 mb-2">🏆 锦标赛战绩分析器</h1>
+  <p class="text-gray-500">拖入 GGpoker Tournament Summary 文件 (.txt) · 自动汇总战绩</p>
+</div>
+
+<!-- Drop Zone -->
+<div id="dropZone" class="drop-zone bg-white rounded-2xl p-12 text-center mb-8 cursor-pointer">
+  <div class="text-5xl mb-4">📂</div>
+  <p class="text-lg font-bold text-gray-700 mb-2">拖拽文件到这里</p>
+  <p class="text-sm text-gray-400 mb-4">或点击选择文件</p>
+  <input type="file" id="fileInput" multiple accept=".txt" class="hidden">
+  <button onclick="document.getElementById('fileInput').click()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-full transition">
+    📁 选择文件
+  </button>
+</div>
+
+<!-- Loading -->
+<div id="loading" class="hidden text-center py-4">
+  <div class="inline-block animate-spin text-3xl">🌀</div>
+  <p class="text-gray-500 mt-2">解析中...</p>
+</div>
+
+<!-- Summary Cards -->
+<div id="summary" class="hidden grid md:grid-cols-4 gap-4 mb-8"></div>
+
+<!-- Charts Row -->
+<div class="hidden grid md:grid-cols-2 gap-6 mb-8" id="chartsRow">
+  <div class="card p-6">
+    <h3 class="font-bold text-gray-700 mb-4">📊 按日期</h3>
+    <div id="chartByDate" class="space-y-2"></div>
+  </div>
+  <div class="card p-6">
+    <h3 class="font-bold text-gray-700 mb-4">💰 按买入级别</h3>
+    <div id="chartByBuyin" class="space-y-2"></div>
+  </div>
+</div>
+
+<!-- Detail Table -->
+<div id="detail" class="hidden card mb-8">
+  <div class="p-6 border-b">
+    <h3 class="font-bold text-gray-700 text-lg">📋 全部战绩明细</h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-gray-50 text-gray-500 text-xs uppercase">
+          <th class="p-3 text-left">日期</th>
+          <th class="p-3 text-left">锦标赛</th>
+          <th class="p-3 text-right">Buy-in</th>
+          <th class="p-3 text-right">参赛人数</th>
+          <th class="p-3 text-right">名次</th>
+          <th class="p-3 text-right">奖金</th>
+          <th class="p-3 text-right">ROI</th>
+        </tr>
+      </thead>
+      <tbody id="detailBody"></tbody>
+    </table>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== PARSER =====
+function parseSummary(text) {
+  const result = {};
+  
+  // Tournament name and ID
+  const tnMatch = text.match(/Tournament #(\d+),\s*(.+?),/);
+  if (!tnMatch) return null;
+  result.id = tnMatch[1];
+  result.name = tnMatch[2].trim();
+  
+  // Buy-in
+  const biMatch = text.match(/Buy-in:\s*\$?([\d.]+)\+?/);
+  if (biMatch) {
+    const parts = text.match(/Buy-in:\s*\$?([\d.]+)\+?\$?([\d.]+)?\+?\$?([\d.]+)?/);
+    if (parts) {
+      result.buyinPrize = parseFloat(parts[1]) || 0;
+      result.buyinRake = parseFloat(parts[2]) || 0;
+      result.buyinBounty = parseFloat(parts[3]) || 0;
+      result.buyin = result.buyinPrize + result.buyinRake + result.buyinBounty;
+    }
+  }
+  
+  // Players
+  const plMatch = text.match(/(\d+)\s*Players/);
+  if (plMatch) result.players = parseInt(plMatch[1]);
+  
+  // Prize pool
+  const ppMatch = text.match(/Total Prize Pool:\s*\$?([\d,.]+)/);
+  if (ppMatch) result.prizePool = parseFloat(ppMatch[1].replace(/,/g, ''));
+  
+  // Date
+  const dateMatch = text.match(/started\s*(\d{4}\/\d{2}\/\d{2})/);
+  if (dateMatch) result.date = dateMatch[1];
+  
+  // Place and prize
+  const placeMatch = text.match(/(\d+)(?:st|nd|rd|th)\s*:\s*Hero,\s*\$?([\d,.]+)/);
+  if (placeMatch) {
+    result.place = parseInt(placeMatch[1]);
+    result.prize = parseFloat(placeMatch[2].replace(/,/g, ''));
+  }
+  
+  // Re-entries
+  const reMatch = text.match(/made (\d+) re-entries/);
+  result.reentries = reMatch ? parseInt(reMatch[1]) : 0;
+  
+  result.totalBuyin = result.buyin * (1 + result.reentries);
+  result.profit = result.prize - result.totalBuyin;
+  result.roi = result.totalBuyin > 0 ? ((result.profit / result.totalBuyin) * 100) : 0;
+  result.itm = result.prize > 0;
+  
+  return result;
+}
+
+// ===== UI =====
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const loading = document.getElementById('loading');
+const summaryEl = document.getElementById('summary');
+const chartsRow = document.getElementById('chartsRow');
+const detailEl = document.getElementById('detail');
+const detailBody = document.getElementById('detailBody');
+
+let allResults = [];
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+async function handleFiles(files) {
+  loading.classList.remove('hidden');
+  allResults = [];
+  
+  for (const file of files) {
+    const text = await file.text();
+    // File may contain multiple summaries
+    const parts = text.split(/Tournament #\d+/);
+    if (parts.length > 1) {
+      // Multiple tournaments in one file
+      const lines = text.split('\n');
+      let current = '';
+      for (const line of lines) {
+        if (line.startsWith('Tournament #') && current.trim()) {
+          const r = parseSummary(current);
+          if (r && r.place) allResults.push(r);
+          current = line + '\n';
+        } else {
+          current += line + '\n';
+        }
+      }
+      if (current.trim()) {
+        const r = parseSummary(current);
+        if (r && r.place) allResults.push(r);
+      }
+    } else {
+      const r = parseSummary(text);
+      if (r && r.place) allResults.push(r);
+    }
+  }
+  
+  // Sort by date
+  allResults.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+  
+  render();
+  loading.classList.add('hidden');
+}
+
+function render() {
+  if (allResults.length === 0) return;
+  
+  // Show sections
+  summaryEl.classList.remove('hidden');
+  chartsRow.classList.remove('hidden');
+  detailEl.classList.remove('hidden');
+  
+  // ===== SUMMARY CARDS =====
+  const totalBuyins = allResults.reduce((s, r) => s + r.totalBuyin, 0);
+  const totalPrizes = allResults.reduce((s, r) => s + r.prize, 0);
+  const totalProfit = totalPrizes - totalBuyins;
+  const itmCount = allResults.filter(r => r.itm).length;
+  const itmPct = allResults.length > 0 ? ((itmCount / allResults.length) * 100) : 0;
+  const avgBuyin = allResults.length > 0 ? (totalBuyins / allResults.length) : 0;
+  const totalROI = totalBuyins > 0 ? ((totalProfit / totalBuyins) * 100) : 0;
+  
+  summaryEl.innerHTML = `
+    <div class="card p-6">
+      <p class="text-xs text-gray-500 mb-1">🏟️ 总场次</p>
+      <p class="text-3xl font-black text-gray-800">${allResults.length}</p>
+      <p class="text-xs text-gray-400 mt-1">ITM ${itmCount} 次 (${itmPct.toFixed(1)}%)</p>
+    </div>
+    <div class="card p-6">
+      <p class="text-xs text-gray-500 mb-1">💰 总报名费</p>
+      <p class="text-3xl font-black text-gray-800">$${totalBuyins.toFixed(2)}</p>
+      <p class="text-xs text-gray-400 mt-1">平均 $${avgBuyin.toFixed(2)}/场</p>
+    </div>
+    <div class="card p-6">
+      <p class="text-xs text-gray-500 mb-1">🏆 总奖金</p>
+      <p class="text-3xl font-black text-amber-600">$${totalPrizes.toFixed(2)}</p>
+      <p class="text-xs text-gray-400 mt-1">ROI ${totalROI >= 0 ? '+' : ''}${totalROI.toFixed(1)}%</p>
+    </div>
+    <div class="card p-6 ${totalProfit >= 0 ? 'bg-green-50' : 'bg-red-50'}">
+      <p class="text-xs text-gray-500 mb-1">📈 净利润</p>
+      <p class="text-3xl font-black ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}">${totalProfit >= 0 ? '+' : ''}$${totalProfit.toFixed(2)}</p>
+      <p class="text-xs text-gray-400 mt-1">${totalProfit >= 0 ? '🟢 盈利中' : '🔴 亏损中'}</p>
+    </div>
+  `;
+  
+  // ===== CHART: BY DATE =====
+  const byDate = {};
+  allResults.forEach(r => {
+    const d = r.date || 'Unknown';
+    if (!byDate[d]) byDate[d] = { buyin: 0, prize: 0, count: 0 };
+    byDate[d].buyin += r.totalBuyin;
+    byDate[d].prize += r.prize;
+    byDate[d].count++;
+  });
+  
+  const maxPrize = Math.max(...Object.values(byDate).map(d => Math.max(d.prize, d.buyin)), 1);
+  
+  document.getElementById('chartByDate').innerHTML = Object.entries(byDate).map(([date, d]) => {
+    const profit = d.prize - d.buyin;
+    const buyinPct = (d.buyin / maxPrize) * 100;
+    const prizePct = (d.prize / maxPrize) * 100;
+    const isGreen = profit >= 0;
+    return `
+      <div class="mb-3">
+        <div class="flex justify-between text-xs mb-1">
+          <span class="font-bold">${date}</span>
+          <span class="${isGreen ? 'text-green-600' : 'text-red-600'} font-bold">${isGreen ? '+' : ''}$${profit.toFixed(2)}</span>
+        </div>
+        <div class="flex gap-1 h-6 rounded-full overflow-hidden bg-gray-100">
+          <div style="width:${buyinPct}%" class="bg-gray-300 flex items-center justify-center text-[10px] text-gray-600 font-bold">$${d.buyin.toFixed(0)}</div>
+          ${d.prize > 0 ? `<div style="width:${Math.max(prizePct - buyinPct, 1)}%" class="bg-amber-400 flex items-center justify-center text-[10px] text-white font-bold">$${d.prize.toFixed(0)}</div>` : ''}
+        </div>
+        <p class="text-[10px] text-gray-400 mt-0.5">${d.count} 场</p>
+      </div>
+    `;
+  }).join('');
+  
+  // ===== CHART: BY BUYIN =====
+  const byBuyin = {};
+  allResults.forEach(r => {
+    const key = '$' + r.buyin.toFixed(2);
+    if (!byBuyin[key]) byBuyin[key] = { buyin: 0, prize: 0, count: 0, itm: 0 };
+    byBuyin[key].buyin += r.totalBuyin;
+    byBuyin[key].prize += r.prize;
+    byBuyin[key].count++;
+    if (r.itm) byBuyin[key].itm++;
+  });
+  
+  document.getElementById('chartByBuyin').innerHTML = Object.entries(byBuyin)
+    .sort((a, b) => parseFloat(a[0].replace('$','')) - parseFloat(b[0].replace('$','')))
+    .map(([level, d]) => {
+      const profit = d.prize - d.buyin;
+      const itmRate = d.count > 0 ? ((d.itm/d.count)*100) : 0;
+      const isGreen = profit >= 0;
+      return `
+        <div class="flex items-center justify-between py-3 border-b last:border-0">
+          <div>
+            <span class="font-bold text-gray-700">${level}</span>
+            <span class="text-xs text-gray-400 ml-2">${d.count} 场 · ITM ${itmRate.toFixed(0)}%</span>
+          </div>
+          <div class="text-right">
+            <p class="font-bold ${isGreen ? 'text-green-600' : 'text-red-600'}">${isGreen ? '+' : ''}$${profit.toFixed(2)}</p>
+            <p class="text-[10px] text-gray-400">$${d.buyin.toFixed(2)} → $${d.prize.toFixed(2)}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  
+  // ===== DETAIL TABLE =====
+  detailBody.innerHTML = allResults.map(r => {
+    const roiClass = r.roi >= 0 ? 'text-green-600' : 'text-red-600';
+    const roiSign = r.roi >= 0 ? '+' : '';
+    const placeClass = r.itm ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600';
+    return `
+      <tr class="border-b hover:bg-gray-50">
+        <td class="p-3 text-gray-500">${r.date || '-'}</td>
+        <td class="p-3">
+          <p class="font-medium text-gray-700">${r.name}</p>
+          <p class="text-[10px] text-gray-400">#${r.id}</p>
+        </td>
+        <td class="p-3 text-right font-medium">$${r.totalBuyin.toFixed(2)}</td>
+        <td class="p-3 text-right">${r.players?.toLocaleString() || '-'}</td>
+        <td class="p-3 text-right">
+          <span class="inline-block px-2 py-0.5 rounded-full text-xs font-bold ${placeClass}">${r.place}${getOrdinal(r.place)}</span>
+          <span class="text-[10px] text-gray-400 ml-1">/ ${r.players || '-'}</span>
+        </td>
+        <td class="p-3 text-right font-bold ${r.prize > 0 ? 'text-amber-600' : 'text-gray-400'}">$${r.prize.toFixed(2)}</td>
+        <td class="p-3 text-right font-bold ${roiClass}">${roiSign}${r.roi.toFixed(0)}%</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function getOrdinal(n) {
+  const s = ['th','st','nd','rd'];
+  const v = n % 100;
+  return s[(v-20)%10] || s[v] || s[0];
+}
+
+// Also allow click on dropzone
+dropZone.addEventListener('click', () => fileInput.click());
+</script>
+</body>
+</html>
