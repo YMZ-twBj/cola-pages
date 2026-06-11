@@ -701,6 +701,70 @@
     <p class="text-sm text-orange-700"><strong>位置是幅度最大的因子</strong>（UTG 15% → BTN 45%，差3倍）。<strong>码量决定方向</strong>（浅=紧，深=宽）。<strong>ICM 是锦标赛的灵魂</strong>——短码的恐惧 = 你的 EV 来源。</p>
     <p class="text-sm text-orange-700 mt-1">禁忌：不要用"我 chip leader 所以开 80%"这种逻辑。加宽 20-30% 就够——过分 aggression 会被反制。</p>
   </div>
+
+  <!-- ===== BTN Push Range 实战表 ===== -->
+  <h3 class="text-lg font-bold text-gray-700 mt-10 mb-4">🎯 BTN 推牌范围实战 (21bb, FT ICM)</h3>
+  <p class="text-sm text-gray-500 mb-4">GTO Wizard MTT 21bb Final Table — BTN vs 短码 SB/BB。你推<strong class="text-amber-600">~40%</strong>，他们只接<strong class="text-red-600">3-5%</strong> → 87-92% 无 showdown 直接印钱。</p>
+
+  <!-- 图例 -->
+  <div class="flex flex-wrap gap-4 mb-4">
+    <span class="inline-flex items-center gap-2 text-sm"><span class="w-5 h-5 rounded" style="background:#fbbf24;"></span> 🟡 All-in Jam</span>
+    <span class="inline-flex items-center gap-2 text-sm"><span class="w-5 h-5 rounded" style="background:#93c5fd;"></span> 🔵 Mixed (可推可开)</span>
+    <span class="inline-flex items-center gap-2 text-sm"><span class="w-5 h-5 rounded" style="background:#c4b5fd;"></span> 🟣 Fold</span>
+  </div>
+
+  <!-- 13x13 扑克矩阵 -->
+  <style>
+    .poker-grid { display: grid; grid-template-columns: 28px repeat(13, minmax(28px,1fr)); gap: 2px; font-size: 10px; max-width: 520px; }
+    .poker-grid .hdr { font-weight: 900; display: flex; align-items: center; justify-content: center; color: #6b7280; }
+    .poker-grid .cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 3px; font-weight: 700; cursor: default; transition: transform 0.15s; }
+    .poker-grid .cell:hover { transform: scale(1.25); z-index: 10; }
+    .poker-grid .jam { background: #fbbf24; color: #92400e; }
+    .poker-grid .mixed { background: #93c5fd; color: #1e40af; }
+    .poker-grid .fold { background: #c4b5fd; color: #5b21b6; }
+    .poker-grid .pair { background: #f59e0b; color: #7c2d12; }
+  </style>
+
+  <div class="overflow-x-auto">
+    <div class="poker-grid mx-auto">
+      <div class="hdr"></div><div class="hdr">A</div><div class="hdr">K</div><div class="hdr">Q</div><div class="hdr">J</div><div class="hdr">T</div><div class="hdr">9</div><div class="hdr">8</div><div class="hdr">7</div><div class="hdr">6</div><div class="hdr">5</div><div class="hdr">4</div><div class="hdr">3</div><div class="hdr">2</div>
+      <!-- A --><div class="hdr">A</div><div class="cell pair">AA</div><div class="cell jam">AKs</div><div class="cell jam">AQs</div><div class="cell jam">AJs</div><div class="cell jam">ATs</div><div class="cell jam">A9s</div><div class="cell jam">A8s</div><div class="cell jam">A7s</div><div class="cell jam">A6s</div><div class="cell jam">A5s</div><div class="cell jam">A4s</div><div class="cell jam">A3s</div><div class="cell jam">A2s</div>
+      <!-- K --><div class="hdr">K</div><div class="cell jam">AKo</div><div class="cell pair">KK</div><div class="cell jam">KQs</div><div class="cell jam">KJs</div><div class="cell jam">KTs</div><div class="cell jam">K9s</div><div class="cell jam">K8s</div><div class="cell mixed">K7s</div><div class="cell mixed">K6s</div><div class="cell fold">K5s</div><div class="cell fold">K4s</div><div class="cell fold">K3s</div><div class="cell fold">K2s</div>
+      <!-- Q --><div class="hdr">Q</div><div class="cell jam">AQo</div><div class="cell jam">KQo</div><div class="cell pair">QQ</div><div class="cell jam">QJs</div><div class="cell jam">QTs</div><div class="cell jam">Q9s</div><div class="cell fold">Q8s</div><div class="cell fold">Q7s</div><div class="cell fold">Q6s</div><div class="cell fold">Q5s</div><div class="cell fold">Q4s</div><div class="cell fold">Q3s</div><div class="cell fold">Q2s</div>
+      <!-- J --><div class="hdr">J</div><div class="cell jam">AJo</div><div class="cell jam">KJo</div><div class="cell jam">QJo</div><div class="cell pair">JJ</div><div class="cell jam">JTs</div><div class="cell jam">J9s</div><div class="cell fold">J8s</div><div class="cell fold">J7s</div><div class="cell fold">J6s</div><div class="cell fold">J5s</div><div class="cell fold">J4s</div><div class="cell fold">J3s</div><div class="cell fold">J2s</div>
+      <!-- T --><div class="hdr">T</div><div class="cell jam">ATo</div><div class="cell jam">KTo</div><div class="cell mixed">QTo</div><div class="cell mixed">JTo</div><div class="cell pair">TT</div><div class="cell jam">T9s</div><div class="cell jam">T8s</div><div class="cell fold">T7s</div><div class="cell fold">T6s</div><div class="cell fold">T5s</div><div class="cell fold">T4s</div><div class="cell fold">T3s</div><div class="cell fold">T2s</div>
+      <!-- 9 --><div class="hdr">9</div><div class="cell jam">A9o</div><div class="cell mixed">K9o</div><div class="cell fold">Q9o</div><div class="cell fold">J9o</div><div class="cell fold">T9o</div><div class="cell pair">99</div><div class="cell jam">98s</div><div class="cell mixed">97s</div><div class="cell fold">96s</div><div class="cell fold">95s</div><div class="cell fold">94s</div><div class="cell fold">93s</div><div class="cell fold">92s</div>
+      <!-- 8 --><div class="hdr">8</div><div class="cell jam">A8o</div><div class="cell fold">K8o</div><div class="cell fold">Q8o</div><div class="cell fold">J8o</div><div class="cell fold">T8o</div><div class="cell fold">98o</div><div class="cell pair">88</div><div class="cell jam">87s</div><div class="cell mixed">86s</div><div class="cell fold">85s</div><div class="cell fold">84s</div><div class="cell fold">83s</div><div class="cell fold">82s</div>
+      <!-- 7 --><div class="hdr">7</div><div class="cell jam">A7o</div><div class="cell fold">K7o</div><div class="cell fold">Q7o</div><div class="cell fold">J7o</div><div class="cell fold">T7o</div><div class="cell fold">97o</div><div class="cell fold">87o</div><div class="cell pair">77</div><div class="cell mixed">76s</div><div class="cell fold">75s</div><div class="cell fold">74s</div><div class="cell fold">73s</div><div class="cell fold">72s</div>
+      <!-- 6 --><div class="hdr">6</div><div class="cell jam">A6o</div><div class="cell fold">K6o</div><div class="cell fold">Q6o</div><div class="cell fold">J6o</div><div class="cell fold">T6o</div><div class="cell fold">96o</div><div class="cell fold">86o</div><div class="cell fold">76o</div><div class="cell pair">66</div><div class="cell mixed">65s</div><div class="cell fold">64s</div><div class="cell fold">63s</div><div class="cell fold">62s</div>
+      <!-- 5 --><div class="hdr">5</div><div class="cell jam">A5o</div><div class="cell fold">K5o</div><div class="cell fold">Q5o</div><div class="cell fold">J5o</div><div class="cell fold">T5o</div><div class="cell fold">95o</div><div class="cell fold">85o</div><div class="cell fold">75o</div><div class="cell fold">65o</div><div class="cell pair">55</div><div class="cell mixed">54s</div><div class="cell fold">53s</div><div class="cell fold">52s</div>
+      <!-- 4 --><div class="hdr">4</div><div class="cell jam">A4o</div><div class="cell fold">K4o</div><div class="cell fold">Q4o</div><div class="cell fold">J4o</div><div class="cell fold">T4o</div><div class="cell fold">94o</div><div class="cell fold">84o</div><div class="cell fold">74o</div><div class="cell fold">64o</div><div class="cell fold">54o</div><div class="cell pair">44</div><div class="cell fold">43s</div><div class="cell fold">42s</div>
+      <!-- 3 --><div class="hdr">3</div><div class="cell jam">A3o</div><div class="cell fold">K3o</div><div class="cell fold">Q3o</div><div class="cell fold">J3o</div><div class="cell fold">T3o</div><div class="cell fold">93o</div><div class="cell fold">83o</div><div class="cell fold">73o</div><div class="cell fold">63o</div><div class="cell fold">53o</div><div class="cell fold">43o</div><div class="cell pair">33</div><div class="cell fold">32s</div>
+      <!-- 2 --><div class="hdr">2</div><div class="cell jam">A2o</div><div class="cell fold">K2o</div><div class="cell fold">Q2o</div><div class="cell fold">J2o</div><div class="cell fold">T2o</div><div class="cell fold">92o</div><div class="cell fold">82o</div><div class="cell fold">72o</div><div class="cell fold">62o</div><div class="cell fold">52o</div><div class="cell fold">42o</div><div class="cell fold">32o</div><div class="cell pair">22</div>
+    </div>
+  </div>
+
+  <!-- 三条规律 -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+    <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <p class="font-black text-amber-800 text-sm">① 任何 Ax → 必推</p>
+      <p class="text-xs text-amber-700 mt-1">A2o 都推。Ax 有 blocker 效应（block AA/AK）+ 对短码 call range 有 ~30% equity。</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <p class="font-black text-amber-800 text-sm">② 任何对子 → 必推</p>
+      <p class="text-xs text-amber-700 mt-1">22-AA 全是 jam。对子不依赖 blocker，但短码不会拿 non-pair call（除非 AK），翻前领先。</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <p class="font-black text-amber-800 text-sm">③ Offsuit 下降很快</p>
+      <p class="text-xs text-amber-700 mt-1">K9o 在混合区，Q9o 就扔了。Suited 多活一格——K8s 推、98s 推、87s 推、65s 混合。</p>
+    </div>
+  </div>
+
+  <!-- 闭环：跟利滚利的连接 -->
+  <div class="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 rounded-xl p-5 mt-6">
+    <p class="font-black text-emerald-800 text-lg mb-2">🔗 跟「利滚利」完美闭环</p>
+    <p class="text-sm text-emerald-700"><strong>SB/BB 接牌范围仅 3-5%（JJ+/AK）</strong>，你推 40%，87-92% 无 showdown 收盲。每圈推成功一次 = +2.5bb = 多活一圈。这不是 gambling——这是<strong>结构性剥削</strong>。短码的 ICM 恐惧 = 你的印钞机。</p>
+  </div>
 </section>
 
 <!-- ===== Section 2: ICM 决策体系 ===== -->
