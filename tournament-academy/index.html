@@ -68,9 +68,12 @@
     🎯 Day 3 就进 Final Table · 1,444 人杀到第 5 名 · 你比你想象的更强
   </p>
   <div class="mt-6 flex justify-center gap-4 flex-wrap">
-    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🎲 锦标赛入门</span>
-    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🧠 ICM 决策体系</span>
-    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">⚔️ Heads-up 决胜</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🎲 入门+十阶段</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">📐 翻前框架</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🧠 ICM</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">⚔️ HU</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🔍 Hero Call</span>
+    <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-bold">🎭 现场赛</span>
   </div>
 </div>
 
@@ -964,6 +967,238 @@
       <p><strong>短码时回归 Nash push/fold。</strong>别想在 10bb 打翻后。</p>
     </div>
   </div>
+  <!-- ===== Hero Call 决策框架扩展 ===== -->
+  <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 rounded-xl p-5 mt-8">
+    <p class="font-black text-purple-800 text-lg mb-2">🔗 HU 延伸：Hero Call 的核心逻辑</p>
+    <p class="text-sm text-purple-700">HU 没有 ICM → 对手 bluff 频率最高 → <strong>中对/底对也能 call</strong>。关键不是牌力——是「我阻挡了什么」+「对手的范围是否两极分化」。见下方第四关。</p>
+  </div>
+</section>
+
+
+<!-- ===== Section 4: Hero Call 决策框架 ===== -->
+<section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">🔍</span>
+    <div>
+      <h2 class="text-2xl font-black text-gray-800">第四关：Hero Call 读牌框架</h2>
+      <p class="text-sm text-gray-500">当你只有中对/底对，但觉得对手在 bluff —— 什么时候该接？</p>
+    </div>
+  </div>
+
+  <!-- 背景 -->
+  <div class="bg-purple-50 rounded-xl p-5 mb-6 border border-purple-200">
+    <p class="font-black text-purple-800 mb-2">🎬 灵感来源</p>
+    <p class="text-sm text-purple-700">台湾扑克教练 小六 解析 <strong>2025 6BET HRS-02 $100K 超级豪客赛</strong>：花顺面上 lead bet，然后用<strong>第三对 call all-in</strong>。不是赌——是基于 blocker + 范围极化的精密计算。</p>
+  </div>
+
+  <!-- Hero Call 是什么 -->
+  <h3 class="text-lg font-bold text-gray-700 mb-3">🤔 Hero Call ≠ 瞎猜</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+      <p class="font-black text-green-800 text-sm">✅ Hero Call 是</p>
+      <ul class="text-xs text-green-700 mt-2 space-y-1">
+        <li>• 基于对手范围极化的推断</li>
+        <li>• 基于 blocker 效应（你阻挡了他的 value）</li>
+        <li>• 基于 pot odds vs equity 的计算</li>
+        <li>• 锦标赛中后期——对手 bluff 频率够高</li>
+      </ul>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <p class="font-black text-red-800 text-sm">❌ Hero Call 不是</p>
+      <ul class="text-xs text-red-700 mt-2 space-y-1">
+        <li>• "我感觉他没了"</li>
+        <li>• 拿中对在干燥面上接 triple barrel</li>
+        <li>• 锦标赛早期——没人 bluff 那么疯</li>
+        <li>• 用锦标赛生命去"验证自己的读牌"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 三步决策框架 -->
+  <h3 class="text-lg font-bold text-gray-700 mb-3">📋 Hero Call 三步决策树</h3>
+  <div class="space-y-4">
+    <div class="flex items-start gap-3 bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <span class="text-2xl flex-shrink-0">1️⃣</span>
+      <div>
+        <p class="font-black text-amber-800 text-sm">板面是否导致对手范围两极分化？</p>
+        <p class="text-xs text-amber-700 mt-1">湿滑面（花顺双抽）= 对手要么有 nuts 要么纯 bluff → <strong>范围两极分化</strong>。干燥面（K72r）= 对手有大量中等牌力 → 范围<strong>未</strong>两极分化 → 不能 hero call。</p>
+        <div class="flex gap-2 mt-2">
+          <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded-full">湿滑面 ✅</span>
+          <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded-full">干燥面 ❌</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <span class="text-2xl flex-shrink-0">2️⃣</span>
+      <div>
+        <p class="font-black text-amber-800 text-sm">你的牌是否阻挡了对手的价值范围？</p>
+        <p class="text-xs text-amber-700 mt-1">Blocker 效应：你手中的牌让对手持有 nuts 的<strong>组合数减少</strong>→ 他的范围里 bluff 占比上升。例如你拿 9♠8♠ 在 JT7 面上——你 block 了 Q9 和 98，对手拿 nuts 的几率骤降。</p>
+        <div class="flex gap-2 mt-2">
+          <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded-full">有 blocker ✅</span>
+          <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded-full">无 blocker ❌</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <span class="text-2xl flex-shrink-0">3️⃣</span>
+      <div>
+        <p class="font-black text-amber-800 text-sm">对手的 bluff 频率是否高于盈亏平衡点？</p>
+        <p class="text-xs text-amber-700 mt-1">算 pot odds。你只需 ~25-30% equity 就能 break-even。如果对手在这里 bluff 频率超过 30%，你 call 就是 +EV。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板面速查 -->
+  <h3 class="text-lg font-bold text-gray-700 mt-8 mb-3">🎯 哪些板面适合 Hero Call</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">板面类型</th><th class="text-center p-3">范围极化</th><th class="text-center p-3">对手 bluff 频率</th><th class="text-center p-3">Hero Call 可行性</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-3 font-bold">J♠T♠7♥ (花顺双抽)</td><td class="p-3 text-center">🔴 极高</td><td class="p-3 text-center">高</td><td class="p-3 text-center"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-bold">高 ✅</span></td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">A♠K♠3♥ (高牌+同花)</td><td class="p-3 text-center">🟡 中</td><td class="p-3 text-center">中</td><td class="p-3 text-center"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-bold">有条件</span></td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">Q♠7♦2♣ (干燥)</td><td class="p-3 text-center">🟢 低</td><td class="p-3 text-center">低</td><td class="p-3 text-center"><span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-bold">低 ❌</span></td></tr>
+        <tr><td class="p-3 font-bold">K♠Q♠J♠ (单色连通)</td><td class="p-3 text-center">🔴 极高</td><td class="p-3 text-center">最高</td><td class="p-3 text-center"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-bold">最高 ✅</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 跟 ICM 的对接 -->
+  <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 rounded-xl p-5 mt-6">
+    <p class="font-black text-purple-800 text-lg mb-2">🔗 跟 ICM 决策体系的对接</p>
+    <p class="text-sm text-purple-700">Hero Call <strong>在 ICM 弱的时候（早期、HU）最安全</strong>——call 错了还能打。FT 上有 ICM 压力时，<strong>宁可多 fold 一个 edge spot 也不 hero call</strong>。你 fold AT 赚 $18 的经验就是反面教材：有时候 fold 比 hero call 更值钱。</p>
+  </div>
+
+  <!-- 口诀 -->
+  <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 rounded-xl p-5 mt-4">
+    <p class="font-black text-purple-800 text-lg mb-2">🎪 口诀</p>
+    <p class="text-sm text-purple-700"><strong>湿滑面 + 有 blocker + 对手 bluff 够多 = 可以接。</strong>三者缺一不可。缺一个就是"我感觉他没了"——那叫赌博。</p>
+  </div>
+</section>
+
+
+<!-- ===== Section 5: 现场锦标赛生存指南 ===== -->
+<section class="bg-white rounded-2xl shadow-lg p-8 card-hover transition-all">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">🎭</span>
+    <div>
+      <h2 class="text-2xl font-black text-gray-800">第五关：现场锦标赛生存指南</h2>
+      <p class="text-sm text-gray-500">为什么现场锦标赛看起来软、打起来硬？线上转线下的 7 个陷阱</p>
+    </div>
+  </div>
+
+  <!-- 来源 -->
+  <div class="bg-blue-50 rounded-xl p-5 mb-6 border border-blue-200">
+    <p class="font-black text-blue-800 mb-2">🎬 灵感来源</p>
+    <p class="text-sm text-blue-700">台湾扑克教练 小六 频道最有价值的视频之一（160K 播放、3.5K 赞）：<strong>「25 分钟带你看清——难以战胜的现场扑克锦标赛」</strong>。结合 Staking 定价逻辑和线上玩家的盲区。</p>
+  </div>
+
+  <!-- 七大陷阱 -->
+  <h3 class="text-lg font-bold text-gray-700 mb-3">⚠️ 现场锦标赛七大陷阱</h3>
+  <div class="space-y-4">
+    <div class="flex items-start gap-3 bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl flex-shrink-0">①</span>
+      <div>
+        <p class="font-black text-red-800 text-sm">"鱼"的不可预测性——GTO 失效</p>
+        <p class="text-xs text-red-700 mt-1">现场大量娱乐玩家打法<strong>完全不符合 GTO</strong>。标准策略遇上随机乱打 = 你的 edge 反而变小。必须切换到<strong>剥削策略</strong>——识别对方的漏洞，针对性调整。</p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl flex-shrink-0">②</span>
+      <div>
+        <p class="font-black text-red-800 text-sm">无工具辅助——纯人脑作战</p>
+        <p class="text-xs text-red-700 mt-1">没有 HUD、没有 GTO Wizard、没有实时 ICM 计算。全靠记忆和临场判断。你习惯的线上辅助全部归零。</p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl flex-shrink-0">③</span>
+      <div>
+        <p class="font-black text-red-800 text-sm">体能消耗——决策质量随时间崩塌</p>
+        <p class="text-xs text-red-700 mt-1">现场比赛一天 8-12 小时，连续多天。Day 3 的你在打 Day 1 50% 质量的牌。线上半小时一场，体能不是变量。</p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl flex-shrink-0">④</span>
+      <div>
+        <p class="font-black text-red-800 text-sm">节奏极慢——手数少 = 波动被放大</p>
+        <p class="text-xs text-red-700 mt-1">现场一小时约 25-30 手，线上同时开 6 桌一小时 300+ 手。样本小 = run good/run bad 的影响被放大。你可能打三天都不知道自己打得好不好。</p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl flex-shrink-0">⑤</span>
+      <div>
+        <p class="font-black text-red-800 text-sm">盲注结构更激进——生存压力更大</p>
+        <p class="text-xs text-red-700 mt-1">现场比赛 level 短、涨盲快。你可能只打 20 手就被盲注吃掉 20%。线上有更多时间等好牌。</p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl flex-shrink-0">⑥</span>
+      <div>
+        <p class="font-black text-red-800 text-sm">旅游成本——隐形成本吃 ROI</p>
+        <p class="text-xs text-red-700 mt-1">机票、酒店、餐饮、时间成本。一个 $1,000 买入的比赛，真实成本可能是 $3,000-$5,000。这就是为什么 Staking markup 包含 travel costs。</p>
+      </div>
+    </div>
+
+    <div class="flex items-start gap-3 bg-red-50 rounded-xl p-4 border border-red-200">
+      <span class="text-2xl flex-shrink-0">⑦</span>
+      <div>
+        <p class="font-black text-red-800 text-sm">心理压力——"我是全场最弱的吗？"</p>
+        <p class="text-xs text-red-700 mt-1">现场环境高压。面对穿hoodie戴墨镜的pro、桌上所有人盯着你、筹码是实物——这些无形的压力会影响你的决策质量。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 线上 vs 现场对照表 -->
+  <h3 class="text-lg font-bold text-gray-700 mt-8 mb-3">📊 线上 vs 现场锦标赛对照</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-50"><th class="text-left p-3">维度</th><th class="text-center p-3">🖥️ 线上</th><th class="text-center p-3">🎭 现场</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-3 font-bold">手数/小时</td><td class="p-3 text-center">300+（6桌）</td><td class="p-3 text-center">25-30（1桌）</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">工具辅助</td><td class="p-3 text-center">HUD + GTO Wizard + ICM</td><td class="p-3 text-center">纯人脑</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">对手类型</td><td class="p-3 text-center">reg 为主，可预测</td><td class="p-3 text-center">鱼 + pro 混合，不可预测</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">核心策略</td><td class="p-3 text-center">GTO 基础 + 适度剥削</td><td class="p-3 text-center">剥削为主，GTO 为辅</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">波动感知</td><td class="p-3 text-center">样本大，回归快</td><td class="p-3 text-center">样本极小，run good 决定一切</td></tr>
+        <tr class="border-b"><td class="p-3 font-bold">真实成本</td><td class="p-3 text-center">买入费</td><td class="p-3 text-center">买入 + 旅费 + 时间</td></tr>
+        <tr><td class="p-3 font-bold">ROI 预期</td><td class="p-3 text-center">>10% 即盈利</td><td class="p-3 text-center">>30% 才算真盈利</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 转线下的关键调整 -->
+  <h3 class="text-lg font-bold text-gray-700 mt-8 mb-3">🔄 从线上转线下的关键调整</h3>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+      <p class="font-black text-emerald-800 text-sm">🧠 策略切换</p>
+      <p class="text-xs text-emerald-700 mt-1">放下 GTO，拿起剥削。观察每个对手的打法漏洞——谁 flat 太多、谁只 bet 强牌、谁 scared money。针对性调整比"打对"更重要。</p>
+    </div>
+    <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+      <p class="font-black text-emerald-800 text-sm">💪 体能管理</p>
+      <p class="text-xs text-emerald-700 mt-1">睡够、吃对、咖啡因控制。Day 2 下午 3 点你的决策质量是最大的 edge——因为别人已经开始崩了。</p>
+    </div>
+    <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+      <p class="font-black text-emerald-800 text-sm">💰 期望管理</p>
+      <p class="text-xs text-emerald-700 mt-1">现场一年可能只打 10-20 场。任何一场 deep run 都可能是你全年唯一的成绩。接受"波动就是现场锦标赛的人生"。</p>
+    </div>
+  </div>
+
+  <!-- 跟 Staking 的对接 -->
+  <div class="bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 rounded-xl p-5 mt-6">
+    <p class="font-black text-indigo-800 text-lg mb-2">💰 跟 Staking 定价的对接</p>
+    <p class="text-sm text-indigo-700">现场锦标赛 ROI >30% 才值得买股份——因为<strong>隐性成本吃掉了大部分 edge</strong>。小六自己视频里承认：多次大赛成功是 run good。如果一个玩家告诉你他现场 ROI 50%，问清楚：打了多少场？算没算旅费？是不是靠一场冠军撑的？</p>
+  </div>
+
+  <!-- 口诀 -->
+  <div class="bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 rounded-xl p-5 mt-4">
+    <p class="font-black text-indigo-800 text-lg mb-2">🎪 口诀</p>
+    <p class="text-sm text-indigo-700"><strong>现场锦标赛 = 线上技术的 30% + 剥削能力的 40% + 体能/心理的 30%。</strong>光有 GTO 在现场活不过 Day 2。光有体能没技术也赢不了。三者缺一不可。</p>
+  </div>
 </section>
 
 
@@ -1190,7 +1425,7 @@
   <p class="text-lg font-bold text-gray-600">锦标赛特训营 · Tournament Academy</p>
   <p class="text-sm text-gray-400 mt-1">从 NL10 到 Final Table · Day 3 1,444 人第 5 名</p>
   <p class="text-sm text-gray-400 mt-1">"原来我是锦标赛玩家！" — 施老师，2026.6.10</p>
-  <p class="text-xs text-gray-300 mt-4">Updated: 2026-06-10 · Built with 🧡 by Cola</p>
+  <p class="text-xs text-gray-300 mt-4">Updated: 2026-06-11 · Built with 🧡 by Cola</p>
 </div>
 
 </div> <!-- card -->
