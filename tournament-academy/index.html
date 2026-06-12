@@ -104,6 +104,7 @@
   <a href="#fgs" class="nav-link">🔮 第六关：FGS 超越ICM</a>
   <a href="#steal" class="nav-link">🥷 第七关：偷盲与Steal纪律</a>
   <a href="#sb-limp" class="nav-link">🔄 第八关：SB Limp战术</a>
+  <a href="#risk-premium" class="nav-link">💎 第九关：风险溢价</a>
   <div class="nav-section-title">💡 深度专题</div>
   <a href="#business" class="nav-link">🏢 商业模式映射</a>
   <a href="#insights" class="nav-link">💎 实战心得</a>
@@ -1865,6 +1866,106 @@ SB Limp →<br>
       <p>② <strong>深码 30bb+：混合。强牌 raise，宽范围 limp。limp 里藏 AA/KK。</strong></p>
       <p>③ <strong>短码 12-20bb：Limp-Jam 是核武器。</strong>强牌 limp → BB raise → jam。比你直接 open-shove 多赚 BB 一次 raise。</p>
       <p>④ <strong>面对 aggressive BB：增加 trap 频率。</strong>他「你 limp 我就 raise」，每 3-4 次 limp 设一次 trap。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 9: 风险溢价 ===== -->
+<div id="risk-premium"></div>
+<section class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-10 card-hover transition-all border-2 border-purple-300">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">💎</span>
+    <div>
+      <h2 class="text-3xl font-black text-gray-800">第九关：风险溢价 — 锦标赛的隐藏税</h2>
+      <p class="text-base text-gray-500">Risk Premium · 为什么同样的 odds 你在锦标赛里接不动</p>
+    </div>
+  </div>
+
+  <div class="bg-purple-100 border border-purple-400 rounded-xl p-6 mb-8">
+    <p class="text-lg font-black text-purple-900 mb-2">💡 一句话</p>
+    <p class="text-base text-purple-800">现金桌：pot odds 33% → 有 33% 就 call。锦标赛：同样的 odds，但你需要 50% 才 break-even。<strong>差的那 17% 就是风险溢价——锦标赛对你收的「出局税」。</strong></p>
+  </div>
+
+  <!-- 公式 -->
+  <div class="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+    <h3 class="text-2xl font-black text-gray-800 mb-4">📐 公式</h3>
+    <div class="text-center py-6 bg-gray-50 rounded-xl font-mono text-lg">
+      <strong class="text-purple-700">Risk Premium</strong> = ICM Required Equity − cEV Required Equity
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
+      <div class="bg-green-50 rounded-xl p-4">
+        <p class="font-bold text-green-800">cEV Required Equity</p>
+        <p class="text-gray-700">你的 call amount ÷ total pot<br>纯数学——现金桌逻辑</p>
+      </div>
+      <div class="bg-purple-50 rounded-xl p-4">
+        <p class="font-bold text-purple-800">ICM Required Equity</p>
+        <p class="text-gray-700">在 payout 结构下，call 的 $-EV 为 0 的门槛<br>锦标赛逻辑——出局有惩罚</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bubble Factor -->
+  <div class="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+    <h3 class="text-2xl font-black text-gray-800 mb-4">🎈 Bubble Factor — 风险溢价的直观表达</h3>
+    <p class="text-sm text-gray-600 mb-4">Bubble Factor = 你出局损失 ÷ 你淘汰对手的收益。BF 越高，风险溢价越高。</p>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="bg-gray-100"><th class="p-3 text-left">阶段</th><th class="p-3 text-center">BF</th><th class="p-3 text-center">风险溢价</th><th class="p-3 text-left">感觉</th></tr></thead>
+        <tbody class="divide-y">
+          <tr><td class="p-3">🌅 早期</td><td class="p-3 text-center font-mono">1.0-1.2</td><td class="p-3 text-center font-bold text-green-700">~0%</td><td class="p-3">像 cash，随便接</td></tr>
+          <tr><td class="p-3">⏰ 中期</td><td class="p-3 text-center font-mono">1.3-1.5</td><td class="p-3 text-center font-bold text-amber-700">5-10%</td><td class="p-3">有点紧，但能打</td></tr>
+          <tr class="bg-red-50"><td class="p-3 font-bold">💣 泡沫期</td><td class="p-3 text-center font-mono font-bold">1.7-2.2</td><td class="p-3 text-center font-bold text-red-700 text-lg">12-20% 🔥</td><td class="p-3">死不起！边缘 spot 全 fold</td></tr>
+          <tr class="bg-red-50"><td class="p-3 font-bold">👑 FT</td><td class="p-3 text-center font-mono font-bold">1.8-2.5</td><td class="p-3 text-center font-bold text-red-700 text-lg">15-25% 🔥</td><td class="p-3">每级 pay jump 都是钱。fold = 赚钱</td></tr>
+          <tr><td class="p-3">⚔️ HU</td><td class="p-3 text-center font-mono">1.0</td><td class="p-3 text-center font-bold text-green-700">0%</td><td class="p-3">风险溢价归零！纯 cEV</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 三层递进 -->
+  <div class="bg-gradient-to-r from-slate-50 to-blue-50 rounded-xl p-6 border border-blue-300 mb-6">
+    <h3 class="text-2xl font-black text-gray-800 mb-4">📊 决策的三层递进</h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white rounded-xl p-4 border border-green-200">
+        <p class="font-black text-green-800 text-lg">① cEV：纯数学</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>公式：</strong>赔率 = equity → call</p>
+        <p class="text-sm text-gray-700"><strong>何时用：</strong>早期 / HU</p>
+        <p class="text-sm text-gray-700 mt-2">现金桌思维。chip = dollar。</p>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-purple-200">
+        <p class="font-black text-purple-800 text-lg">② ICM：加出局惩罚</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>公式：</strong>cEV + 风险溢价 → 收紧</p>
+        <p class="text-sm text-gray-700"><strong>何时用：</strong>泡沫 / FT</p>
+        <p class="text-sm text-gray-700 mt-2">fold AT 赚 $18 的逻辑。出局比接人更贵。</p>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-amber-200">
+        <p class="font-black text-amber-800 text-lg">③ FGS：加未来价值</p>
+        <p class="text-sm text-gray-700 mt-2"><strong>公式：</strong>ICM + 未来 steal 价值 → 放宽</p>
+        <p class="text-sm text-gray-700"><strong>何时用：</strong>能变 CL / 极端短码快死</p>
+        <p class="text-sm text-gray-700 mt-2">AQo call CL 推的价值——赢了碾压全桌。比 ICM 宽 50%。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 实战连接 -->
+  <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-300">
+    <h3 class="text-2xl font-black text-gray-800 mb-4">🔗 风险溢价 × 你的实战体系</h3>
+    
+    <div class="space-y-4 text-sm">
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-amber-800">💣 Bubble Abuse — 风险溢价是你的偷盲武器</p>
+        <p class="text-gray-700 mt-1">对手有 15-20% 风险溢价 → 他的 calling range 收窄 25% → 你的 steal 成功率 +25%。<strong>别人的恐惧 = 你的收入。</strong>不是你在偷——是风险溢价替他 fold 了。</p>
+      </div>
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-red-700">🔥 48th Aggression Gap — 双重错误</p>
+        <p class="text-gray-700 mt-1">超均码 2x 时不 steal = 不仅自己不赚钱，还让对手不需要付风险溢价。<strong>你帮全桌免了税。</strong>Stage 6 的 10bb 漏血——本质上是把风险溢价这把武器放在桌上不用，反被盲注白白烧掉。</p>
+      </div>
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-green-700">✅ Fold AT 赚 $18 — 风险溢价的正面案例</p>
+        <p class="text-gray-700 mt-1">FT 上你的风险溢价 ~20%。AT 在 cEV 上是 borderline call，但在 ICM 下因为 20% 风险溢价变成了明确 fold。<strong>fold 不是弱——是你会算这笔「出局税」。</strong></p>
+      </div>
     </div>
   </div>
 </section>
