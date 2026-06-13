@@ -106,13 +106,14 @@
   <a href="#sb-limp" class="nav-link">🔄 第八关：SB Limp战术</a>
   <a href="#risk-premium" class="nav-link">💎 第九关：风险溢价</a>
   <a href="#no-fold" class="nav-link">⚡ 第十关：跟世界冠军学MTT</a>
+  <a href="#deal" class="nav-link">🤝 第十一关：FT协商Deal</a>
   <div class="nav-section-title">💡 深度专题</div>
   <a href="#business" class="nav-link">🏢 商业模式映射</a>
   <a href="#insights" class="nav-link">💎 实战心得</a>
   <div class="nav-section-title">🛠️ 工具箱</div>
   <a href="case-study-5th-1444.html" class="nav-link">📋 Case Study: 5th/1444</a>
   <a href="case-study-48th-hyper.html" class="nav-link">📊 Case Study: 48th Hyper</a>
-  <a href="br-seven-game.html" class="nav-link">⚡ BR 七场特训</a>
+  <a href="br-seven-game.html" class="nav-link">⚡ BR 八场特训</a>
   <a href="tracker.html" class="nav-link">📊 锦标赛战绩分析器</a>
   <a href="https://poker-tools.pages.dev/" target="_blank" class="nav-link">🔧 Poker Tools (Range/Sim)</a>
   <a href="https://guerrilla-poker.com/archives/" target="_blank" class="nav-link">🎓 Guerrilla Poker</a>
@@ -2175,6 +2176,94 @@ SB Limp →<br>
     <div class="bg-white rounded-xl p-4 mt-4 text-sm">
       <p class="font-bold text-gray-800">💡 合体 = 完整玩家</p>
       <p class="text-gray-700">ICM 体系让你活到 FT。No Fold 让你在 FT 上赢比赛。<strong>早期：ICM 防守。中期：风险溢价 steal。FT：No Fold 侵略。</strong>缺一不可。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 11: Deal 协商 ===== -->
+<div id="deal"></div>
+<section class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-lg p-10 card-hover transition-all border-2 border-emerald-300">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">🤝</span>
+    <div>
+      <h2 class="text-3xl font-black text-gray-800">第十一关：FT 协商 Deal — 你的筹码值多少钱</h2>
+      <p class="text-base text-gray-500">什么时候该分钱、怎么谈、短码和 CL 的谈判策略完全不同</p>
+    </div>
+  </div>
+
+  <div class="bg-emerald-100 border border-emerald-400 rounded-xl p-6 mb-6">
+    <p class="text-lg font-black text-emerald-900 mb-2">💡 Deal 的本质</p>
+    <p class="text-base text-emerald-800">Deal 不是"放弃比赛"——是把你的 ICM equity 提前兑现，消除 variance。<strong>CL 用筹码 bully 全桌，短码用 ICM 溢价保护自己。</strong></p>
+  </div>
+
+  <!-- 三种方式 -->
+  <div class="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+    <h3 class="text-xl font-black text-gray-800 mb-3">📐 三种分钱方式</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="bg-gray-100"><th class="p-3 text-left">方式</th><th class="p-3 text-left">逻辑</th><th class="p-3 text-left">场景</th></tr></thead>
+        <tbody class="divide-y">
+          <tr><td class="p-3 font-bold text-emerald-700">ICM Chop</td><td class="p-3">按 ICM 模型算每人 equity 分钱</td><td class="p-3">GGpoker 默认，线上标准</td></tr>
+          <tr><td class="p-3">Chip Chop</td><td class="p-3">按筹码比例分（不考虑 payout 结构）</td><td class="p-3 text-gray-400">极少用，对短码不公平</td></tr>
+          <tr><td class="p-3">Save + Play</td><td class="p-3">每人预留一部分保底，剩余按 ICM 分，继续打</td><td class="p-3">线下常见</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 决策矩阵 -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div class="bg-green-50 rounded-xl p-6 border border-green-200">
+      <h3 class="text-xl font-black text-green-800 mb-3">✅ 该接 Deal</h3>
+      <div class="space-y-2 text-sm">
+        <p><strong>🎯 钱大到改变生活</strong> — 别跟 variance 赌人生</p>
+        <p><strong>😴 极累、状态差</strong> — 打不过清醒的对手</p>
+        <p><strong>📉 你比对手弱</strong> — ICM 给你的 equity 可能高于真实胜率</p>
+        <p><strong>💀 你是最短码</strong> — ICM 对短码有溢价，接了比硬打更优</p>
+      </div>
+    </div>
+    <div class="bg-red-50 rounded-xl p-6 border border-red-200">
+      <h3 class="text-xl font-black text-red-800 mb-3">❌ 该拒 / 谈判</h3>
+      <div class="space-y-2 text-sm">
+        <p><strong>👑 你是 CL、碾压全桌</strong> — 多要！威胁：不答应就继续 bully</p>
+        <p><strong>🧠 你技术远超对手</strong> — 真实 equity 高于 ICM 模型</p>
+        <p><strong>🤝 对方急于成交</strong> — 多要 2-5%，通常会答应</p>
+        <p><strong>⏰ 盲注还很深</strong> — 有足够时间发挥 skill edge</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 谈判技巧 -->
+  <div class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-6 border border-gray-300 mb-6">
+    <h3 class="text-xl font-black text-gray-800 mb-3">🗣️ 四条谈判铁律</h3>
+    <div class="space-y-2 text-sm">
+      <div class="bg-white rounded-lg p-3"><span class="font-bold text-gray-800">① 永远别第一个报价</span> — 让对手先开，你反还。先报价的人给对手锚定了一个数字。</div>
+      <div class="bg-white rounded-lg p-3"><span class="font-bold text-gray-800">② CL 的筹码是核武器</span> — "不按我说的分，我就继续 steal 你们。每圈烧你们 2.5bb。"</div>
+      <div class="bg-white rounded-lg p-3"><span class="font-bold text-gray-800">③ 短码的武器是「我无所谓」</span> — "不给我多 3%，我就赌一把——输了拉倒，反正本来就没什么好输的。"</div>
+      <div class="bg-white rounded-lg p-3"><span class="font-bold text-gray-800">④ 算好自己的 ICM 底线</span> — 打开计算器，知道自己的 equity 是多少。别被忽悠。短码的 ICM 溢价是真实存在的。</div>
+    </div>
+  </div>
+
+  <!-- 5th/1444 复盘 -->
+  <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-6 border border-amber-300">
+    <h3 class="text-xl font-black text-gray-800 mb-3">🔬 实战：5th/1444 当时该 Deal 吗？</h3>
+    <p class="text-sm text-gray-600 mb-3">场景：5 人 · Hero 12.7bb 最短码（99 shove 之前那一刻）</p>
+    
+    <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-red-700">实际结果：打下去</p>
+        <p class="text-gray-700 mt-1">99 shove → 撞 TT → 5th → <strong>$120.75</strong></p>
+      </div>
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-green-700">如果 Deal（ICM 5人分）</p>
+        <p class="text-gray-700 mt-1">短码 ICM 溢价 → 预计 <strong>$130-150</strong></p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-4 text-sm">
+      <p class="font-bold text-amber-800 mb-1">💡 教训</p>
+      <p class="text-gray-700">ICM 对短码有利——你的 12.7bb 在模型里「值钱」，因为每 1bb 的生存价值高于 CL 的 1bb。FT 上 <strong>短码应该是第一个喊 Deal 的人</strong>——ICM 模型是你最好的朋友。但当时没人提，你也没主动提。</p>
+      <p class="text-gray-700 mt-2">不过现实是：CL（SB 70bb）不会同意——他有筹码碾压优势。BTN 33bb 也可能想继续。所以即使提了，未必通过。但 <strong>作为短码，任何时候有人提议 Deal，你的答案永远是「先算一下再说」——不是直接拒绝。</strong></p>
     </div>
   </div>
 </section>
