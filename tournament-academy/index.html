@@ -93,7 +93,7 @@
   </div>
   <div class="nav-section-title">🎯 快速导航</div>
   <a href="#hero" class="nav-link">🏠 首页</a>
-  <a href="#basics" class="nav-link">🎲 第一关：锦标赛入门</a>
+  <a href="#basics" class="nav-link">🎲 第一关：锦标赛入门+赛事选择</a>
   <a href="#stages" class="nav-link sub">📋 十阶段作战地图</a>
   <a href="#preflop" class="nav-link">📐 翻前开池三维框架</a>
   <a href="#btn-push" class="nav-link sub">🎯 BTN推牌13×13表</a>
@@ -840,6 +840,80 @@
   <div class="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 rounded-xl p-5 mt-6">
     <p class="font-black text-emerald-800 text-lg mb-2">🔗 跟「利滚利」完美闭环</p>
     <p class="text-sm text-emerald-700"><strong>SB/BB 接牌范围仅 3-5%（JJ+/AK）</strong>，你推 40%，87-92% 无 showdown 收盲。每圈推成功一次 = +2.5bb = 多活一圈。这不是 gambling——这是<strong>结构性剥削</strong>。短码的 ICM 恐惧 = 你的印钞机。</p>
+  </div>
+</section>
+
+<!-- ===== Section 1.6: 如何选择MTT ==== -->
+<section class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl shadow-lg p-10 card-hover transition-all border-2 border-indigo-300">
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-4xl">🎫</span>
+    <div>
+      <h2 class="text-3xl font-black text-gray-800">如何选择合适的 MTT</h2>
+      <p class="text-base text-gray-500">比赛选错了，技术再好也是送钱。Late Reg 10bb 进场？那是买彩票。</p>
+    </div>
+  </div>
+
+  <div class="bg-indigo-100 border border-indigo-400 rounded-xl p-5 mb-6">
+    <p class="font-black text-indigo-900 text-lg mb-1">💡 0613nightmare 数据验证</p>
+    <p class="text-sm text-indigo-800">6/13 全部 MTT 都是 Late Reg 进场（剩 10-15bb），VPIP 被迫压在 13.9%。不是打法太紧——是只剩推推乐，没有翻后空间。10 场 0 兑现。同一天的 BR（正常注册 50bb 起步），VPIP 18-60%，有冠军有第二。</p>
+  </div>
+
+  <!-- 三问决策框架 -->
+  <div class="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+    <h3 class="text-xl font-black text-gray-800 mb-4">🎯 注册前的三问</h3>
+    <div class="space-y-3">
+      <div class="bg-green-50 rounded-lg p-4">
+        <p class="font-bold text-green-800">① 我进场时有多少 bb？</p>
+        <p class="text-sm text-green-700"><strong>>40bb：正常打。</strong>翻后有空间，skill edge 能发挥。30-40bb：凑合。20-30bb：勉强，翻后空间小。<strong><15bb：别买。</strong>你买的是彩票，不是扑克。</p>
+      </div>
+      <div class="bg-yellow-50 rounded-lg p-4">
+        <p class="font-bold text-yellow-800">② 还剩多少 Late Reg 时间？</p>
+        <p class="text-sm text-yellow-700">如果 Late Reg 还剩 30 分钟 → 等等再注册，盲注小的时候进场。如果只剩 5 分钟 → 看看当前盲注级别和你的起始筹码，<strong>起始筹码 <20bb 坚决不买。</strong></p>
+      </div>
+      <div class="bg-red-50 rounded-lg p-4">
+        <p class="font-bold text-red-800">③ 这个比赛的 rake 多少？</p>
+        <p class="text-sm text-red-700">低额 MTT（<$5）rake 可能高达 20-30%。10bb Late Reg 进场 + 20% rake = <strong>你连推推乐的 EV 都是负的。</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Late Reg 调整策略 -->
+  <div class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-6 border border-gray-300 mb-6">
+    <h3 class="text-xl font-black text-gray-800 mb-4">🗡️ 如果已经 Late Reg 了——怎么调整</h3>
+    <p class="text-sm text-gray-600 mb-3">有时候已经晚了，比如你临时想打、或者忘了时间。以下按进场码量分层：</p>
+    
+    <div class="grid grid-cols-3 gap-3 text-sm mb-4">
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-green-700 text-lg">20-30bb</p>
+        <p class="text-gray-600">Push/Fold + 翻前 steal。有位置时 open-raise 2.2bb 偷盲。不要在翻后玩花活。</p>
+      </div>
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-yellow-700 text-lg">10-19bb</p>
+        <p class="text-gray-600">纯 Push/Fold。看 Nash 表推。有 Ax/对子/broadway 就推。别 flat。</p>
+      </div>
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-red-700 text-lg"><10bb</p>
+        <p class="text-gray-600">每手都是生死局。双倍或回家。本质是 gambling——承认这一点，别骗自己是在打扑克。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 实战对照 -->
+  <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-6 border border-amber-300">
+    <h3 class="text-xl font-black text-gray-800 mb-3">🔬 实战对照：同一天的不同结果</h3>
+    <div class="grid grid-cols-2 gap-4 text-sm">
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-red-700">MTT Late Reg（10-15bb 进场）</p>
+        <p class="text-gray-600 mt-1">10 场 / VPIP 13.9% / 0 兑现 / <strong>-$33</strong></p>
+        <p class="text-gray-500 mt-1 text-xs">推推乐没有 skill edge。你的翻后技术全部浪费。</p>
+      </div>
+      <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-green-700">BR 正常注册（50bb 进场）</p>
+        <p class="text-gray-600 mt-1">20 场 / VPIP 18-60% / 3 兑现 / <strong>-$58</strong></p>
+        <p class="text-gray-500 mt-1 text-xs">有翻后空间，skill edge 能发挥。冠军 + 第二名。</p>
+      </div>
+    </div>
+    <p class="text-sm text-amber-800 mt-3 font-bold">⚠️ 教训：Late Reg <15bb 的 MTT 不要再买。想打短码？去打 BR——至少 50bb 起步，翻后能打。</p>
   </div>
 </section>
 
