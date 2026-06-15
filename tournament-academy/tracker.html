@@ -174,7 +174,7 @@ async function handleFiles(files) {
       for (const line of lines) {
         if (line.startsWith('Tournament #') && current.trim()) {
           const r = parseSummary(current);
-          if (r && r.place) allResults.push(r);
+          if (r) allResults.push(r);
           current = line + '\n';
         } else {
           current += line + '\n';
@@ -182,11 +182,11 @@ async function handleFiles(files) {
       }
       if (current.trim()) {
         const r = parseSummary(current);
-        if (r && r.place) allResults.push(r);
+        if (r) allResults.push(r);
       }
     } else {
       const r = parseSummary(text);
-      if (r && r.place) allResults.push(r);
+      if (r) allResults.push(r);
     }
   }
   
