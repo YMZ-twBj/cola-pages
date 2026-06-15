@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 MTT Final Table 策略 — 锦标赛特训营</title>
+<script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-gray-50 font-sans">
+<nav class="bg-gray-900 text-white p-4 sticky top-0 z-50 shadow-lg">
+  <div class="max-w-6xl mx-auto flex gap-6 text-sm font-bold overflow-x-auto">
+    <a href="index.html" class="hover:text-yellow-400">🏠 首页</a>
+    <a href="br-seven-game.html" class="hover:text-yellow-400">⚡ BR 十场特训</a>
+    <a href="mindset.html" class="hover:text-yellow-400">🧠 心态训练</a>
+    <a href="tracker.html" class="hover:text-yellow-400">📊 赛事追踪</a>
+    <a href="ft-strategy.html" class="text-yellow-400">🏆 FT 策略</a>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto p-4 md:p-8">
+
+<div class="card p-8 mb-6" style="background: linear-gradient(135deg, #eab308 0%, #f59e0b 50%, #d97706 100%);">
+  <h1 class="text-4xl font-black text-white mb-2">🏆 MTT Final Table 策略</h1>
+  <p class="text-amber-100 text-lg">选座位 · ICM 博弈 · 寡头生存 · 利滚利收割</p>
+  <div class="flex gap-4 mt-4 text-sm text-white">
+    <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full">🪑 选座位</span>
+    <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full">📉 ICM/Risk Premium</span>
+    <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full">🤝 Deal 协商</span>
+    <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full">🦈 No-Fold 周懿楠</span>
+  </div>
+</div>
+
+<!-- ===== 选座位策略 ===== -->
+<div class="card p-6 mb-6 bg-white rounded-2xl shadow-lg border-2 border-amber-300">
+  <h2 class="text-2xl font-black text-amber-800 mb-4">🪑 选座位策略（GGpoker 规则）</h2>
+
+  <div class="bg-amber-50 rounded-xl p-4 mb-4 text-sm">
+    <p class="font-black text-amber-900 mb-2">GGpoker 流程</p>
+    <p>进 FT 前跳座位选择界面 → <strong>短码先选、CL 最后选</strong> → 每人 30 秒 → 可以点别人的座位交换位置。</p>
+    <p class="mt-1">CL 最后选 → 看所有人选完 → 再决定坐哪（最大信息优势）。</p>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4 text-sm text-center mb-4">
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <p class="font-black text-lg text-red-700">短码</p>
+      <p class="text-xs text-red-600 mt-1">选 BTN 附近 → 最久不付盲注 → 最大化 fold equity</p>
+    </div>
+    <div class="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
+      <p class="font-black text-lg text-yellow-700">中码</p>
+      <p class="text-xs text-yellow-600 mt-1">左手坐紧逼/ICM 怕死的 → 右手坐短码 → 形成 bully 角度</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+      <p class="font-black text-lg text-green-700">CL</p>
+      <p class="text-xs text-green-600 mt-1">最后选 → 把第二大码甩到右边 → 有位置碾压他</p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl p-4 text-sm">
+    <p class="font-black text-gray-800 mb-2">六大选座黄金法则</p>
+    <ol class="list-decimal ml-6 space-y-1 text-gray-700">
+      <li><strong>CL 坐对面：</strong>大鲨鱼越远越好，减少直接对抗频率</li>
+      <li><strong>左手坐「等死型」：</strong>紧逼、怕死、玩 ladder 的人放你左边 → 你 open，他们 fold</li>
+      <li><strong>右手坐短码：</strong>短码不敢反击 → 你可以放心偷</li>
+      <li><strong>避开 20bb restacker：</strong>20bb 恰恰是 restack 最舒服的深度 → 别放他们左边</li>
+      <li><strong>激进鬼放手左边：</strong>你在他之后行动 = 你有位置信息优势</li>
+      <li><strong>CL 反手：</strong>CL 最后选可以把第二大码推到右边 → 整个 orbit 都在碾压他</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ===== ICM & Risk Premium ===== -->
+<div class="card p-6 mb-6 bg-white rounded-2xl shadow-lg border-2 border-red-300">
+  <h2 class="text-2xl font-black text-red-800 mb-4">📉 FT 上的 ICM 与风险溢价</h2>
+  <div class="grid grid-cols-4 gap-3 text-sm text-center mb-4">
+    <div class="bg-red-50 rounded-xl p-3"><p class="font-bold text-xs text-gray-500">Bubble Factor</p><p class="text-lg font-black text-red-700">1.8-2.5</p></div>
+    <div class="bg-red-50 rounded-xl p-3"><p class="font-bold text-xs text-gray-500">风险溢价</p><p class="text-lg font-black text-red-700">15-25%</p></div>
+    <div class="bg-red-50 rounded-xl p-3"><p class="font-bold text-xs text-gray-500">你的 fold equity</p><p class="text-lg font-black text-green-700">+15-25%</p></div>
+    <div class="bg-red-50 rounded-xl p-3"><p class="font-bold text-xs text-gray-500">接 all-in 门槛</p><p class="text-lg font-black text-red-700">需要 50%+ equity</p></div>
+  </div>
+  <div class="bg-gray-100 rounded-xl p-4 text-sm">
+    <p class="font-black text-gray-800 mb-1">核心公式</p>
+    <p class="text-gray-700">Risk Premium = ICM Required Equity − cEV Required Equity</p>
+    <p class="text-gray-600 mt-1">例：现金桌 33% equity 就能接 → FT 需要 50% → 溢价 17%。</p>
+  </div>
+  <div class="bg-red-50 rounded-xl p-4 mt-3 text-sm">
+    <p class="font-black text-red-800 mb-1">⚡ 两层应用</p>
+    <p class="text-red-700"><strong>防守面：</strong>溢价 = 你 fold 的理由。Fold AT → 对手的风险溢价在帮你赚钱。</p>
+    <p class="text-red-700"><strong>攻击面：</strong>对手的溢价 = 你的 fold equity。你 c-bet 25%，他们不敢接 → 每手都在偷。</p>
+  </div>
+</div>
+
+<!-- ===== 码量策略 ===== -->
+<div class="card p-6 mb-6 bg-white rounded-2xl shadow-lg border-2 border-blue-300">
+  <h2 class="text-2xl font-black text-blue-800 mb-4">📏 FT 码量策略三档</h2>
+
+  <div class="space-y-4">
+    <div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500">
+      <p class="font-black text-red-800 text-lg">短码（<15bb）—— VC / 破产重组</p>
+      <p class="text-sm text-red-700 mt-1">选 BTN 坐。等中对子/Ax 推，别接别人的 all-in（除非 premium）。目标是 ladder——每跳一级都是钱。你最大的武器是「我已经无所谓了」——用这个表情谈判 Deal。</p>
+    </div>
+    <div class="bg-yellow-50 rounded-xl p-4 border-l-4 border-yellow-500">
+      <p class="font-black text-yellow-800 text-lg">中码（15-40bb）—— 现金流经营</p>
+      <p class="text-sm text-yellow-700 mt-1">选座位把紧逼放左边、短码放右边。每圈 steal 1-2 次维持呼吸。大 blind 来了就推，不纠结。别跟另外两个中码互掐——两个中码互干 = 第三方渔翁得利。</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4 border-l-4 border-green-500">
+      <p class="font-black text-green-800 text-lg">CL / 深码（>40bb）—— 利滚利 + 杠杆收购</p>
+      <p class="text-sm text-green-700 mt-1">最后选座位，把第二大码推到你右边。每圈 steal = 复利增长。c-bet 小尺度（25% pot）→ 中码不敢接。你不是在等牌——你是在用对手的恐惧当杠杆。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 寡头博弈 ===== -->
+<div class="card p-6 mb-6 bg-white rounded-2xl shadow-lg border-2 border-purple-300">
+  <h2 class="text-2xl font-black text-purple-800 mb-4">🏛️ FT = 寡头博弈（不是 9 个独立玩家）</h2>
+  <p class="text-sm text-gray-700 mb-3">FT 不是 9 个独立玩家——是<strong>一个互相牵制的寡头市场</strong>。你的每一步都在改变别人的 payout 结构。</p>
+  <div class="bg-purple-50 rounded-xl p-4 text-sm space-y-2">
+    <p>🔴 <strong>两个中码互干</strong> = Coke 和 Pepsi 打价格战 → 两家都伤 → 你什么都不做就涨了 pay jump</p>
+    <p>🟡 <strong>CL 的 steal = 市场领导者压价</strong> → 小对手被挤出市场 → CL 不战而胜</p>
+    <p>🟢 <strong>Fold AT 的 discipline = 放弃短期利润保长期生存</strong> → 多活一轮 = 真正的美元</p>
+  </div>
+</div>
+
+<!-- ===== Deal 策略 ===== -->
+<div class="card p-6 mb-6 bg-white rounded-2xl shadow-lg border-2 border-cyan-300">
+  <h2 class="text-2xl font-black text-cyan-800 mb-4">🤝 Deal（协商分钱）策略</h2>
+  <div class="grid grid-cols-2 gap-4 text-sm">
+    <div class="bg-green-50 rounded-xl p-4">
+      <p class="font-black text-green-800 mb-2">✅ 该接</p>
+      <ul class="list-disc ml-5 space-y-1 text-green-700">
+        <li>钱大到改变生活</li>
+        <li>你是最短码（ICM 对短码有溢价）</li>
+        <li>极累、状态差</li>
+        <li>技术不如对手</li>
+      </ul>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4">
+      <p class="font-black text-red-800 mb-2">❌ 拒 or 谈判</p>
+      <ul class="list-disc ml-5 space-y-1 text-red-700">
+        <li>你是 CL 碾压全桌 → 谈判多要</li>
+        <li>技术远超对手</li>
+        <li>对手急于成交 → 多要 2-5%</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bg-yellow-50 rounded-xl p-4 mt-3 text-sm">
+    <p class="font-black text-yellow-800 mb-1">💡 关键：短码应该是第一个喊 Deal 的人</p>
+    <p class="text-yellow-700">ICM 模型对短码有溢价——你的每 1bb 在 ICM 里比 CL 的 1bb 更值钱。不提 Deal = 放弃了这个溢价。</p>
+  </div>
+</div>
+
+<!-- ===== No-Fold 周懿楠 ===== -->
+<div class="card p-6 mb-6 bg-white rounded-2xl shadow-lg border-2 border-indigo-300">
+  <h2 class="text-2xl font-black text-indigo-800 mb-4">🦈 No-Fold 哲学 @ FT（周懿楠）</h2>
+  <p class="text-sm text-gray-600 mb-3 italic">"我来这里就是为了赢，不是来弃牌的。" — WSOP $25K 超主赛冠军，$6M</p>
+
+  <div class="space-y-3 text-sm">
+    <div class="bg-indigo-50 rounded-xl p-3">
+      <span class="font-black text-indigo-800">1. 风险溢价的反向使用</span>
+      <p class="text-indigo-700 mt-1">对手因为 ICMP pressure 不敢接 → 你 c-bet 25% 100% 范围。你的风险溢价低 = 你可以 flat 更多牌打翻后。</p>
+    </div>
+    <div class="bg-indigo-50 rounded-xl p-3">
+      <span class="font-black text-indigo-800">2. 强牌 Flat Call</span>
+      <p class="text-indigo-700 mt-1">AJo, KQs, KJs 在 BTN flat open（不打 3-bet/fold）。保留翻后权益，避免被 4-bet 推飞。</p>
+    </div>
+    <div class="bg-indigo-50 rounded-xl p-3">
+      <span class="font-black text-indigo-800">3. 河牌薄价值</span>
+      <p class="text-indigo-700 mt-1">1/5 pot sizing，精准锁定对手在一手牌。好赔率舍不得弃 = 心理学 exploit。</p>
+    </div>
+    <div class="bg-indigo-50 rounded-xl p-3">
+      <span class="font-black text-indigo-800">4. 身份识破</span>
+      <p class="text-indigo-700 mt-1">用 aggression 建 table image。一旦你被标记为「敢 bluff 敢 value」，对手对你的 range 永远不确定 → 每一下注都有隐含 fold equity。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 今天 FT 实例 ===== -->
+<div class="card p-6 mb-6 bg-white rounded-2xl shadow-lg border-2 border-green-300">
+  <h2 class="text-2xl font-black text-green-800 mb-4">📅 6/15 实战 FT 三局</h2>
+  <table class="w-full text-sm">
+    <tr class="border-b bg-green-50"><th class="p-3 text-left">比赛</th><th class="p-3 text-center">名次</th><th class="p-3 text-center">奖金</th><th class="p-3 text-left">关键动作</th></tr>
+    <tr class="border-b"><td class="p-3">T$ Builder $1</td><td class="p-3 text-center font-black">5th</td><td class="p-3 text-center text-green-700">T$9.20</td><td class="p-3 text-xs">2.7bb 连跳两级 → 纯等死 ladder</td></tr>
+    <tr class="border-b"><td class="p-3">T$ Builder $2</td><td class="p-3 text-center font-black text-yellow-700">🥉 3rd</td><td class="p-3 text-center text-green-700">T$8.71</td><td class="p-3 text-xs">6.4bb 短码 → 等两个超短码死 → 自动 podium</td></tr>
+    <tr class="border-b bg-amber-50"><td class="p-3">Bounty Hunters $5.40</td><td class="p-3 text-center font-black">6th</td><td class="p-3 text-center text-green-700">$25.37</td><td class="p-3 text-xs">9.9bb 短码进 FT → 等 8.6bb 先死 → ladder 两级</td></tr>
+  </table>
+  <p class="text-sm text-gray-600 mt-3"><strong>共同点：</strong>三局都是短码进 FT → 不急着推 → 等别人死 → 躺着涨钱。</p>
+</div>
+
+<!-- ===== 总结 ===== -->
+<div class="card p-6 bg-white rounded-2xl shadow-lg" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
+  <h2 class="text-2xl font-black text-white mb-4">🎯 FT 生存定律</h2>
+  <div class="grid grid-cols-3 gap-4 text-center">
+    <div class="bg-white/10 backdrop-blur rounded-xl p-4">
+      <p class="text-3xl mb-1">🪑</p>
+      <p class="font-black text-white text-sm">选座定生死</p>
+      <p class="text-xs text-gray-300 mt-1">短码抢 BTN<br>CL 反手压第二</p>
+    </div>
+    <div class="bg-white/10 backdrop-blur rounded-xl p-4">
+      <p class="text-3xl mb-1">💀</p>
+      <p class="font-black text-white text-sm">等死即收割</p>
+      <p class="text-xs text-gray-300 mt-1">每跳一级 = 美元<br>不用你动手</p>
+    </div>
+    <div class="bg-white/10 backdrop-blur rounded-xl p-4">
+      <p class="text-3xl mb-1">📉</p>
+      <p class="font-black text-white text-sm">ICM 是你的朋友</p>
+      <p class="text-xs text-gray-300 mt-1">fold AT 赚 ICM<br>短码喊 Deal 赚溢价</p>
+    </div>
+  </div>
+  <p class="text-center text-sm text-gray-400 mt-4">FT 的终极技巧不是打牌——是<strong>选座位、等别人死、在正确的时间喊 Deal</strong>。</p>
+</div>
+
+<p class="text-center text-xs text-gray-400 py-8">MTT Final Table 策略 · 锦标赛特训营 · 2026-06-15</p>
+</div></body></html>
