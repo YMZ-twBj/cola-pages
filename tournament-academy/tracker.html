@@ -84,22 +84,24 @@
 function parseSummary(text) {
   const result = {};
   
-  // Tournament name and ID
-  const tnMatch = text.match(/Tournament #(\d+),\s*(.+?),/);
+  // Tournament name and ID — handles both summary & full hand history
+  const tnMatch = text.match(/Tournament #(\d+),\s*([^,\n-]+)/);
   if (!tnMatch) return null;
   result.id = tnMatch[1];
   result.name = tnMatch[2].trim();
   
-  // Buy-in
-  const biMatch = text.match(/Buy-in:\s*\$?([\d.]+)\+?/);
+  // Buy-in — from Buy-in: line, or fallback to extracting from name
+  const biMatch = text.match(/Buy-in:\s*(?:T\$)?\$?([\d.]+)\+?(?:T\$)?\$?([\d.]+)?\+?(?:T\$)?\$?([\d.]+)?/);
   if (biMatch) {
-    const parts = text.match(/Buy-in:\s*\$?([\d.]+)\+?\$?([\d.]+)?\+?\$?([\d.]+)?/);
-    if (parts) {
-      result.buyinPrize = parseFloat(parts[1]) || 0;
-      result.buyinRake = parseFloat(parts[2]) || 0;
-      result.buyinBounty = parseFloat(parts[3]) || 0;
-      result.buyin = result.buyinPrize + result.buyinRake + result.buyinBounty;
-    }
+    result.buyinPrize = parseFloat(biMatch[1]) || 0;
+    result.buyinRake = parseFloat(biMatch[2]) || 0;
+    result.buyinBounty = parseFloat(biMatch[3]) || 0;
+    result.buyin = result.buyinPrize + result.buyinRake + result.buyinBounty;
+  } else {
+    // Fallback: extract from tournament name (e.g. "Bounty Hunters $2.50")
+    const fallback = text.match(/\$(\d+\.?\d*)/);
+    result.buyin = fallback ? parseFloat(fallback[1]) : 0;
+    result.buyinPrize = result.buyin; result.buyinRake = 0; result.buyinBounty = 0;
   }
   
   // Players
@@ -110,12 +112,13 @@ function parseSummary(text) {
   const ppMatch = text.match(/Total Prize Pool:\s*\$?([\d,.]+)/);
   if (ppMatch) result.prizePool = parseFloat(ppMatch[1].replace(/,/g, ''));
   
-  // Date
-  const dateMatch = text.match(/started\s*(\d{4}\/\d{2}\/\d{2})/);
+  // Date — from summary or full HH first line
+  let dateMatch = text.match(/started\s*(\d{4}\/\d{2}\/\d{2})/);
+  if (!dateMatch) dateMatch = text.match(/(\d{4}\/\d{2}\/\d{2})\s+\d{2}:\d{2}:\d{2}/);
   if (dateMatch) result.date = dateMatch[1];
   
   // Place and prize
-  const placeMatch = text.match(/(\d+)(?:st|nd|rd|th)\s*:\s*Hero,\s*\$?([\d,.]+)/);
+  const placeMatch = text.match(/(\d+)(?:st|nd|rd|th)\s*:\s*Hero,\s*(?:T\$)?\$?([\d,.]+)/);
   if (placeMatch) {
     result.place = parseInt(placeMatch[1]);
     result.prize = parseFloat(placeMatch[2].replace(/,/g, ''));
@@ -124,6 +127,9 @@ function parseSummary(text) {
   // Re-entries
   const reMatch = text.match(/made (\d+) re-entries/);
   result.reentries = reMatch ? parseInt(reMatch[1]) : 0;
+  
+  // Detect full hand history (no summary) vs tournament summary
+  result.isFullHH = !text.match(/finished the tournament/);
   
   result.totalBuyin = result.buyin * (1 + result.reentries);
   result.profit = result.prize - result.totalBuyin;
@@ -161,7 +167,7 @@ async function handleFiles(files) {
     const text = await file.text();
     // File may contain multiple summaries
     const parts = text.split(/Tournament #\d+/);
-    if (parts.length > 1) {
+    if (parts.length > 2) {
       // Multiple tournaments in one file
       const lines = text.split('\n');
       let current = '';
@@ -200,18 +206,19 @@ function render() {
   detailEl.classList.remove('hidden');
   
   // ===== SUMMARY CARDS =====
-  const totalBuyins = allResults.reduce((s, r) => s + r.totalBuyin, 0);
-  const totalPrizes = allResults.reduce((s, r) => s + r.prize, 0);
+  const pnlResults = allResults.filter(r => !r.isFullHH || r.place);
+  const totalBuyins = pnlResults.reduce((s, r) => s + r.totalBuyin, 0);
+  const totalPrizes = pnlResults.reduce((s, r) => s + (r.prize||0), 0);
   const totalProfit = totalPrizes - totalBuyins;
-  const itmCount = allResults.filter(r => r.itm).length;
-  const itmPct = allResults.length > 0 ? ((itmCount / allResults.length) * 100) : 0;
-  const avgBuyin = allResults.length > 0 ? (totalBuyins / allResults.length) : 0;
+  const itmCount = pnlResults.filter(r => r.itm).length;
+  const itmPct = pnlResults.length > 0 ? ((itmCount / pnlResults.length) * 100) : 0;
+  const avgBuyin = pnlResults.length > 0 ? (totalBuyins / pnlResults.length) : 0;
   const totalROI = totalBuyins > 0 ? ((totalProfit / totalBuyins) * 100) : 0;
   
   summaryEl.innerHTML = `
     <div class="card p-6">
       <p class="text-xs text-gray-500 mb-1">🏟️ 总场次</p>
-      <p class="text-3xl font-black text-gray-800">${allResults.length}</p>
+      <p class="text-3xl font-black text-gray-800">${allResults.length}${allResults.length !== pnlResults.length ? ' <span class="text-sm text-gray-400">('+pnlResults.length+' 有结果)</span>' : ''}</p>
       <p class="text-xs text-gray-400 mt-1">ITM ${itmCount} 次 (${itmPct.toFixed(1)}%)</p>
     </div>
     <div class="card p-6">
@@ -299,21 +306,22 @@ function render() {
     const roiClass = r.roi >= 0 ? 'text-green-600' : 'text-red-600';
     const roiSign = r.roi >= 0 ? '+' : '';
     const placeClass = r.itm ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600';
+    const isFullHH = r.isFullHH && !r.place;
     return `
       <tr class="border-b hover:bg-gray-50">
         <td class="p-3 text-gray-500">${r.date || '-'}</td>
         <td class="p-3">
           <p class="font-medium text-gray-700">${r.name}</p>
-          <p class="text-[10px] text-gray-400">#${r.id}</p>
+          <p class="text-[10px] text-gray-400">#${r.id}${isFullHH ? ' · 仅手牌' : ''}</p>
         </td>
         <td class="p-3 text-right font-medium">$${r.totalBuyin.toFixed(2)}</td>
         <td class="p-3 text-right">${r.players?.toLocaleString() || '-'}</td>
         <td class="p-3 text-right">
-          <span class="inline-block px-2 py-0.5 rounded-full text-xs font-bold ${placeClass}">${r.place}${getOrdinal(r.place)}</span>
-          <span class="text-[10px] text-gray-400 ml-1">/ ${r.players || '-'}</span>
+          ${isFullHH ? '<span class="text-gray-400 text-xs">—</span>' : `<span class="inline-block px-2 py-0.5 rounded-full text-xs font-bold ${placeClass}">${r.place}${getOrdinal(r.place)}</span>
+          <span class="text-[10px] text-gray-400 ml-1">/ ${r.players || '-'}</span>`}
         </td>
-        <td class="p-3 text-right font-bold ${r.prize > 0 ? 'text-amber-600' : 'text-gray-400'}">$${r.prize.toFixed(2)}</td>
-        <td class="p-3 text-right font-bold ${roiClass}">${roiSign}${r.roi.toFixed(0)}%</td>
+        <td class="p-3 text-right font-bold ${isFullHH ? 'text-gray-400' : (r.prize > 0 ? 'text-amber-600' : 'text-gray-400')}">${isFullHH ? '—' : '$'+r.prize.toFixed(2)}</td>
+        <td class="p-3 text-right font-bold ${isFullHH ? 'text-gray-400' : roiClass}">${isFullHH ? '—' : roiSign+r.roi.toFixed(0)+'%'}</td>
       </tr>
     `;
   }).join('');
