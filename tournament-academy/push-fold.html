@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 短码 Push-Fold 策略 — 锦标赛特训营</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');body{font-family:'Noto Sans SC',sans-serif;background:#fef3c7}</style>
+</head>
+<body class="p-4 md:p-8">
+<div class="max-w-5xl mx-auto">
+<a href="index.html" class="text-amber-600 hover:text-amber-800 text-sm font-bold mb-6 inline-block">← 返回锦标赛特训营</a>
+
+<div class="card p-8 mb-6" style="background:linear-gradient(135deg,#b91c1c 0%,#dc2626 50%,#ef4444 100%);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08)">
+  <h1 class="text-4xl font-black text-white mb-2">🎯 短码 Push-Fold 策略</h1>
+  <p class="text-red-100 text-lg">位置 × 码量 × 6-max · 别再漏 SB/BTN steal</p>
+  <div class="flex gap-3 mt-4 text-sm text-white flex-wrap">
+    <span class="bg-white/20 px-3 py-1 rounded-full">💀 6/16 漏洞: 29手漏8推</span>
+    <span class="bg-white/20 px-3 py-1 rounded-full">🔑 SB/BTN 是命门</span>
+    <span class="bg-white/20 px-3 py-1 rounded-full">📏 6-max 比 9-max 宽 30%</span>
+  </div>
+</div>
+
+<!-- Core Principle -->
+<div class="card p-6 mb-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">🧠 三大原则</h2>
+  <div class="grid grid-cols-3 gap-4 text-sm">
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <p class="font-black text-red-800 text-center text-lg">💰 偷盲 > 等牌</p>
+      <p class="text-xs text-red-600 mt-2">10BB 以下，fold equity 是你最大的武器。推出去对手弃牌你就白捡 2.5BB——比等好牌更有效率。</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+      <p class="font-black text-amber-800 text-center text-lg">📍 位置 > 牌力</p>
+      <p class="text-xs text-amber-600 mt-2">SB 拿 K6o 应该推，UTG 拿 KQo 才勉强。同样的牌，BTN 是武器，EP 是陷阱。</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+      <p class="font-black text-green-800 text-center text-lg">⏱️ 每少 1BB 扩 20%</p>
+      <p class="text-xs text-green-600 mt-2">7BB 还能等一轮。3BB 等不了——任何有 face card 的手都必须进。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 4-tier push-fold by position -->
+<div class="card p-6 mb-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">📊 四档 Push-Fold 速查表 · 6-max</h2>
+
+  <!-- 10-15BB -->
+  <div class="mb-6">
+    <h3 class="font-black text-lg text-green-700 mb-2">🟢 10-15BB — 有 raise-fold 空间</h3>
+    <p class="text-xs text-red-500 mb-3"><strong>⚠️ 不是纯 push-fold！</strong> 开 2-2.5x，被 3bet 可以弃。</p>
+    <table class="w-full text-sm mb-2">
+      <thead><tr class="bg-green-50 text-xs"><th class="p-2 text-left">位置</th><th class="p-2 text-left">Open Range（非 shove）</th><th class="p-2 text-left">面对 rejam fold</th></tr></thead>
+      <tr class="border-b"><td class="p-2 font-bold">UTG</td><td class="p-2 text-xs">77+, A9s+, AJo+, KJs+, KQo</td><td class="p-2 text-xs">弃 AJo/KQo 给 CL rejam</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">MP</td><td class="p-2 text-xs">66+, A7s+, ATo+, KTs+, KJo+, QJs</td><td class="p-2 text-xs">弃 ATo/KJo 给 CL</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">CO</td><td class="p-2 text-xs">44+, A2s+, A8o+, K9s+, KTo+, QTs+, QJo, JTs</td><td class="p-2 text-xs">弃 A8o/QJo</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">BTN</td><td class="p-2 text-xs">22+, A2s+, A2o+, K6s+, K9o+, Q8s+, QTo+, J8s+, JTo, T8s+</td><td class="p-2 text-xs">弃底 30% 给 rejam</td></tr>
+      <tr><td class="p-2 font-bold">SB</td><td class="p-2 text-xs">22+, A2s+, A2o+, K2s+, K8o+, Q5s+, Q9o+, J7s+, JTo, T7s+</td><td class="p-2 text-xs">弃底端</td></tr>
+    </table>
+    <div class="bg-red-50 rounded-lg p-3 mt-1 text-xs border border-red-200">
+      <p class="font-black text-red-700">🔴 6/16 教训：A7s 13BB BTN 推 CL — 该开不该推。</p>
+    </div>
+  </div>
+
+  <!-- 7-10BB -->
+  <div class="mb-6">
+    <h3 class="font-black text-lg text-amber-700 mb-2">🟡 7-10BB — 纯 push-fold</h3>
+    <table class="w-full text-sm">
+      <thead><tr class="bg-amber-50 text-xs"><th class="p-2 text-left">位置</th><th class="p-2 text-left">Shove Range（6-max）</th></tr></thead>
+      <tr class="border-b"><td class="p-2 font-bold">UTG</td><td class="p-2 text-xs">55+, A8s+, ATo+, KJs+, KQo, QJs</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">MP</td><td class="p-2 text-xs">44+, A5s+, A9o+, KTs+, KJo+, QJs</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">CO</td><td class="p-2 text-xs">33+, A2s+, A7o+, K9s+, KTo+, QTs+, QJo, JTs</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">BTN</td><td class="p-2 text-xs bg-red-50">22+, A2s+, A2o+, K6s+, K9o+, Q8s+, QTo+, J8s+, JTo, T8s+, 98s, 87s</td></tr>
+      <tr><td class="p-2 font-bold">SB</td><td class="p-2 text-xs bg-red-50">22+, A2s+, A2o+, K2s+, K7o+, Q2s+, Q8o+, J5s+, J9o+, T6s+, T8o+, 96s+, 98o, 86s+</td></tr>
+    </table>
+    <p class="text-xs text-gray-500 mt-2"><strong>口诀：</strong>BTN 见 A 就推、见对就推、K6s+ 推、QT+ 推。SB 见 A/K/对/suited 就推。</p>
+  </div>
+
+  <!-- 5-7BB -->
+  <div class="mb-6">
+    <h3 class="font-black text-lg text-orange-700 mb-2">🟠 5-7BB — 再扩 30%</h3>
+    <table class="w-full text-sm">
+      <thead><tr class="bg-orange-50 text-xs"><th class="p-2 text-left">位置</th><th class="p-2 text-left">新增手牌</th></tr></thead>
+      <tr class="border-b"><td class="p-2 font-bold">UTG</td><td class="p-2 text-xs">+ 44, A5s-A7s, A8o-A9o, KTs, QJs</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">MP</td><td class="p-2 text-xs">+ 33, A2s-A4s, A5o-A8o, K9s, QTs</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">CO</td><td class="p-2 text-xs">+ 22, A2o-A6o, K8s, K9o, Q9s, QTo, J9s</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">BTN</td><td class="p-2 text-xs bg-red-50">+ K2s-K5s, K6o-K8o, Q2s-Q7s, Q8o-Q9o, J7s, J8o-J9o, T7s, T8o, 97s, 86s, 76s</td></tr>
+      <tr><td class="p-2 font-bold">SB</td><td class="p-2 text-xs bg-red-50">几乎 any two — 有 Q 就推，T7o+ 推，54s+ 推</td></tr>
+    </table>
+    <div class="bg-red-50 rounded-lg p-3 mt-2 text-xs border border-red-200">
+      <p class="font-black text-red-700">🔴 6/16 该档漏推：QJo UTG 5.3BB · QTo CO 6.6BB · K6o SB 6.3BB</p>
+    </div>
+  </div>
+
+  <!-- <5BB -->
+  <div>
+    <h3 class="font-black text-lg text-red-700 mb-2">🔴 &lt;5BB — 见牌就推</h3>
+    <table class="w-full text-sm">
+      <thead><tr class="bg-red-50 text-xs"><th class="p-2 text-left">位置</th><th class="p-2 text-left">推什么</th></tr></thead>
+      <tr class="border-b"><td class="p-2 font-bold">UTG/MP</td><td class="p-2 text-xs">任何 A、任何对、K8s+、Q9s+、JTs、T9s</td></tr>
+      <tr class="border-b"><td class="p-2 font-bold">CO/BTN</td><td class="p-2 text-xs bg-red-50"><strong>any two cards</strong> — 没有下一轮了</td></tr>
+      <tr><td class="p-2 font-bold">SB</td><td class="p-2 text-xs bg-red-50"><strong>100% any two</strong> — 闭眼推</td></tr>
+    </table>
+    <div class="bg-red-100 rounded-lg p-3 mt-2 text-xs border border-red-300">
+      <p class="font-black text-red-700">🔴 6/16 最痛三手（都在这档）：</p>
+      <p class="text-red-600">Q4o MP 2.3BB ❌ · T8o BTN 2.5BB ❌ · K8o SB 3.1BB ❌<br>这个码量不推等于自杀。下一圈盲注直接清零。</p>
+    </div>
+  </div>
+</div>
+
+<!-- SB Special -->
+<div class="card p-6 mb-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">🔥 SB — 最大 Leak</h2>
+  <div class="bg-gradient-to-r from-red-100 to-orange-100 rounded-xl p-4 mb-4">
+    <p class="font-black text-red-800 text-lg">6/16 复盘：5 次 SB，4 次该推没推。</p>
+  </div>
+  <div class="space-y-2 text-sm">
+    <p class="font-black">为什么 SB 推最宽？</p>
+    <ul class="list-disc ml-4 text-xs space-y-1">
+      <li>你后面只有一个人（BB）— 偷成率最高</li>
+      <li>BB 没有位置优势 — 防御需很宽</li>
+      <li>ante 让偷盲回报极高 — 白捡 2.5BB</li>
+      <li>下一手就 post BB — 现在不偷下轮强制付</li>
+    </ul>
+    <p class="font-black mt-3">SB 记忆法：</p>
+    <ul class="list-disc ml-4 text-xs space-y-1">
+      <li>10BB: 见 A/K/对/suited → 推</li>
+      <li>7BB: 见 Q-high → 推</li>
+      <li>5BB: 见 face card → 推</li>
+      <li>3BB: any two → 闭眼推</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 6/16对照 -->
+<div class="card p-6 mb-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">🔬 6/16 MM Hyper · 逐手对照</h2>
+  <p class="text-sm text-gray-600 mb-3">8 手该推没推：</p>
+  <table class="w-full text-sm">
+    <thead><tr class="bg-red-50 text-xs"><th class="p-2 text-left">手</th><th class="p-2 text-center">位置</th><th class="p-2 text-center">码量</th><th class="p-2 text-left">实际</th><th class="p-2 text-left">应推</th></tr></thead>
+    <tr class="border-b"><td class="p-2">KTs</td><td class="p-2 text-center font-bold">BTN</td><td class="p-2 text-center">9.3BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+    <tr class="border-b"><td class="p-2">K6o</td><td class="p-2 text-center font-bold bg-red-50">SB</td><td class="p-2 text-center">6.3BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+    <tr class="border-b"><td class="p-2">QJo</td><td class="p-2 text-center">UTG</td><td class="p-2 text-center">5.3BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+    <tr class="border-b"><td class="p-2">QTo</td><td class="p-2 text-center font-bold">CO</td><td class="p-2 text-center">6.6BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+    <tr class="border-b"><td class="p-2">Q2o</td><td class="p-2 text-center font-bold bg-red-50">SB</td><td class="p-2 text-center">7.4BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+    <tr class="border-b"><td class="p-2">Q4o</td><td class="p-2 text-center">MP</td><td class="p-2 text-center">2.3BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+    <tr class="border-b"><td class="p-2">T8o</td><td class="p-2 text-center font-bold">BTN</td><td class="p-2 text-center">2.5BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+    <tr><td class="p-2">K8o</td><td class="p-2 text-center font-bold bg-red-50">SB</td><td class="p-2 text-center">3.1BB</td><td class="p-2 text-red-600">fold</td><td class="p-2 text-green-600">shove</td></tr>
+  </table>
+  <div class="bg-red-50 rounded-xl p-3 mt-3 text-sm">
+    <p class="font-black text-red-800">💀 致命模式</p>
+    <p class="text-xs text-red-700">8 手里 3 手 SB、2 手 BTN。怕提前出局 → 等 → 码更少 → 更不敢推 → 闷死。</p>
+  </div>
+</div>
+
+<!-- ICM -->
+<div class="card p-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">⚠️ ICM — 什么时候收紧</h2>
+  <div class="grid grid-cols-2 gap-4 text-sm">
+    <div class="bg-blue-50 rounded-xl p-4 border">
+      <p class="font-black text-blue-800">收紧</p>
+      <ul class="list-disc ml-4 text-xs text-blue-700 mt-1 space-y-1"><li>FT bubble（差 1 名进 FT）</li><li>有比你更短的短码</li><li>CL 在你左后方</li><li>明显 pay jump</li></ul>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4 border">
+      <p class="font-black text-green-800">不收紧</p>
+      <ul class="list-disc ml-4 text-xs text-green-700 mt-1 space-y-1"><li>你是最短码 — 没人替你死</li><li>离 FT 还远</li><li>6-max Hyper — 盲注压力 > ICM</li><li>赏金赛 BH — 赏金兜底</li></ul>
+    </div>
+  </div>
+</div>
+
+<p class="text-center text-xs text-gray-400 py-8">短码 Push-Fold 策略 · 锦标赛特训营 · 2026-06-17</p>
+</div></body></html>
