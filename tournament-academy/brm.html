@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏦 资金管理 BRM — 锦标赛特训营</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');body{font-family:'Noto Sans SC',sans-serif;background:#fef3c7}</style>
+</head>
+<body class="p-4 md:p-8">
+<div class="max-w-5xl mx-auto">
+<a href="index.html" class="text-amber-600 hover:text-amber-800 text-sm font-bold mb-6 inline-block">← 返回锦标赛特训营</a>
+
+<div class="card p-8 mb-6" style="background:linear-gradient(135deg,#059669 0%,#10b981 50%,#34d399 100%);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08)">
+  <h1 class="text-4xl font-black text-white mb-2">🏦 资金管理 BRM</h1>
+  <p class="text-emerald-100 text-lg">Doug Polk 十步之⑧ · 升级路线 · 降级纪律 · 波动管理</p>
+  <div class="flex gap-4 mt-4 text-sm text-white">
+    <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full">💰 当前 BR: ~$1,240</span>
+    <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full">📏 主力级别: $3-$10</span>
+    <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full">🎯 目标: $2,000→$10</span>
+  </div>
+</div>
+
+<div class="card p-6 mb-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">📏 三级升降系统</h2>
+  <div class="grid grid-cols-3 gap-4 text-center text-sm mb-4">
+    <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+      <p class="font-black text-lg text-blue-700">🔵 $3-$5 主力</p>
+      <p class="text-xs text-blue-600 mt-1">BR: $500-$1,500<br>买入上限: 1% BR<br>场次: 不限<br>目标: 堆量练 FT</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4 border border-amber-300">
+      <p class="font-black text-lg text-amber-700">🟡 $5-$10 探测</p>
+      <p class="text-xs text-amber-600 mt-1">BR: $1,500-$3,000<br>买入上限: 1.5% BR<br>场次: 1-2/天<br>目标: 测 reg 强度</p>
+    </div>
+    <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+      <p class="font-black text-lg text-red-700">🔴 $15-$25 特种</p>
+      <p class="text-xs text-red-600 mt-1">BR: $3,000+<br>买入上限: 2% BR<br>场次: 1/周<br>目标: 甜点赛一击</p>
+    </div>
+  </div>
+
+  <div class="bg-green-50 rounded-xl p-4 mb-3 text-sm">
+    <p class="font-black text-green-800 mb-2">⬆️ 升级触发线（必须同时满足）</p>
+    <ol class="list-decimal ml-5 space-y-1 text-green-700">
+      <li><strong>BR 达标</strong> — 达到目标级别的最低 BR 线</li>
+      <li><strong>记录证明</strong> — 现级别 20 场以上 ROI>0%（Doug: "有记录证明你值得"）</li>
+      <li><strong>心态绿灯</strong> — 没有 tilt、没有追损、连续 3 天不超 buy-in 2%</li>
+    </ol>
+  </div>
+
+  <div class="bg-red-50 rounded-xl p-4 mb-3 text-sm">
+    <p class="font-black text-red-800 mb-2">⬇️ 降级触发线（任一触发即降）</p>
+    <ol class="list-decimal ml-5 space-y-1 text-red-700">
+      <li><strong>BR 跌破</strong> — 降到下一级 BR 区间</li>
+      <li><strong>单日 -5 buy-in</strong> — 当天自动降级，次日恢复评估</li>
+      <li><strong>连输 8 场</strong> — 不管 BR 多少，降级冷静</li>
+    </ol>
+  </div>
+</div>
+
+<div class="card p-6 mb-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">📊 你的升级路线图</h2>
+  <table class="w-full text-sm">
+    <thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="p-3 text-left">BR 里程碑</th><th class="p-3 text-center">主力级别</th><th class="p-3 text-center">探测级别</th><th class="p-3 text-left">动作</th></tr></thead>
+    <tr class="border-b bg-blue-50"><td class="p-3 font-black text-blue-700">$500-$1,500</td><td class="p-3 text-center font-bold">$3-$5</td><td class="p-3 text-center">—</td><td class="p-3 text-xs">← <strong>你现在在这里</strong></td></tr>
+    <tr class="border-b"><td class="p-3 font-bold">$1,500-$2,000</td><td class="p-3 text-center font-bold">$3-$5</td><td class="p-3 text-center">$8-$10 MTT</td><td class="p-3 text-xs">加 1 场 $10/天 · 混合打</td></tr>
+    <tr class="border-b"><td class="p-3 font-bold">$2,000-$3,000</td><td class="p-3 text-center font-bold">$8-$10</td><td class="p-3 text-center">—</td><td class="p-3 text-xs">主力转 $10 · $3 变练 FT</td></tr>
+    <tr class="border-b"><td class="p-3 font-bold">$3,000+</td><td class="p-3 text-center font-bold">$10-$15</td><td class="p-3 text-center">$25 甜点</td><td class="p-3 text-xs">$25 每周一次甜点赛</td></tr>
+  </table>
+</div>
+
+<div class="card p-6 mb-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">🧠 Doug 的原话</h2>
+  <div class="space-y-3 text-sm italic">
+    <div class="bg-gray-100 p-4 rounded-xl">"当你有足够的资金时，寻找机会冲击更高级别。因为这才是长期目标。找到有一天玩更高筹码的方法，在牌局中每小时收益极佳。"</div>
+    <div class="bg-gray-100 p-4 rounded-xl">"当你升段时，不要改变已有的成功框架。即使只是低一级筹码，扑克始终是同一游戏。拿到的牌数相同，一切都在大底池中。保持同样的思维。"</div>
+  </div>
+</div>
+
+<div class="card p-6 bg-white" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">⚠️ 纪律红线</h2>
+  <div class="grid grid-cols-2 gap-4 text-sm">
+    <div class="bg-red-50 p-4 rounded-xl border border-red-200"><p class="font-black text-red-700">🚫 绝不越级</p><p class="text-xs text-red-600 mt-1">BR $1,200 打 $25 = 自杀。任何级别买入不能超过 BR 的 2%。</p></div>
+    <div class="bg-red-50 p-4 rounded-xl border border-red-200"><p class="font-black text-red-700">🚫 输了不追</p><p class="text-xs text-red-600 mt-1">同一级别连输 3 场 → 停。0613 的教训：不要在深夜追损。</p></div>
+    <div class="bg-red-50 p-4 rounded-xl border border-red-200"><p class="font-black text-red-700">🚫 赢了不飘</p><p class="text-xs text-red-600 mt-1">赢了一场不能马上跳级。Doug："不要改变已有的成功框架"。</p></div>
+    <div class="bg-red-50 p-4 rounded-xl border border-red-200"><p class="font-black text-red-700">🚫 不裸奔</p><p class="text-xs text-red-600 mt-1">没有 tracker 记录的比赛不算。每场必录。</p></div>
+  </div>
+</div>
+
+<p class="text-center text-xs text-gray-400 py-8">资金管理 BRM · 锦标赛特训营 · 2026-06-16</p>
+</div></body></html>
