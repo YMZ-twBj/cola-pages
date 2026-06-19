@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍀 Lucky Poker — 锦标赛特训营</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+  body{font-family:'Noto Sans SC',sans-serif;background:#f0fdf4}
+  .card{background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
+  .sidebar{position:fixed;top:0;left:0;width:250px;height:100vh;background:linear-gradient(180deg,#f0fdf4 0%,#dcfce7 50%,#fef3c7 100%);border-right:2px solid #22c55e;overflow-y:auto;z-index:200;box-shadow:2px 0 20px rgba(34,197,94,0.1)}
+  .sidebar-header{padding:24px 20px 16px;border-bottom:2px solid #86efac;position:sticky;top:0;background:linear-gradient(180deg,#f0fdf4,#dcfce7);z-index:10}
+  .sidebar-header h3{font-size:18px;font-weight:900;color:#15803d}
+  .sidebar-header .subtitle{font-size:11px;color:#166534;margin-top:4px}
+  .nav-section-title{padding:14px 20px 4px;font-size:11px;font-weight:800;color:#16a34a;letter-spacing:1px;text-transform:uppercase}
+  .nav-link{display:block;padding:6px 20px;color:#166534;text-decoration:none;font-size:13px;transition:all 0.15s;border-left:3px solid transparent}
+  .nav-link:hover{color:#15803d;background:rgba(34,197,94,0.1);border-left-color:#22c55e}
+  .nav-link.sub{padding-left:34px;font-size:12px;color:#166534}
+  .main-wrap{margin-left:250px;flex:1;max-width:1100px;padding:40px 50px 80px}
+  .lucky-glow{text-shadow:0 0 20px rgba(34,197,94,0.6),0 0 40px rgba(250,204,21,0.3)}
+  .jackpot-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(34,197,94,0.2)}
+  @keyframes shimmer{0%,100%{opacity:0.6}50%{opacity:1}}
+  .shimmer{animation:shimmer 2s ease-in-out infinite}
+  @keyframes floatUp{0%{transform:translateY(20px);opacity:0}100%{transform:translateY(0);opacity:1}}
+  .float-up{animation:floatUp 0.6s ease-out}
+</style>
+</head>
+<body style="display:flex;margin:0;min-height:100vh">
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" style="text-decoration:none"><h3>🏆 锦标赛特训营</h3></a>
+    <p class="subtitle">Tournament Academy</p>
+    <p class="subtitle" style="font-size:10px;color:#166534">5th / 1,444 · $2.50→$120</p>
+  </div>
+  <div class="nav-section-title">🎯 快速导航</div>
+  <a href="index.html#hero" class="nav-link">🏠 首页</a>
+  <a href="index.html#basics" class="nav-link">🎲 第一关：锦标赛入门</a>
+  <a href="index.html#stages" class="nav-link sub">📋 十阶段作战地图</a>
+  <a href="index.html#preflop" class="nav-link">📐 翻前开池三维框架</a>
+  <a href="index.html#icm" class="nav-link">🧠 第二关：ICM决策体系</a>
+  <a href="index.html#hu" class="nav-link">⚔️ 第三关：Heads-up</a>
+  <a href="index.html#hero-call" class="nav-link">🔍 第四关：Hero Call</a>
+  <a href="index.html#live-mtt" class="nav-link">🎭 第五关：现场锦标赛</a>
+  <div class="nav-section-title">📋 Case Study 复盘</div>
+  <a href="case-study-0617.html" class="nav-link">🌧️ 6/17 Cooler Day</a>
+  <a href="case-study-0616.html" class="nav-link">🔥 6/16 · $122深跑</a>
+  <a href="case-study-0615-mtt.html" class="nav-link">📅 6/15 · +$57</a>
+  <a href="case-study-5th-1444.html" class="nav-link">👑 5th/1444</a>
+  <a href="case-study-48th-hyper.html" class="nav-link">📊 48th Hyper</a>
+  <div class="nav-section-title">🍀 幸运时刻</div>
+  <a href="lucky-poker.html" class="nav-link" style="font-weight:700;color:#15803d;background:rgba(34,197,94,0.12);border-left-color:#22c55e">🍀 Lucky Poker</a>
+  <div class="nav-section-title">🛠️ 工具箱</div>
+  <a href="br-seven-game.html" class="nav-link">⚡ BR 十场特训</a>
+  <a href="tracker.html" class="nav-link">📊 锦标赛战绩分析器</a>
+  <a href="ft-strategy.html" class="nav-link">🏆 FT 决赛桌策略</a>
+  <a href="brm.html" class="nav-link">🏦 资金管理 BRM</a>
+  <a href="study-routine.html" class="nav-link">📖 学习 Routine</a>
+  <a href="push-fold.html" class="nav-link">🎯 短码 Push-Fold</a>
+</nav>
+
+<div class="main-wrap">
+
+<!-- Hero -->
+<div class="card p-8 mb-6" style="background:linear-gradient(135deg,#064e3b 0%,#059669 40%,#10b981 70%,#facc15 100%)">
+  <div class="flex items-center gap-4 mb-2">
+    <span style="font-size:3rem" class="shimmer">🍀</span>
+    <div>
+      <h1 class="text-4xl font-black text-white lucky-glow">Lucky Poker</h1>
+      <p class="text-green-100 text-lg">四组 Bad Beat Jackpot · KT 葫芦 · Flipout 15th/13,028</p>
+    </div>
+  </div>
+  <div class="flex gap-4 mt-4 text-sm text-white flex-wrap">
+    <span class="bg-white/20 px-3 py-1 rounded-full">💰 累计奖池: $2,369.81+</span>
+    <span class="bg-white/20 px-3 py-1 rounded-full">🍀 四组 Jackpot</span>
+    <span class="bg-white/20 px-3 py-1 rounded-full">🏆 Flipout 15th</span>
+    <span class="bg-white/20 px-3 py-1 rounded-full">📅 Apr–Jun 2026</span>
+  </div>
+</div>
+
+<!-- Summary Stats -->
+<div class="card p-6 mb-6">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">📊 Lucky Stats</h2>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+    <div class="bg-green-50 rounded-xl p-4">
+      <p class="text-3xl font-black text-green-700">4</p>
+      <p class="text-xs text-green-600 mt-1">Bad Beat<br>Jackpots</p>
+    </div>
+    <div class="bg-amber-50 rounded-xl p-4">
+      <p class="text-3xl font-black text-amber-700">$2,370</p>
+      <p class="text-xs text-amber-600 mt-1">Jackpot<br>合计</p>
+    </div>
+    <div class="bg-yellow-50 rounded-xl p-4">
+      <p class="text-3xl font-black text-yellow-700">$592</p>
+      <p class="text-xs text-yellow-600 mt-1">平均<br>每次</p>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-4">
+      <p class="text-3xl font-black text-blue-700">15th</p>
+      <p class="text-xs text-blue-600 mt-1">Flipout<br>/ 13,028</p>
+    </div>
+    <div class="bg-purple-50 rounded-xl p-4">
+      <p class="text-3xl font-black text-purple-700">C$300</p>
+      <p class="text-xs text-purple-600 mt-1">+ $150<br>门票</p>
+    </div>
+  </div>
+</div>
+
+<!-- What is Bad Beat Jackpot -->
+<div class="card p-6 mb-6">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">💡 Bad Beat Jackpot 是什么？</h2>
+  <div class="bg-amber-50 rounded-xl p-4 text-sm text-amber-900 leading-relaxed">
+    <p><strong>Bad Beat Jackpot</strong> 是 GG Poker 的彩池：当你在 NL10 桌上用 <strong>AAATT 或更强的牌</strong> 输掉时，你（被歪的一方）拿走奖池的 <strong>60%</strong>，赢你的对手拿 <strong>18%</strong>，桌上其他人平分 <strong>22%</strong>。</p>
+    <p class="mt-2">触发条件：双方手牌都用到了 ≥ TT 的 pocket pair，且败方手牌 ≥ AAATT（三条 A 带一对 T 以上）。你的 TT 输给 QQ on AAAQx——恭喜，$650+ 入账。</p>
+    <p class="mt-2 text-green-700 font-bold">本质：AA 跑输 KK 时你"心累"——但 AAATT 跑输 AAAQQ 时你拿 6 个 buy-in 走人。系统用波动还你钱。</p>
+  </div>
+</div>
+
+<!-- Jackpot Gallery -->
+<div class="card p-6 mb-6">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">🍀 Bad Beat Jackpot Gallery</h2>
+
+  <!-- Jackpot 1: 2026-04-16 -->
+  <div class="jackpot-card card p-6 mb-4 border-2 border-green-100 hover:border-green-400" style="transition:all 0.2s">
+    <div class="flex gap-6 flex-wrap">
+      <div class="flex-1 min-w-[250px]">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">🍀</span>
+          <span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">2026-04-16</span>
+          <span class="text-xs text-gray-400">NL10 $0.05/$0.10</span>
+        </div>
+        <h3 class="text-xl font-black text-gray-800 mb-2">$656 · AAA TT vs AAA QQ</h3>
+        <div class="text-sm text-gray-600 space-y-1">
+          <p>🏆 Winner (被歪): <strong>ImBoy</strong> T♦T♥ → $656</p>
+          <p>😈 赢家: <strong>TTil_i_Crash</strong> Q♠Q♥ → $196.80</p>
+          <p>👥 其余玩家各 → $52.48</p>
+          <p class="mt-1 text-xs text-gray-400">面板: A♠A♦Q♦7♦A♣ · 总奖池 $1,062.72</p>
+        </div>
+      </div>
+      <div class="w-full md:w-64">
+        <img src="img/lucky/jackpot-0416.png" alt="Jackpot 04-16" class="w-full rounded-lg shadow" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- Jackpot 2: 2026-05-04 (USER) -->
+  <div class="jackpot-card card p-6 mb-4 border-2 border-green-300 hover:border-green-500" style="transition:all 0.2s;background:linear-gradient(135deg,#ffffff,#f0fdf4)">
+    <div class="flex gap-6 flex-wrap">
+      <div class="flex-1 min-w-[250px]">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">🎯</span>
+          <span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">2026-05-04</span>
+          <span class="text-xs font-bold text-white bg-green-600 px-2 py-1 rounded">WizardYMC</span>
+          <span class="text-xs text-gray-400">NL10 $0.05/$0.10</span>
+        </div>
+        <h3 class="text-xl font-black text-gray-800 mb-2">$573.54 · 你的 AT 被 AQ 歪 🎉</h3>
+        <div class="text-sm text-gray-600 space-y-1">
+          <p>🏆 你 (被歪): <strong>A♣T♥</strong> on 10♦Q♦2♦A♥A♣ → <strong>$573.54</strong></p>
+          <p>😈 赢家: <strong>duncanrlk</strong> A♠Q♠ → $172.06</p>
+          <p>👥 其余玩家各 → $45.88</p>
+          <p class="mt-1 text-xs text-gray-400">面板 AAA + QT · 总奖池 $929.12 · 只发一次</p>
+        </div>
+      </div>
+      <div class="w-full md:w-64">
+        <img src="img/lucky/jackpot-0504.png" alt="Jackpot 05-04" class="w-full rounded-lg shadow" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- Jackpot 3: 2026-05-26 (USER) -->
+  <div class="jackpot-card card p-6 mb-4 border-2 border-green-300 hover:border-green-500" style="transition:all 0.2s;background:linear-gradient(135deg,#ffffff,#f0fdf4)">
+    <div class="flex gap-6 flex-wrap">
+      <div class="flex-1 min-w-[250px]">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">🎯</span>
+          <span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">2026-05-26</span>
+          <span class="text-xs font-bold text-white bg-green-600 px-2 py-1 rounded">WizardYMC</span>
+          <span class="text-xs text-gray-400">NL10 $0.05/$0.10</span>
+        </div>
+        <h3 class="text-xl font-black text-gray-800 mb-2">$557.27 · 你的 TT 被 JJ 歪 🎉</h3>
+        <div class="text-sm text-gray-600 space-y-1">
+          <p>🏆 你 (被歪): <strong>T♣T♦</strong> on 8♥7♥A♠A♥A♣ → <strong>$557.27</strong></p>
+          <p>😈 赢家: <strong>clt86</strong> J♠J♣ → $167.18</p>
+          <p>👥 其余玩家各 → $44.58</p>
+          <p class="mt-1 text-xs text-gray-400">面板 AAA · 奖池 5,572.7 BB</p>
+        </div>
+      </div>
+      <div class="w-full md:w-64">
+        <img src="img/lucky/jackpot-0526.png" alt="Jackpot 05-26" class="w-full rounded-lg shadow" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- Jackpot 4: 2026-06-09 -->
+  <div class="jackpot-card card p-6 mb-4 border-2 border-green-100 hover:border-green-400" style="transition:all 0.2s">
+    <div class="flex gap-6 flex-wrap">
+      <div class="flex-1 min-w-[250px]">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">🍀</span>
+          <span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">2026-06-09</span>
+          <span class="text-xs text-gray-400">NL10 $0.05/$0.10</span>
+        </div>
+        <h3 class="text-xl font-black text-gray-800 mb-2">$583 · JJ vs QQ on AAA</h3>
+        <div class="text-sm text-gray-600 space-y-1">
+          <p>🏆 Winner (被歪): <strong>DominikDCoco</strong> A♠A♥A♣J♠J♦ → $583</p>
+          <p>😈 赢家: <strong>alwayslucky777</strong> A♣A♦A♠Q♦Q♥ → $174.90</p>
+          <p>👥 其余玩家各 → $46.64</p>
+        </div>
+      </div>
+      <div class="w-full md:w-64">
+        <img src="img/lucky/jackpot-0609.png" alt="Jackpot 06-09" class="w-full rounded-lg shadow" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-green-50 rounded-xl p-4 text-sm text-green-800">
+    <p>🎯 <strong>标绿色的是你的 Jackpot</strong>——TT 输 QQ、AT 输 AQ。每一次都是"输了牌，赢了钱"。</p>
+  </div>
+</div>
+
+<!-- KT Full House -->
+<div class="card p-6 mb-6">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">👑 KT 葫芦 $19.50 · 常规桌</h2>
+  <div class="flex gap-6 flex-wrap">
+    <div class="flex-1 min-w-[250px]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">2026-05-02</span>
+        <span class="text-xs font-bold text-white bg-green-600 px-2 py-1 rounded">WizardYMC</span>
+      </div>
+      <p class="text-sm text-gray-600">面板: 4♦9♣K♦T♦K♠ — K♣T♥ 葫芦吃 Q♥J♠。</p>
+      <p class="text-sm text-gray-500 mt-1">$19.50 底池 · NL10 · 全场最大锅</p>
+    </div>
+    <div class="w-full md:w-72">
+      <img src="img/lucky/hand-0502-kt-fullhouse.png" alt="KT Full House" class="w-full rounded-lg shadow" loading="lazy">
+    </div>
+  </div>
+</div>
+
+<!-- Tournament: Flipout -->
+<div class="card p-6 mb-6" style="background:linear-gradient(135deg,#3b0764,#7c3aed,#a78bfa)">
+  <h2 class="text-2xl font-black text-white mb-4">🏆 #ThanksGG Flipout · 15th / 13,028</h2>
+  <div class="flex gap-6 flex-wrap">
+    <div class="flex-1 min-w-[250px]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold text-purple-200 bg-purple-800/30 px-2 py-1 rounded">2026-06-19</span>
+        <span class="text-xs text-purple-200">Daily $100,000 · 用时 5:42</span>
+      </div>
+      <div class="text-white space-y-2">
+        <p class="text-3xl font-black">C$300 + $150 门票</p>
+        <p class="text-lg">WSOP Express Step 4 Ticket</p>
+        <p class="text-sm text-purple-200 mt-1">开局 5 击杀 · 13,028 人杀到第 15 名 · 前 0.12%</p>
+      </div>
+    </div>
+    <div class="w-full md:w-72">
+      <img src="img/lucky/tourney-0619-lucky15.png" alt="Flipout 15th" class="w-full rounded-lg shadow-lg" loading="lazy">
+    </div>
+  </div>
+</div>
+
+<!-- Jackpot Math -->
+<div class="card p-6 mb-6">
+  <h2 class="text-2xl font-black text-gray-800 mb-4">🧮 Jackpot 经济学</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+    <div class="bg-amber-50 rounded-xl p-4">
+      <p class="font-black text-amber-800 mb-2">你的两组合计</p>
+      <p class="text-2xl font-black text-amber-700">$1,130.81</p>
+      <p class="text-xs text-amber-600 mt-1">05/04 $573.54 + 05/26 $557.27</p>
+      <p class="text-xs text-amber-600">= 113 组 NL10 buy-in</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-4">
+      <p class="font-black text-green-800 mb-2">全页总计</p>
+      <p class="text-2xl font-black text-green-700">$2,369.81</p>
+      <p class="text-xs text-green-600 mt-1">四组 Jackpot 合计 + KT 葫芦 $19.50</p>
+      <p class="text-xs text-green-600">+ Flipout C$300 + $150 门票</p>
+    </div>
+  </div>
+  <div class="mt-4 bg-gray-50 rounded-xl p-4 text-sm text-gray-600">
+    <p><strong>Jackpot 不是技术——是运气税返还。</strong></p>
+    <p class="mt-1">每手牌你都交 rake。Bad Beat Jackpot 里的钱是所有 NL10 玩家共同积累的。当你的 TT 被 QQ 歪在 AAA 面板上时，系统把你交的 rake 连本带利还你。不是运气好，是终于轮到你收租了。</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="text-center text-xs text-gray-400 mt-8">
+  <p>🍀 Lucky Poker · 锦标赛特训营 · 2026 Apr–Jun</p>
+  <a href="index.html" class="text-green-600 hover:text-green-800">← 返回首页</a>
+</div>
+
+</div></body></html>
