@@ -497,6 +497,7 @@
   <main class="main">
     <div class="hero">
       <h1>扑克深度学习笔记 — NL10 6-max 线上（公开版）</h1>
+<div style="position:sticky;top:0;z-index:50;background:#0f1424ee;backdrop-filter:blur(6px);border-bottom:1px solid #243049;padding:10px 16px;text-align:center;font-size:14px;margin-bottom:8px">📖 <a href="../nl10-poker-notes/" style="color:#5b8def;text-decoration:none;font-weight:700">NL10 扑克笔记（主站）</a> &nbsp;·&nbsp; 🏆 <a href="../tournament-academy/" style="color:#e94560;text-decoration:none;font-weight:700">MTT 锦标赛学院</a></div>
       <div class="hero-meta">
         <span><span class="dot dot-green"></span> 40 章</span>
         <span><span class="dot dot-cyan"></span> NL10 6-Max 现金桌</span>
@@ -551,6 +552,8 @@
             <pre><code>45 分钟打牌 → 15 分钟完全离开电脑<br><br>为什么：扑克是智力游戏。注意力周期 ≈ 45 分钟。<br>45 分钟后决策品质直线下降。<br>&quot;&quot;&quot;<br><br>执行细则：<br>- 手机设 45 分钟倒计时<br>- 铃响 → 4 张桌全部 sit out next hand<br>- 离开电脑，做物理动作（水、拉伸、刷牙）<br>- 15 分钟内如果还想「把这手打完」→ 再延长 15 分钟（tilt 边缘信号）<br>- 回来重新开始新的 45 分钟 block</code></pre>
             <blockquote>核心发现：「之前的问题不是一个 session 没克制好的问题……当你精力耗损了之后，你的决策品质就变差了」——这是这两天最成熟的一句话。你的真正敌人不是 bad beat，是第三个小时的自己。</blockquote>
             <h4>(3) Tilt 四阶段</h4>
+<figure style="margin:18px 0"><img src="img/tilt-gauge.svg" alt="Tilt 四阶段风险条" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">Tilt 四阶段风险条 · 配合 -3 组止损线</figcaption></figure>
+
             <table>
               <thead>
                 <tr>
@@ -738,6 +741,8 @@
             <p><strong>实操：</strong>不要再问「我这手牌强不强」。问「我的范围在这个牌面上强不强」。范围比你大，牌比你老。</p>
             <hr>
             <h4>(2) 概率论入门：Outs、胜率与赔率</h4>
+<figure style="margin:18px 0"><img src="img/outs-equity.svg" alt="Outs 到胜率曲线" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">Outs → 胜率（转牌 / 河牌）· 规则 2/4 的精确版</figcaption></figure>
+
             <h4>Outs（补牌）</h4>
             <p>Outs = 能让你反超的牌的数量。</p>
             <table>
@@ -1591,6 +1596,8 @@ Turn 5♦ → check-call 2.1 → River 6♦ → check-fold all-in
       </section>
       <section id="9-军争篇ipoop--位置博弈与信息差" class="chapter">
         <h2>9. 军争篇：IP/OOP — 位置博弈与信息差</h2>
+<figure style="margin:18px 0"><img src="img/position-winrate.svg" alt="位置赢率示意" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">位置赢率示意 (bb/100) · 越后位越高，盲位通常为负</figcaption></figure>
+
             <blockquote><strong>孙子曰：「凡先处战地而待敌者佚，后处战地而趋战者劳。」「后人发，先人至，此知迂直之计者也。」</strong><br><br>IP（In Position）就是「先处战地」——你让对手先行动，暴露信息，你再决策。OOP（Out of Position）就是「趋战」——你先暴露，对手再下手。军争篇告诉你：<strong>位置的战争不是比谁先动，是比谁先看到对方的牌。</strong></blockquote>
             <h4>(1) NL10 位置战争的残酷数学</h4>
             <pre><code>6/1-6/3 位置数据趋势:
@@ -1743,6 +1750,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
       </section>
       <section id="9-翻前范围详解" class="chapter">
         <h2>9. 翻前范围详解</h2>
+<figure style="margin:18px 0"><img src="img/nl10-range-ladder.png" alt="NL10 6-max 范围阶梯图" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">NL10 6-max 翻前范围阶梯（真实导出）</figcaption></figure><figure style="margin:18px 0"><img src="img/preflop_range_btn.svg" alt="BTN 开池范围" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">BTN 开池范围热图（示例）</figcaption></figure><figure style="margin:18px 0"><img src="img/preflop_range_utg.svg" alt="UTG 开池范围" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">UTG 开池范围热图（示例）· 与 BTN 对比可见位置对宽度的 ~3 倍影响</figcaption></figure>
+
             <h4>(1) Axs 面对 3-bet 的完整决策表</h4>
             <table>
               <thead>
@@ -2813,6 +2822,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <ul><li><strong>坐对桌比 GTO 精确重要 10 倍。</strong> 你在 22/18 的全 reg 桌上打 GTO 完美 = 微利。你在有两条鱼的桌上犯两个 GTO 错 = 仍然大赚。</li><li><strong>VPIP 40%+ = 坐下。</strong> 不需要分析更多。VPIP 40% 的玩家在 NL10 就是送钱的。</li><li><strong>鱼走了你也走。</strong> 桌上有鱼 → 打。鱼走了 → 换下一张。你不是来挑战 reg 的——你是来收鱼的。</li><li><strong>短码多 = 换。</strong> 3 个以上短码 = 有效筹码不够 = 你的技术优势被浅筹码强行抹平。</li><li><strong>Waitlist 可以当情报。</strong> 如果等待列表清一色 reg 标签 = 那张桌的鱼刚走。跳过。</li></ul>
       </section>      <section id="18-进阶-玩家分类与针对性策略" class="chapter">
         <h2>18. 进阶：玩家分类与针对性策略</h2>
+<figure style="margin:18px 0"><img src="img/player-quadrant.jpeg" alt="玩家象限图" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">玩家四象限分类（真实图）</figcaption></figure>
+
             <blockquote>这一章是旧版四象限系统的升级。旧版只告诉你「他是什么类型」和「一句话怎么打」。<br>进阶版加上了：翻前具体怎么调、翻后怎么剥削、他的弱点在哪、多人组合怎么切换。</blockquote>
             <h4>(1) 四象限速览</h4>
             <table>
