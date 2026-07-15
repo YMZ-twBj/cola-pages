@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -445,8 +445,58 @@
       }
     }
   </style>
+/* === P1-ENHANCE === */
+
+/* === P1-ENHANCE === */
+html{ scroll-behavior:smooth; }
+#p1-progress{ position:fixed; top:0; left:0; height:3px; width:0; z-index:10000;
+  background:linear-gradient(90deg,#00d4ff,#00ff88); transition:width .08s linear; }
+#p1-theme-toggle{ position:fixed; top:14px; right:16px; z-index:10000; width:40px; height:40px;
+  border-radius:50%; border:1px solid var(--border,#2a2f45); background:var(--bg-card,#161c26);
+  color:var(--text-primary,#c9d1d9); cursor:pointer; font-size:17px; display:flex;
+  align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,.35); }
+#p1-top{ position:fixed; bottom:22px; right:16px; z-index:10000; width:42px; height:42px;
+  border-radius:50%; border:1px solid var(--border,#2a2f45); background:var(--bg-card,#161c26);
+  color:var(--text-primary,#c9d1d9); cursor:pointer; font-size:18px; display:none;
+  align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,.35); }
+#p1-top.show{ display:flex; }
+.tbl-scroll{ width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; margin:1em 0; }
+.tbl-scroll table{ width:100%; }
+a.nav-link.active{ color:#00d4ff !important; font-weight:700;
+  border-left-color:#00d4ff !important; background:rgba(0,212,255,.10); }
+.p1-hamburger{ position:fixed; top:12px; left:14px; z-index:9998; display:none; width:42px; height:42px;
+  border-radius:8px; border:1px solid #fbbf24; background:#fff7ed; color:#b45309; font-size:20px;
+  cursor:pointer; align-items:center; justify-content:center; }
+.sidebar-overlay-p1{ position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9996; display:none; }
+.sidebar-overlay-p1.show{ display:block; }
+@media (max-width:1024px){
+  .p1-hamburger{ display:flex; }
+  .sidebar{ transform:translateX(-100%); transition:transform .3s ease; z-index:9997; }
+  .sidebar.open{ transform:none; }
+  .main-wrap{ margin-left:0 !important; padding:70px 18px 60px !important; }
+  #p1-theme-toggle{ top:12px; right:12px; }
+}
+
+
+html[data-theme="light"]{
+  --bg-primary:#eef1f5; --bg-secondary:#ffffff; --bg-card:#ffffff;
+  --bg-table-header:#e7ecf2; --bg-table-row:#ffffff; --bg-table-alt:#f5f7fa;
+  --text-primary:#1b2230; --text-secondary:#465061; --text-muted:#7a8694;
+  --border:#d6dce4; --shadow:0 4px 20px rgba(20,30,50,.10);
+  --felt-green:#1a3a2a; --felt-dark:#0d1f15;
+}
+html[data-theme="light"] .sidebar{
+  --bg-sidebar:#0d1117; --text-primary:#c9d1d9; --text-secondary:#8b949e;
+  --text-muted:#545d68; --border:#21262d;
+}
+
 </head>
 <body>
+
+<div id="p1-progress"></div>
+<button id="p1-theme-toggle" title="切换 深色 / 浅色 (Dark / Light)">☀️</button>
+<button id="p1-top" title="回到顶部 (Back to top)">↑</button>
+
   <button class="hamburger" onclick="toggleSidebar()">☰</button>
   <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
 
@@ -516,7 +566,8 @@
       <section id="1-心态与纪律" class="chapter">
         <h2>1. 心态与纪律</h2>
             <h4>(1) 止盈止损系统</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>触发线</th>
@@ -547,6 +598,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>核心理念：<strong>你赚的不是钱，是取款权。今天不取，明天清零。</strong></blockquote>
             <h4>(2) 45/15 时段管理</h4>
             <pre><code>45 分钟打牌 → 15 分钟完全离开电脑<br><br>为什么：扑克是智力游戏。注意力周期 ≈ 45 分钟。<br>45 分钟后决策品质直线下降。<br>&quot;&quot;&quot;<br><br>执行细则：<br>- 手机设 45 分钟倒计时<br>- 铃响 → 4 张桌全部 sit out next hand<br>- 离开电脑，做物理动作（水、拉伸、刷牙）<br>- 15 分钟内如果还想「把这手打完」→ 再延长 15 分钟（tilt 边缘信号）<br>- 回来重新开始新的 45 分钟 block</code></pre>
@@ -554,7 +606,8 @@
             <h4>(3) Tilt 四阶段</h4>
 <figure style="margin:18px 0"><img src="img/tilt-gauge.svg" alt="Tilt 四阶段风险条" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">Tilt 四阶段风险条 · 配合 -3 组止损线</figcaption></figure>
 
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>阶段</th>
@@ -590,10 +643,12 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>你的日记摘要：「再玩是猪」「又努力看看！又被清空了」「天天 set over set…」— 这不是运气不好。这是你在 🔵🟡 阶段没有刹车。</blockquote>
             <h4>(4) 连损强制暂停（第三道防线）</h4>
             <blockquote>2026-05-19 深夜 R&amp;C 教训：不到 30 分钟掉 5 组，不是方差，是自动驾驶关掉了判断力。深夜状态差 + 追损心态 = 送钱组合。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>触发线</th>
@@ -619,6 +674,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>和 1.1 止损的区别</strong>：1.1 是 session 总止损（-3 组关桌）。1.5 是<strong>连续掉</strong>——短时间内密集亏损。你可以在总账只 -2 组的情况下已经触发了连损暂停（连续两把 set over set 在 5 分钟内发生）。</blockquote>
             <hr>
             <hr>
@@ -627,7 +683,8 @@
             <blockquote><strong>核心原则</strong>：扑克是技术游戏，但资金管理是生存游戏。技术决定你赢多少，资金管理决定你能不能留到赢的时候。</blockquote>
             <h4>(1) 三个账户原则</h4>
             <p>NL5000 教练的核心框架——三个完全隔离的账户：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>账户</th>
@@ -653,10 +710,12 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>为什么隔离：人的大脑会骗自己。「先从储蓄拿 100 刀，赢回来就还」→ 三周后储蓄少了 500 刀，扑克账户清空。两个账户一起死。</blockquote>
             <h4>(2) 升级降级规则</h4>
             <p>级别升降不是感觉——是数字。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>升级条件</th>
@@ -674,7 +733,9 @@
                 </tr>
               </tbody>
             </table>
-            <table>
+</div>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>降级触发</th>
@@ -696,13 +757,15 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>降级不是失败——降级是止损。留在承受不起的级别才是失败。</blockquote>
             <h4>(3) Shot-taking 策略</h4>
             <p>想尝试更高级别？可以。但要有规则。</p>
             <pre><code>准备：3-5 buy-ins 当作「冒险预算」<br>规则：赢 → 留下的 buy-ins 就是新级别的启动资金<br>      输光这 3-5 组 → 回原级别。不追、不补、不借。<br>      一次 shot 期不超过 5 个 session。</code></pre>
             <blockquote>Shot-taking 不是升级——是侦察。你的目标不是「在 NL50 稳定盈利」，是「看看 NL50 的人怎么打」。输掉的 3-5 组是你付的学费。</blockquote>
             <h4>(4) 下风期应对</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>行为</th>
@@ -728,6 +791,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>下风期的定义不是「输了多少组」，是「你开始觉得你该赢了」的那一刻。一旦这个念头出现——<strong>你的判断力已经关了。</strong></blockquote>
             <h4>(5) NL10 实战要点</h4>
             <ul><li><strong>55 buy-ins = 健康。</strong> $550 扑克账户打 NL10 = 安全。30 buy-ins 以下 = 危险信号。</li><li><strong>别动储蓄。</strong> 哪怕你觉得「就差一点就回本了」——那不是回本，是加注送。</li><li><strong>赢钱了不提。</strong> 扑克账户是工具，不是工资。复利效应在扑克不靠赢率——靠 buy-ins 厚度。</li><li><strong>每 100 手记录一次账户余额。</strong> 不只是看输赢——看 swing。20 buy-in swing 要停下来问自己：「我在打牌还是在赌？」</li></ul>
@@ -745,7 +809,8 @@
 
             <h4>Outs（补牌）</h4>
             <p>Outs = 能让你反超的牌的数量。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你的手</th>
@@ -786,6 +851,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>快速换算：Out × 4%（翻牌）或 × 2%（转牌）≈ 胜率。</strong></p>
             <ul><li>翻牌：你有 9 个 out → 9×4 = <strong>36%胜率</strong></li><li>转牌只剩一张：9×2 = <strong>18%胜率</strong></li></ul>
             <hr>
@@ -811,7 +877,8 @@
         <h2>4. 基础概念二：范围与 GTO</h2>
             <h4>(1) 范围：你真正的底牌</h4>
             <p>你拿到 AA 的时候，范围显示「这是他的 top 1%」。你拿到 76s 的时候，同一个范围显示「这可能是他的 bottom 10%」。<strong>范围是你在对手眼中的身份。</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你在做什么</th>
@@ -837,6 +904,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>每一个动作都在收窄你的范围。</strong> 翻前你的范围是 30%——你 open 了 30% 的手。翻后 flop c-bet——你的范围收窄到在这个牌面上该 c-bet 的那部分。转牌 barrel——更窄。河牌 bet——最窄。<strong>每一枪都在对对手说「我的范围现在只有这么宽了」。</strong></p>
             <hr>
             <h4>(2) GTO 是什么</h4>
@@ -847,7 +915,8 @@
             <p><strong>在 NL10/25，GTO 是你学习的起点——但不是你执行的终点。</strong> 你的对手不按 GTO 打，所以你也不用。你只需要知道 GTO 的基准线，然后看对手往哪边偏。</p>
             <hr>
             <h4>(3) GTO 频率速查（NL10/25 基础）</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -889,10 +958,12 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <h4>(4) 频率思维：你不需要计算到小数点</h4>
             <p>GTO 的前提是<strong>你的对手按 GTO 打</strong>。NL10/25 的对手不按。所以你只需要频率感：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你想做的</th>
@@ -918,6 +989,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>GTO 是你玩的游戏的说明书——但你不是在跟机器人打。你知道说明书，然后照着对手的型号调。</strong></blockquote>
             <hr>
       </section>      <section id="5-基础概念三-从-gto-到剥削打法" class="chapter">
@@ -928,7 +1000,8 @@
             <p><strong>剥削不是「打烂牌」。剥削是「他的漏洞是什么，我就针对那个漏洞调」。</strong></p>
             <hr>
             <h4>(2) 剥削四步法</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>步骤</th>
@@ -959,9 +1032,11 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <h4>(3) 常见偏离与对策表</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手偏离</th>
@@ -1007,9 +1082,11 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <h4>(4) 始计篇 + 兵势篇 = 剥削落地</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>始计篇（翻前）</th>
@@ -1040,6 +1117,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <h4>(5) 一句话</h4>
             <blockquote><strong>GTO 让你不被杀。剥削让你杀人。始计篇让你活到翻后。兵势篇让你活着的时候多赚。</strong> 在 NL10/25，不需要平衡——需要赢到他们不敢跟你坐同一桌。</blockquote>
@@ -1056,7 +1134,8 @@
             <p>NL10 的对手池极度不平衡——他们诈唬太少、跟注太多、4-bet 范围只有 QQ+/AK。用 GTO 混合策略对抗这样的对手，等于放弃了自己最大的优势：<strong>剥削他们的错误，而不是用平衡防守自己。</strong></p>
             <blockquote>核心认知：<strong>NL10 不是要「不被剥削」，是要「剥削对手」。对手的错误是单向的——你跟注他们就继续打，你加注他们就想看牌。翻前铁律的目的不是 GTO——是让你每一手牌在翻前就站在优势位置。</strong></blockquote>
             <h4>(2) 六条铁律</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -1104,6 +1183,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <h4>(3) 逐条详解 + 实战案例</h4>
             <p><strong>案例：QQ 4-bet vs KK 5-bet（2026-05-22 早间，-$10.00）</strong></p>
@@ -1140,7 +1220,8 @@
             <hr>
             <h4>(4) 翻前纪律检查清单</h4>
             <p>每次开桌前过一遍：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>✓</th>
@@ -1174,6 +1255,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>记住：你翻前省下的每一块钱，都是翻后不用被迫 bluff 的弹药。在 NL10，翻前纪律就是最好的剥削。</strong></blockquote>
             <blockquote>🎯 <strong>实战训练</strong>：<br>- <a href="fourbet-defend-drill.html" target="_blank">🛡 4-Bet 翻前防守（IP vs OOP）</a> — 你 3-bet 被 4-bet 推回来，FOLD/CALL/JAM？始计篇铁律的肌肉记忆训练。<br>- <a href="btn-3bet-drill.html" target="_blank">📋 BTN 面对 3-Bet</a> — BTN open → 被 3-bet，call 还是 4-bet？每条街的实战决策。</blockquote>
             <hr>
@@ -1185,7 +1267,8 @@
             <h4>(1) 为什么你的高频率牌不赚钱</h4>
             <p>回顾你的 session 数据：AA/KK 每手赢 5-10bb，AK TPTK 赢 10-15bb。但它们是你范围里拿最多的牌。真正的大锅（+50bb+）来自什么？Set、顺子、听花反超。</p>
             <p>这不是你打得不好。这是 <strong>NL10 的对手在对付透明强牌时极度高效</strong>。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你的牌</th>
@@ -1227,11 +1310,13 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>核心发现：你的 bread-and-butter 牌（AA/KK/AK/AQ）在源源不断地生产小额利润——但它们的翻后透明性封死了上限。每一手 AA 赢 8bb 的背后，是另一手 55 set 赢了 85bb。而 55 拿到的频率只是 AA 的十分之一。</strong></p>
             <blockquote>孙子曰：「善战者之胜也，无智名，无勇功。」你的 AA 赢 8bb 没有掌声。但你的 75s 四条赢 100bb 也没有——因为对手到死都不知道自己输了。</blockquote>
             <hr>
             <h4>(2) 隐形四原则</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌型</th>
@@ -1273,12 +1358,14 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>隐形度不是牌面决定的——是你的范围决定的。</strong> AA 3-bet 之后范围是透明的。76s flat 之后范围是不可读的。你拿什么牌不重要——对手以为你拿什么牌才重要。</p>
             <p>如果你的 check 永远 = 弱、你的 bet 永远 = 强，你不需要 HUD 也能被 NL10 的鱼打爆。</p>
             <p><strong>保护 check range 的意思是：你在强牌和弱牌时，都用 check 作为一部分动作线。</strong> 这意味着：</p>
             <ul><li>你 check 的时候，对手不能自动 bet——你可能在慢打</li><li>你 bet 的时候，对手不能自动弃——你可能在 bluff</li><li>你的范围在他眼里是一团雾——他只能用自己的牌力硬猜</li></ul>
             <p><strong>具体操作：</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -1309,6 +1396,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>案例：75s 四条 vs JJ（2026-05-22 晚间）</strong></p>
             <pre><code>Hero BTN 7♠5♠ open 2.5bb → BB JJ flat<br>Flop: 5♦5♥Q♦（6bb）<br>Hero bet 5bb → BB call<br><br>Turn: 5♣ （16bb，Hero 四条！）<br>Hero CHECK → BB check<br><br>River: 6♠ （16bb）<br>BB donk 11bb → Hero overbet 30bb → BB call</code></pre>
             <p>转牌那张 5 给了 Hero 四条——同时也给了 BB 葫芦。Hero 的 check 不是「错过一条街的价值」——是在买一条价值更高的街。BB 看到 check，读的故事是：「BTN 的 75s 翻牌 trip 打了一枪，转牌不敢打了 → 他没东西 → 我的 JJ 葫芦是 nuts。」</p>
@@ -1318,7 +1406,8 @@
             <blockquote>「他 bet，他强」→ 「他 check，他弱」→ 「他 raise，他超强」</blockquote>
             <p>如果你的动作线总是符合这个剧本（强牌 bet/bet/bet，弱牌 check/fold），对手不用任何 poker 知识也能把你打穿。</p>
             <p><strong>打破剧本的方法：在同一个位置、同一类牌面上，偶尔换一条动作线。</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>标准线</th>
@@ -1348,10 +1437,12 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>这不是 GTO 的混合频率——这是 NL10 的叙事管理。</strong> 你不需要平衡到 0.05bb 的 EV——你只需要让你的故事时而不按剧本走，让他猜。</p>
             <p>这是原则一和原则二的结合应用。你的 AA/KK/AK 是赢小钱的主力——但它们的默认打法（3-bet → c-bet → barrel）在帮你主动驱赶支付者。</p>
             <p><strong>调整表：</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌</th>
@@ -1382,11 +1473,13 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>每手 AA 从 5bb 提升到 15bb，比你多中一个 set 的期望值还要高。</strong></p>
             <hr>
             <h4>(3) 隐形度诊断表</h4>
             <p>每次 session 之后，问自己三个问题：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -1412,6 +1505,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>孙子曰：「微乎微乎，至于无形；神乎神乎，至于无声，故能为敌之司命。」——把你的牌力藏到对手看不到的地方。当他看不到的时候，他的 JJ 就是你的 ATM。</blockquote>
             <hr>
             <h4>(4) 总结：从「我的牌有多强」到「我的牌有多暗」</h4>
@@ -1421,7 +1515,8 @@
             <blockquote><strong>记住：你的 AA 翻出来，他弃了，你赢了 10bb。你的 75s 翻出来，他跟着你的 check 自己推了 40bb，你赢了 100bb。不是 75s 比 AA 强——是 75s 他不知道你拿 75s。</strong></blockquote>
             <blockquote>🎯 <strong>实战训练</strong>：<br>- <a href="bet-sizing-drill.html" target="_blank">🎯 下注尺寸决策</a> — 你的筹码是你的兵。干燥面多大？潮湿面多大？河牌 thin value 多大？6 种场景 + 6 个 size 选项。<br>- <a href="oop-miss-drill.html" target="_blank">💨 OOP 3-Bet 后 Miss Flop</a> — 你 3-bet 了，翻牌没中，c-bet 还是 check？OOP 最难的翻后第一步。</blockquote>
             <h4>(5) 开池尺度（统一 2.5bb）</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>位置</th>
@@ -1457,9 +1552,11 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>决策过程：讨论过 BTN 2.2bb 的 GTO 趋势，但最终选择统一 2.5bb——简化决策，避免 sizing tell。</blockquote>
             <h4>(6) 3-bet 尺度</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -1490,9 +1587,11 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>教训：你之前 BB 3-bet SB 一直打 9bb——太便宜。今晚起调整到 11bb。</blockquote>
             <h4>(7) 4-bet 尺度</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -1514,6 +1613,7 @@
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>4-bet 不是 5-bet 的预演。4-bet 是自己一条完整的街。不要想着「我 4-bet 小了，被推好弃」。4-bet 的目的就是让对手弃，或者让他的边缘牌付不起门票。</strong></p>
             <pre><code>AK 4-bet = 你不希望看翻牌。AK 没中率 67%。<br>AK 不需要翻牌。AK 需要底池现在拿走。<br><br>错误：UTG AK 4-bet 25bb（对手 3-bet 11.5bb）→ 对手只要 24% equity 就跟<br>正确：UTG AK 4-bet 35bb → 对手需要 32%+ equity → QQ/JJ 跟不动</code></pre>
             <h4>(8) Squeeze（挤压）尺度</h4>
@@ -1566,7 +1666,8 @@ Turn 5♦ → check-call 2.1 → River 6♦ → check-fold all-in
 弃牌不是怕——是看到虚实之后的最优解。</code></pre>
             <h4>(3) 虚实判断三步法</h4>
             <p>每次面对对手的 aggression，过这三关：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>步骤</th>
@@ -1592,6 +1693,7 @@ Turn 5♦ → check-call 2.1 → River 6♦ → check-fold all-in
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
       </section>
       <section id="9-军争篇ipoop--位置博弈与信息差" class="chapter">
@@ -1624,7 +1726,8 @@ IP 的关键作用:
             <p><strong>IP 不是让你多赢一手牌——是让你同样的牌多赚 30-50bb。</strong> 因为 IP 给了你「对手先暴露信息→你再决策」的顺序优势。王烨的 K3 XR 之所以能成立，也是因为 Elton 先 bet 暴露了他 range 里 55-75% 的脆弱部分。</p>
             <h4>(3) OOP 生存法则：BB 位的三条戒律</h4>
             <p>OOP 的核心困境：你先行动 = 你先给对手画地图。解决方案不是「在 OOP 打赢更多牌」——那是逆天。解决方案是「在 OOP 少输、控池、等好牌再出手。」</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>戒律</th>
@@ -1650,6 +1753,7 @@ IP 的关键作用:
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>6/3 实战：J6s BB check-raise 河牌两对</strong></p>
             <pre><code>Hero BB J♥6♥ → 平跟 defend
 Flop J♠7♦2♥ → check-call（控池，中对不打）
@@ -1663,7 +1767,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
         <h2>10. 九变篇：判断力边界 — 何时偏离标准线</h2>
             <blockquote><strong>孙子曰：「涂有所不由，军有所不击，城有所不攻，地有所不争，君命有所不受。」「故将通于九变之利者，知用兵矣。」</strong><br><br>GTO 给你的是标准线——在无限手牌、无限信息、双方理性下的均衡。但 NL10 不是这个世界。你的对手有的太紧、有的太松、有的从不 bluff、有的每手都在 bluff。九变篇告诉你：<strong>知道什么时候打破规则，比知道规则本身更重要。</strong></blockquote>
             <h4>(1) NL10 的五类对手与偏离策略</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手类型</th>
@@ -1705,6 +1810,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>核心原则：你的偏离幅度 = 对手偏离 GTO 的幅度。</strong> 他对 GTO 偏差越大，你越可以从标准线走远来剥削他。他越接近 GTO，你越需要回到标准线。</p>
             <h4>(2) 偏离的边界：什么时候不能偏离</h4>
             <p>偏离不是乱打——是<strong>在确定性的信息基础上做针对性调整。</strong> 如果你没有信息，就用标准线。</p>
@@ -1753,7 +1859,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
 <figure style="margin:18px 0"><img src="img/nl10-range-ladder.png" alt="NL10 6-max 范围阶梯图" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">NL10 6-max 翻前范围阶梯（真实导出）</figcaption></figure><figure style="margin:18px 0"><img src="img/preflop_range_btn.svg" alt="BTN 开池范围" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">BTN 开池范围热图（示例）</figcaption></figure><figure style="margin:18px 0"><img src="img/preflop_range_utg.svg" alt="UTG 开池范围" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">UTG 开池范围热图（示例）· 与 BTN 对比可见位置对宽度的 ~3 倍影响</figcaption></figure>
 
             <h4>(1) Axs 面对 3-bet 的完整决策表</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌</th>
@@ -1794,11 +1901,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <pre><code>A5s 4-bet bluff：翻后没有 A 很难打 → 翻前直接拿走底池<br>ATs-AQs 冷跟：翻后翻出 A 有踢脚、翻出同花有坚果 → 翻后能打<br>A6s-A9s 弃：踢脚太弱。翻后中 A → 被 AK/AQ 压制 → 反向隐含赔率</code></pre>
             <p><strong>OOP 面对 3-bet：所有 Axs 一律弃。没有例外。</strong></p>
             <blockquote>注意：A5s 只有在 <strong>IP 面对 3-bet</strong> 时才是 4-bet bluff。OOP 的 fold equity 不够，被冷跟后翻后是地狱。</blockquote>
             <h4>(2) AK 的所有路线</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -1834,9 +1943,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>核心发现：AK 打什么牌胜率都是一半。所以它的价值不在翻后中牌——在翻前让对手弃。</blockquote>
             <h4>(3) QQ/JJ 面对激进动作</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -1866,10 +1977,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(4) KK：最适合 5-bet all-in 的牌</h4>
             <pre><code>KK 翻后痛点：<br>→ 翻牌掉 A 的概率：23%<br>→ 翻牌掉 Q 的概率：23%<br>→ 翻牌掉 A 或 Q 的概率：42%<br><br>42% 的翻牌，你的 KK 从「超对」变成「猜谜」。<br>你付了 25bb 跟 4-bet，但只有 58% 的翻牌能舒服地打。<br>→ 回报不对称。不如直接 5-bet 推。</code></pre>
             <pre><code>对手组合（你手里有 KK）：<br>  AA：6 组（你没 block A）<br>  QQ：6 组<br>  AK：8 组（你 block 两张 K）<br>  KK：1 组<br><br>对手弃（QQ + AK）：14/21 = 67%<br>对手接（AA）：      6/21 = 29%<br><br>弃牌 EV：67% × 51.5bb = +34.5bb<br>接牌 EV：29% × (-63.7bb) = -18.5bb<br><br>总 EV：+16bb ✅</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>动作</th>
@@ -1891,6 +2004,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>结论：KK → 要么 4-bet（面对 3-bet），要么 5-bet all-in（面对 4-bet）。不要 OOP 冷跟 4-bet。</blockquote>
             <h4>(5) 线上 5-bet = AA/KK</h4>
             <pre><code>NL10 被 5-bet all-in：<br><br>拿 AK → 弃。19% equity，需要 36%。<br>拿 KK → 也弃。23% equity，需要 36%。<br>拿 QQ → 秒弃。22% equity。<br><br>为什么：线上 5-bet bluff &lt; 2%。<br>盈利的 reg 不 5-bet AK。<br>AA 自己的 5-bet 频率在降（他们发现冷跟赢更多）。<br>但你现在还不知道对方是哪一种 → 默认他有 AA。</code></pre>
@@ -1906,7 +2020,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>例：K♠ 7♠ 2♦, Q♦ J♦ 3♣<br>特征：同花听牌 ~15-20 组。<br>策略：2/3 pot。不是 1/3。1/3 pot → 同花 draw 轻松跟。<br>转牌无关→继续 2/3。转牌同花→check-fold。</code></pre>
             <pre><code>例：J♠ T♠ 9♠, A♦ K♦ Q♦<br>特征：同花+顺子同时存在。你的 AA/KK=bluff catcher。<br>策略：高频 check。你不是在赚钱，你是在试图活着。<br>3-bet/4-bet pot→SPR 低→你的范围偶然有同花→可以 bet。</code></pre>
             <h4>(2) Raiser 总决策表</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -1954,6 +2069,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(3) 核心原则</h4>
             <pre><code>1. 他没中 → 1/3 pot 够了。打大只浪费。<br>2. 他有 draw → 2/3 pot。让他买不起门票。<br>3. 面太湿 → check。你不是在赚钱。你是在试图活着。<br>4. SPR 低 → 重注安全（你的错误空间被 SPR 吃掉了）<br>5. SPR 高 → 小注安全（每条街你都有机会猜错）</code></pre>
             <h4>(4) 实战牌例</h4>
@@ -1994,7 +2110,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <blockquote><strong>核心问题</strong>：翻牌谁都会打——c-bet 是义务。转牌才是分水岭。转牌决定一手的走向：价值收三条街、停枪控池、还是弃牌止损。</blockquote>
             <h4>(1) Turn Barrel（开第二枪）条件</h4>
             <p>翻牌 c-bet 被跟，转牌继续打——不是每次都该打。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>条件</th>
@@ -2020,10 +2137,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>核心理念：转牌 bet 不是在「继续翻牌的故事」——是在 <strong>重构你的范围</strong>。翻牌 1/3 pot = 全范围。转牌重注 = 极化的宣言：「我有牌，或者我在装。」</blockquote>
             <h4>(2) Turn Probe（翻牌全 check → 转牌 bet）</h4>
             <p>翻牌双方 check，转牌你先打。这种 bet 叫 probe bet。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>适合 probe</th>
@@ -2045,10 +2164,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>选牌</strong>：你有 A-high blocker → probe。你有小对子 → probe 也很适合（被跟了还有可能 showdown）。KQ on A-high 面 → <strong>别 probe</strong>——A 在对手范围密度太高。</p>
             <h4>(3) Turn Float（跟翻牌后在转牌偷）</h4>
             <p>翻牌你 call 对手 c-bet（float），转牌对手 check → 你 bet。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>适合 float</th>
@@ -2070,11 +2191,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>典型场景</strong>：BTN open → BB call。Flop K72r → BTN c-bet 1/3 → BB float with A5s（A-high + backdoor）。Turn blank → BTN check → BB bet 2/3 pot → BTN fold。BTN 翻牌 c-bet = 义务，turn check = 他没 K。</p>
             <h4>(4) 延迟 C-bet（翻牌 check → 转牌 bet）</h4>
             <p>翻前你 PFR，翻牌你 check，转牌你 bet。</p>
             <p><strong>什么时候用</strong>：翻牌是连接面（JT8 两同花）→ 你 check 控池。转牌 blank → 你 bet。对手的翻牌 check 表示他没强牌（有强牌会 bet 保护）。你的转牌 bet 有额外 fold equity——因为「翻牌 check = 放弃」的思维惯性让对手觉得你不可能有牌。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>面适合延迟 c-bet</th>
@@ -2092,9 +2215,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(5) Turn Sizing 逻辑</h4>
             <p>转牌的 sizing 逻辑和翻牌完全不同。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>Sizing</th>
@@ -2125,10 +2250,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>翻牌 sizing 看面。转牌 sizing 看范围。</strong> 翻牌是讲范围优势，转牌是讲极化程度。范围越极化 → sizing 可以越大。</blockquote>
             <h4>(6) Turn 面对 Donk 的应对</h4>
             <p>转牌对手突然 donk bet。NL10 这是极强的信号。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -2154,6 +2281,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>NL10 铁律</strong>：转牌 donk = 价值 95%。不 bluff-catch。</blockquote>
             <h4>(7) 关于「开池 Miss 后的第二条街防守」</h4>
             <p>详见第 21 章「特定手牌专题」中 <strong>开池 Miss 后的第二条街防守</strong> 一节。该节专门拆解 AK/AQ/AJ/KQ 在翻牌完全 miss 后，转牌面对反打的决策框架——牌面 × 阻挡 × 对手类型三维交叉。本章覆盖的是广义的转牌进攻体系（barrel/probe/float/延迟 c-bet），那节解决的是防守端的具体决策表。两个方向构成完整的转牌决策闭环。</p>
@@ -2164,7 +2292,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
         <h2>13. 价值下注</h2>
             <blockquote><strong>核心问题</strong>：River Bluff（第 9 章）讲的是怎么诈唬。但 NL10 最大的利润来源不是 bluff——是 <strong>价值下注</strong>。Bluff 赚的是 fold equity，价值下注赚的是他整组。</blockquote>
             <h4>(1) 价值下注三层 Sizing 金字塔</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>层级</th>
@@ -2194,10 +2323,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>翻牌 → moderate/fat value。转牌 → thin/moderate（看面）。河牌 → thin value 为主（强牌已经建完池了）。</blockquote>
             <h4>(2) 榨取性 Value Sizing</h4>
             <p>不是每手牌都该 GTO sizing。根据对手类型调：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手类型</th>
@@ -2228,13 +2359,15 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>跟注站的金矿</strong>：你中 TPTK，他中对。GTO 说 bet 2/3 pot。对跟注站 bet <strong>满 pot</strong>。他的中对不会因为你的 sizing 改变决定——但他的损失翻倍了。</p>
             <h4>(3) Value Bet vs Check-Back 决策树</h4>
             <p>河牌你 IP，对手 check。Bet 还是 check？</p>
             <pre><code>「比我差的会不会跟？」<br><br>会 → bet。<br>  他差到什么程度？<br>  → 弱牌（中对/底对）→ thin value 1/3 pot<br>  → 中等牌（TP weaker kicker）→ moderate value 1/2-2/3 pot<br>  → 强牌但比你差 → fat value 3/4-满 pot<br><br>不会 → check back。<br>  → bet 不是为了「赢底池」，是为了被比你差的牌跟。<br>  → 「我 bet 他可能弃」→ 那 check。check 也能赢底池。<br>  → 「我 bet 他可能 raise」→ 看人。NIT raise = 你死。LAG raise = 可能 bluff。</code></pre>
             <blockquote>最常见的漏：拿着 TPTK 在 scare card river bet 薄价值，被 raise，不知道该怎么办。<strong>解法</strong>：scare card river → 你的 TPTK 降级为 bluff-catcher。Check back。别 bet。</blockquote>
             <h4>(4) 多人底池的 Value Sizing</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>人数</th>
@@ -2260,6 +2393,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(5) NL10 实战要点</h4>
             <ul><li><strong>价值下注是 NL10 最大的利润来源。</strong> Bluff 在 NL10 不稳定——对手 call 太多。但 value bet 是稳的——对手 <strong>跟太多</strong> 才是你赚钱的地方。</li><li><strong>鱼付到满。</strong> 跟注站/娱乐玩家 vs 你的 set → bet bet bet，河牌 overbet。他们的 AA/顶对/两对跟到死。</li><li><strong>NIT 身上别贪。</strong> NIT 的 fold button 很灵敏。你的 nuts vs NIT → bet 正常 size（2/3 pot），别 overbet。你宁可少赢 10bb 也别把他吓跑。</li><li><strong>河牌 thin value 是 NL10 的高级技能。</strong> 多数 NL10 reg 要么 check back 太多（漏 value），要么 bet-fold 做不好（被 raise 不知道弃）。练好 thin value bet-fold 是你从 breakeven 到 3bb/100 的关键。</li><li><strong>Donk bet 面前的价值保护</strong>：对手 donk → 你有强牌就 raise，别慢打。NL10 donk = 他有货→他能跟 raise。</li></ul>
       </section>      <section id="14-river-bluff-什麼時候轉詐唬" class="chapter">
@@ -2267,7 +2401,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <blockquote><strong>核心問題</strong>：17.8 講了什麼時候 value bet。現在講另一半——你 miss 了，什麼時候該轉 bluff？</blockquote>
             <h4>(1) River Bluff 的三個前提</h4>
             <p>不是所有 miss 的手牌都該 bluff。必須同時滿足三個條件：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>條件</th>
@@ -2293,6 +2428,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>沒有這三個條件，不要 bluff。</strong> 尤其是 NL10——對手 call 太多，bluff 的 EV 本來就低。</blockquote>
             <h4>(2) IP vs OOP Bluff</h4>
             <p><strong>IP（有位置）</strong>：對手 check → 你決定。這是最佳 bluff 場景。</p>
@@ -2301,7 +2437,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <ul><li>只在 <strong>scare card</strong> 上 bluff：river 完成了明顯的花/順，且這張卡在你的感知範圍裡</li><li>OOP river bluff = <strong>lead 2/3 pot</strong>。不要 donk small——看起來太弱，容易被 call</li><li>OOP bluff 頻率要遠低於 IP。多數時候 OOP river miss = check-fold</li></ul>
             <h4>(3) Bluff Range 如何建構</h4>
             <p><strong>選哪些手牌 bluff？</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌類型</th>
@@ -2327,8 +2464,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>經典 blocker 例子</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -2359,12 +2498,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>Blocker 口訣</strong>：「你有那門花的 A、你有順子的關鍵牌 → bluff。什麼都沒擋住 → give up。」</blockquote>
             <p><strong>頻率控制</strong>：</p>
             <ul><li>GTO 要求在 river 保持 value:bluff = 2:1（bet 2/3 pot 時）</li><li>實際上你不需要精確計算。記住：<strong>每 3 次 river value bet，配 1 次 river bluff。</strong></li><li>NL10 調整：降到 4:1 甚至 5:1。對手 call 太多。</li></ul>
             <h4>(4) Bluff Sizing 深度研究</h4>
             <p>Bluff 的大小決定了你的 bluff 需要多高的成功率。<strong>size 越大 → 需要的 fold equity 越高 → 對手 fold 的機率也越高。</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>Size</th>
@@ -2418,12 +2559,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>Rule of thumb</strong>：bluff 最小從 2/3 pot 開始。打太小 = 送錢給跟注站。</blockquote>
             <p>Overbet（&gt;1x pot）在 river 是最強的 bluff 武器——但用錯場合就是自殺。</p>
             <p><strong>✅ Overbet 的三個條件（比一般 bluff 更嚴格）</strong>：</p>
             <ol><li><strong>對手必定 capped</strong> — 不是「可能 capped」，是「必定」。對手 check-call 兩街 + check river = 必定。如果他有可能在慢打 nuts，不要 overbet。</li><li><strong>你有極佳 blocker</strong> — 你擋住了 nuts 或接近 nuts 的手牌。不只是「我有 A♠」，而是「我有 A♠ + 另一張 blocker」。</li><li><strong>牌面極度嚇人</strong> — river 完成了花 or 順，而且這張卡在你的感知範圍正中央。</li></ol>
             <p><strong>Overbet size 選擇</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面類型</th>
@@ -2449,6 +2592,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>Overbet 口訣</strong>：「必定 capped + 極佳 blocker + 極度嚇人 → overbet。缺任何一個 → 打 2/3-3/4 就好。」</blockquote>
             <ol><li><strong>NL10 整體 under-bluff</strong> → overbet 在 NL10 幾乎都是 value。這是一個事實——你的對手也知道（至少 regs 知道）</li><li><strong>Regs 會 overfold to overbet</strong> — 因為他們預設 overbet = value。這反而讓你的 overbet bluff 有更高的 fold equity</li><li><strong>Fish 會 hero-call everything</strong> — 不要 bluff fish。他們不懂 pot odds，只會「打這麼大一定在 bluff」</li><li><strong>區分對手</strong>：vs reg → overbet bluff 有效（他們尊重）。vs fish → overbet value 有效（他們不尊重）</li><li><strong>OOP overbet bluff 仍然危險</strong> — NL10 的 OOP lead 看起來太可疑，即使 regs 也可能 hero-call</li></ol>
             <blockquote><strong>NL10 Overbet 結論</strong>：NL10 under-bluff 的聲譽反而讓你的 overbet bluff 更可信。對 reg 用 overbet bluff，對 fish 用 overbet value。這是 NL10 的 paradox。</blockquote>
@@ -2484,7 +2628,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
         <h2>15. 多人底池策略</h2>
             <blockquote><strong>核心问题</strong>：NL10 最大的结构性偏差——多人底池频率极高。鱼不弃，reg 要隔离但不够频繁。你要么学会打多人底池，要么在 NL10 被拖死。</blockquote>
             <h4>(1) 翻前策略：3-way/4-way 调整</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -2510,9 +2655,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>翻前纪律在多人底池里比单挑重要十倍。一手错误的 cold-call 在 4-way pot 能漏你半组。</blockquote>
             <h4>(2) 翻后调整</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>原则</th>
@@ -2538,8 +2685,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(3) 牌力需求变化</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>单挑</th>
@@ -2570,10 +2719,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>核心公式</strong>：牌力缩水 = 1 / √(人数)。4-way pot → 你的 TPTK 价值大约只剩单挑的 50%。</blockquote>
             <h4>(4) Draw 的赔率陷阱</h4>
             <p>在多人底池，draw 的隐含赔率看起来好（人多 = 有人会付你的中牌）——但反向隐含赔率暴增。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>陷阱</th>
@@ -2595,13 +2746,15 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>多人底池的 draw 玩法：<strong>优先选坚果方向的 draw。</strong> 非坚果 draw → fold。不是 -EV 的问题——是你不知道中牌后是不是领先。</blockquote>
             <h4>(5) NL10 实战要点</h4>
             <ul><li><strong>NL10 多人底池极常见。</strong> 鱼不弃 = 你 open 2.5bb → 3 个人跟。这不会变——这就是 NL10 的生态。</li><li><strong>ISO 要大。</strong> 2.5bb 开池不够——鱼会跟任何 2.5bb。有 limper → 4-5bb ISO。有多个 limper → 5-7bb。</li><li><strong>翻后别自动 c-bet。</strong> 单挑 c-bet = 习惯。多人 c-bet = 错误。miss 就 check——这是数学。</li><li><strong>TPTK 在 3-way = 控池为主。</strong> 别三枪打光。一枪翻牌、转牌 check、河牌看对手行动。</li><li><strong>Nuts 不要慢打。</strong> 多人 = 更有可能有人在追。你的 set/顺子 → bet 或 check-raise。NL10 的多人底池是 draw 重灾区。</li></ul>
       </section>      <section id="16-nl10-线上实战调整" class="chapter">
         <h2>16. NL10 线上实战调整</h2>
             <h4>(1) 线上 vs 线下：同一手牌，两个世界</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -2642,6 +2795,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>人口读 #7：前置位 donk bet = 超强牌</strong></p>
             <p>当你在后位（BTN/CO）翻前 open → 前置位冷跟 → 河牌对手突然 donk bet（蛋壳）弹出来——<strong>牌力极强，几乎永远是价值下注</strong>。</p>
             <p>NL10 玩家不会在河牌 donk bluff。他们的逻辑是：「我一直跟注，现在我有牌了，我要主动打」。donk 的 sizing 越大，牌力越实在。面对这种线下——除非你有坚果或接近坚果，默认弃牌。</p>
@@ -2649,7 +2803,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(2) NL10 人口特征</h4>
             <pre><code>线上 NL10 reg 的 5-bet：<br>  AA：75%<br>  KK：20%<br>  QQ：3%<br>  AK：2%<br>  Bluff：0%<br><br>    线上 NL10 的 5-bet = 两件事：AA 和 KK。<br>    你的 QQ 和 AK 不是在打牌。是在给他们交税。</code></pre>
             <h4>(3) 关键剥削调整</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>GTO 理论</th>
@@ -2679,6 +2834,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(4) 线上翻前 bluff 少，翻后 bluff 多的原因</h4>
             <pre><code>翻前：<br>  每个人都知道自己的范围<br>  HUD 帮你看着 → 3-bet 8% 的人，4-bet 回去不敢不信<br>  → 翻前 bluff 的 fold equity 是公开的秘密<br><br>翻后：<br>  4-6 桌同时打，没精力分析每个面<br>  SPR 越低，犯错越贵<br>  → bluff 的 fold equity 藏在他没注意到的信息里</code></pre>
             <h4>(5) 对手分类速查</h4>
@@ -2697,7 +2853,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <blockquote><strong>核心认知</strong>：「坐对桌比翻前范围精确 1% 重要得多。」你在 1bb/100 的边缘桌上把一个 leak 修成 GTO 完美——多赚 0.3bb/100。你换到有两条鱼的桌——直接多赚 5bb/100。<strong>牌桌选择是 NL10 最大的 leverage。</strong></blockquote>
             <h4>(1) 快速扫桌方法</h4>
             <p>开 lobby，按 <strong>VPIP 排序</strong>。30 秒判断一张桌：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>信号</th>
@@ -2733,9 +2890,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>实战口诀</strong>：看到有人 VPIP 50%+ → 马上坐下。看到全桌 VPIP 22/18 → 换。</p>
             <h4>(2) 座位选择</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>位置</th>
@@ -2761,9 +2920,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>Waitlist 策略</strong>：等鱼右边的座位。不在鱼左边的位坐下——哪怕桌上有鱼，OOP 打鱼也不好赚。</blockquote>
             <h4>(3) 坏桌信号</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>信号</th>
@@ -2789,12 +2950,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(4) 换桌节奏</h4>
             <pre><code>开 4 桌 → 每 30 分钟扫一次 lobby（在 45/15 的 15 分钟休息里做）<br>          → 有鱼的新桌？→ 停掉最差的那桌，换过去。<br>          → 某桌的鱼走了？→ 马上 sit out。别留恋。</code></pre>
             <blockquote>不要忠诚于一张桌。忠诚于你的 win rate。鱼走了 = 你的 edge 消失了 = 换。</blockquote>
             <h4>(5) 选站逻辑（平台与抽水）</h4>
             <p>来自 NL5000 教练视频的低级别核心理念：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>因素</th>
@@ -2816,6 +2979,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>NL10 实用建议</strong>：选低抽水平台 &gt; 选高返水平台 &gt; 选「看起来很酷」的平台。GG Poker 的抽水虽然高，但 NL10 鱼密度是最高的——综合性价比仍然最优。</p>
             <blockquote>视频金句：「低级别看抽水结构，高级别看对手。NL500 往上，抽水已经不是问题——你的 win rate 远大于 rake。但 NL10——你的真实盈利大头可能被抽水偷掉。」</blockquote>
             <h4>(6) NL10 实战要点</h4>
@@ -2826,7 +2990,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
 
             <blockquote>这一章是旧版四象限系统的升级。旧版只告诉你「他是什么类型」和「一句话怎么打」。<br>进阶版加上了：翻前具体怎么调、翻后怎么剥削、他的弱点在哪、多人组合怎么切换。</blockquote>
             <h4>(1) 四象限速览</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -2895,6 +3060,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <h4>(2) 🟤 紧弱 (NIT) — 翻前翻后完整策略</h4>
             <p><strong>核心特征</strong>：只打强牌。翻前很紧，翻后没中就弃。</p>
@@ -2929,7 +3095,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <p><strong>他的弱点</strong>：bluff 太多。你用中等牌当 bluff catcher。不需要坚果跟。</p>
             <hr>
             <h4>(6) 多人组合：当桌上不止一种类型</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>局面</th>
@@ -2959,11 +3126,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(7) 开局 20 手快速识别法</h4>
             <pre><code>不看 VPIP/PFR 数字。先看行为：<br><br>翻前 limp → 🔵松弱 或 🟤紧弱<br>  → 看翻后：limp-fold → 🟤紧弱。limp-call → 🔵松弱<br><br>翻前 3-bet 两次以上 → 🟣松凶 或 🔴紧凶<br>  → 看 showdown：showdown 有烂牌 → 🟣松凶。没 showdown → 再看几手<br><br>翻后 check-raise → 不一定是松凶<br>  → NL10: check-raise = 有货 90%。这个人的 WTSD 低 → 信他有货<br><br>30 手后还是看不出来 → 默认 🔴紧凶。保守打。</code></pre>
             <h4>(8) HUD 九分类颜色标签系统</h4>
             <p>基于 VPIP / PFR / 3BET / ATS 四维数据，将 NL10 对手分为 9 类，对应 GGPoker 10 色标签。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -3069,11 +3238,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>分类逻辑</strong>：VPIP 决定松紧度 → PFR/VPIP 比决定激进程度 → 3BET 辅助确认 → ATS 判断偷盲倾向。</p>
             <p><strong>核心洞察</strong>：所有盈利型集中在 VPIP 17-24 / PFR 14-21 窄区间——就是施老师自己的数据范围（21/18）。</p>
             <p><strong>参考卡</strong>：<code>/Users/ymz/Documents/poker/app/label-reference.html</code> — 打开即用，截图即可存手机。</p>
             <p><strong>中英对照</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -3139,6 +3310,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>🔴 #1 职业玩家（+4~5 bb/100）</strong></p>
             <p>识别：PFR 紧贴 VPIP（gap &lt; 4%），3-bet 9-11%，ATS 高。翻后 c-bet 频率适中，不轻易弃给 c-bet。</p>
             <p>怎么打：</p>
@@ -3188,7 +3360,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <blockquote>HUD 告诉你他们<strong>是谁</strong>。偏移标签告诉你他们<strong>漏在哪</strong>——上桌就能用。</blockquote>
             <p>&gt;</p>
             <blockquote>观察 ~50-100 手后打标签。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>维度</th>
@@ -3224,8 +3397,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>FTCB</strong> 和 <strong>XR</strong> 是最重要的两个维度。FTCB = 能偷他吗？XR = BB 位能 check-raise 他吗？</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -3282,6 +3457,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <pre><code>🟢 跟注站 | XR↓ FTCB↓<br>→ 中對跟兩條街。河牌如果 check，直接偷。</code></pre>
             <pre><code>🩷 NIT | FTCB↑ CB↓<br>→ 開牌窄。遇到 3-bet 就棄。c-bet 必偷。</code></pre>
             <pre><code>🟡 LAG | CB↑ RV↑ XR↑<br>→ 別 flat 3-bet。用價值牌 check-raise 他們的 c-bet。</code></pre>
@@ -3301,7 +3477,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>翻牌 K♠ 7♦ 2♣<br>你没 K → 对手 KK 3 组，AK 12 组，KQ 12 组<br>你手里有 K → 对手 KK 只有 1 组，AK 12 → 9 组<br>你有 K → 他有 K 的概率降 ~1/3</code></pre>
             <pre><code>翻牌 T♠ 7♥ 3♦（全是低的）<br>→ 对手的 Broadway 组合全在<br>→ 你没中 → 别 c-bet。他 hit 太多。<br><br>翻牌 A♠ J♦ 8♥（有 A 和 J）<br>→ 你是 raiser → AK/AQ/AJ 都在你范围<br>→ 他的 AJ 只有 9 组（J 被公共牌挡了）<br>→ 高频 c-bet</code></pre>
             <p><strong>口诀</strong>：低牌面 → 你 miss 多他 hit 多。高牌面 → 你 hit 多他 miss 多。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>情况</th>
@@ -3339,10 +3516,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(3) 实战：用公共牌读对手 hit 频率</h4>
             <pre><code>翻牌：K♠ Q♥ 3♦<br><br>对手：冷跟 BTN open 的 BB<br>冷跟范围 ≈ {中小对子，同花连张，Axo，高张}<br><br>K 和 Q 在翻牌上 →<br>  KQ：9 组<br>  QQ：3 组<br>  KK：3 组<br>  33：3 组<br>  AK：12 组（全在）<br>  KJ：12 组<br>  KT：12 组<br>  QJ：12 组<br><br>他对子以上：~60 组<br>他 miss：~40 组<br><br>结论：他 hit ~60%。c-bet 不能乱开。</code></pre>
             <h4>(4) NL10 实战用法</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>阶段</th>
@@ -3360,6 +3539,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
       </section>      <section id="20-手牌选择与隐含赔率" class="chapter">
         <h2>20. 手牌选择与隐含赔率</h2>
@@ -3368,7 +3548,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>任何两张同花 → 河牌成花的概率 = 6.4%<br>100 手只成 6 次。剩下 94 手你拿着两张同色牌在猜。<br><br>所以选牌逻辑：<br>  先看顺子潜力 + 幽灵牌密度（T/5）<br>  同花是 tiebreaker —— 什么都一样时，花的 6% 说了算</code></pre>
             <h4>(2) JTs / QTs / KTs vs KQo</h4>
             <pre><code>翻前 IP 面对 3-bet 的价值：<br>  KQs &gt; JTs &gt; QTs &gt; KTs &gt; KQo</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -3423,6 +3604,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <pre><code>K 在 3-bet 范围密度 ~40 组<br>Q 在 3-bet 范围密度 ~40 组<br><br>KQo = 把两张最拥挤的牌捏在一起<br>  → 翻牌中 K → 对手 AK(12)/KK(3) 都在<br>  → 翻牌中 Q → 对手 AQ(12)/QQ(3) 都在<br>  → 翻牌 K-Q-x → 你两队，对手 JT 双头顺(16)<br>  → 每次中牌都在猜「我领先还是落后」<br><br>对比 JTs 中顶对 J：<br>  → T 踢脚被 AJ/KJ/QJ 碾压<br>  → 但不需要猜 —— 直接弃。丢 3bb 不是丢整组。</code></pre>
             <h4>(3) KQs 的双重人格</h4>
             <pre><code>你 3-bet，对手冷跟。<br>对手范围被 cap：没有 AA/KK，AK 大概率 4-bet。<br><br>翻牌 K♠ 7♥ 2♦<br>你 KQs 顶对 Q 踢脚。<br>对手有 K 的：KQ(9)/KJ(12)/KT(12) → 你全碾压<br>对手有 AK：不在范围（被 cap 掉了）<br><br>→ 价值 bet 三条街。不需要猜。</code></pre>
@@ -3430,7 +3612,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <p><strong>KQs 在 3-bet 范围是 value。在冷跟范围是陷阱。不是牌变了——是范围天花板变了。</strong></p>
             <h4>(4) JTo/QTo/KTo 能不能 IP 跟 3-bet</h4>
             <pre><code>同花那 6% = 从 -EV 变 +EV 的 tiebreaker。<br><br>JTs IP 冷跟 3-bet：+0.5bb/100 ✅<br>JTo IP 冷跟 3-bet：-1.5bb/100 ❌<br><br>差的不是 6% equity。差的是刚好踩过零线。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌</th>
@@ -3471,9 +3654,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(5) 买顺 vs 买花 — 隐含赔率的信息差</h4>
             <pre><code>买花（明显）：<br>  翻牌 3 张♦ → 转牌第 4 张♦<br>  → 全桌人都看到。对手 KK 秒变 check-fold。<br>  → 隐含赔率 = 0。没人付钱。<br><br>买顺（隐藏）：<br>  翻牌 J-9-8，你拿 QT，等一张 K。<br>  转牌 K♠。<br>  → 对手 AK：「顶对顶踢脚！打！」<br>  → 你 call。河牌他推。你 snap。<br>  → 隐含赔率 = 他整组。<br><br>买花的信号是公用的。买顺的信号只有你知道。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -3504,10 +3689,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(6) 小对子 Set Mining</h4>
             <pre><code>成本：8bb（跟 3-bet 到 10.5bb）<br>中 set：12%<br>没中：88%<br><br>最理想（中 set → 赢整组 90bb）：<br>  EV = 12% × 90 + 88% × (-8) = 10.8 - 7.0 = +3.8bb<br><br>现实（中 set → 对手不一定付整组）：<br>  平均赢 ~40bb<br>  EV = 12% × 40 + 88% × (-8) = 4.8 - 7.0 = -2.2bb ❌</code></pre>
             <p><strong>四个条件全满足才能正 EV：</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>条件</th>
@@ -3533,7 +3720,9 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
-            <table>
+</div>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -3559,10 +3748,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>set over set 概率低，不是不打的理由。<br><strong>真正的问题是：中了 set 对手不付钱。</strong></blockquote>
             <h4>(7) Set 在 SRP 的建池时机</h4>
             <pre><code>翻牌你中 set。SPR ~8-10。<br>什么时候 check-raise？取决于面。<br><br>面干燥（J72 彩虹）：<br>  → 可以慢打。翻牌 check-call，转牌 check-raise。<br>  → 干燥面对手有牌=跟，没牌=弃，什么时候动手差别不大。<br>  → 慢打反而让对手有空间 bet 第二条街，给你建池机会。<br><br>面潮湿/连接（JT8 两同花 / KQJ）：<br>  → 🚫 不能慢打。翻牌 check-raise NOW。<br>  → 对手有 draw：翻牌会跟，转牌没中就弃了 → 翻牌不收，转牌收不到。<br>  → 慢打的代价 = 免费送对手买顺/买花。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>面</th>
@@ -3588,6 +3779,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>核对：对手没牌 → 什么时候动手他都不跟。对手有牌 → 干燥面什么时候动手他都跟。<br>但有 draw 就不一样了 —— draw 有时效性。翻牌在，转牌没了。</blockquote>
             <h4>(8) 翻前结构与「你胜率高不高」</h4>
             <pre><code>AA 的价值不在 AA 本身。在结构。<br><br>场景 A：SRP<br>  open 2.5bb → BB flat。SPR = 19。<br>  翻牌 K-7-2 → bet → 对手弃 → 赢 2.5bb。<br>  翻牌 J-T-9 → bet → 对手 raise → 你猜 → 可能输 100bb。<br><br>场景 B：4-bet pot<br>  3-bet → 4-bet → 5-bet all-in。SPR = 0。<br>  对手 KK call。翻牌 K-7-2 → 你死。<br>  但全进时 equity 82%。<br>  100 次：82 次赢 100bb，18 次输 100bb = +64bb/次。<br><br>场景 A 不一定赚钱。场景 B 一定赚钱。不是牌变了 —— 结构变了。</code></pre>
@@ -3604,7 +3796,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>翻牌 A83r，你 c-bet 1/3，他 call。<br>转牌 blank。<br><br>你 turn bet → 对手：「你有 A。AK/AQ。」→ 弱 Ax 弃，强 Ax 跟。<br>你 turn check → 对手：「你没 A。KK/QQ/KQ。」→ 「他没 A！」→ 河牌偷你。</code></pre>
             <p><strong>你的 turn 动作把你的范围劈成两半——完全透明。对手不需要动脑。</strong></p>
             <p>用 <strong>一部分 AK/AQ 在转牌 check</strong>——不是每次都 check，是混合。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -3625,9 +3818,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p>对手的困境：</p>
             <pre><code>你 turn check。<br>「你 check 了。70% 可能是你没 A。但 30% 你在 slow play AK。<br>我 bet？万一你是那 30% 我送钱。<br>我 check？万一你是 70% 我河牌可以偷。」<br>→ 他难受。你成功了。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>Turn 出什么</th>
@@ -3658,11 +3853,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p>OOP 你是先说话的人——先暴露范围。如果不保护 check 范围：</p>
             <pre><code>翻牌 A83r，你 OOP bet → 他 call。<br>转牌你 check → 对手：&quot;你没 A！&quot; → bet 任何两张。<br>你弃 → 每手亏 3bb。一百手 = 三组买。</code></pre>
             <p><strong>OOP check-call 范围里必须藏 30% TPTK+。</strong> 他对着这 30% bet = 往黑洞里开枪。</p>
             <pre><code>OOP 拿 AK/TPTK 公式：<br>翻牌 bet 1/3。<br>转牌 60% check，40% bet。<br>  - check → 他 bet → call<br>  - check → 他 check → 河牌 bet 2/3（他范围 capped，你收 thin）<br>  - bet → 继续收 thin</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -3692,11 +3889,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>check nuts 频率控制在 20-30%。70% 还是正常 bet——让他觉得 check ≠ nuts。</strong></p>
             <blockquote><strong>干燥面 turn check nuts = 给 bluff 开门。湿润面 turn check nuts = 给 draw 开门。前者赚钱，后者送命。</strong></blockquote>
             <hr>
             <h4>(2) AK thin value → 河牌被 raise = 必弃</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手类型</th>
@@ -3718,8 +3917,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p>你 AK bet thin value 被 raise——他手上不会是比你差的 A，更不可能是 Kx 变 bluff。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>他拿</th>
@@ -3749,6 +3950,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <pre><code>你 AK，A83r，bet 1/3 river。<br>他 raise。<br>他的范围 = {A8s(3)、A3s(3)、88(3)、33(3)} = 12 个全碾压你的<br>你的 equity = 0%。<br>→ 弃。</code></pre>
             <blockquote><strong>AK 不是让你在河牌当英雄的——是让你打薄价值收钱、被 raise 就走的。</strong></blockquote>
             <hr>
@@ -3759,7 +3961,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <p>你该打三枪：翻牌 bet → 转牌 bet（收学费，他 miss 87%）→ 河牌 blank 再 bet。别因为怕 13% 就退——等于把 87% 的钱退给他。</p>
             <hr>
             <h4>(4) 不同 A 高面的危险度</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>A 高面</th>
@@ -3801,6 +4004,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>A83r → 三枪。AJ8r → 两枪（翻牌可能已落后）。</strong></p>
             <hr>
             <h4>(5) 花面防守：A Blocker 规则</h4>
@@ -3808,7 +4012,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <p><strong>规则</strong>：</p>
             <pre><code>手上有 A♠（该花色的 A）→ 可以跟一枪（对面 bluff 频率飙升）<br>手上无 A blocker → 对面大概率有花，fold。</code></pre>
             <p>核心：A blocker 去掉了对面所有 nut flush 的 combo → bluff 比例暴增。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你拿</th>
@@ -3826,12 +4031,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>你有花就跟，没花就弃。少输为赢。</strong></blockquote>
             <hr>
             <h4>(6) 翻前大牌纪律：AK/QQ 不进 4-bet 锅</h4>
             <blockquote><strong>NL10 R&amp;C 核心原则：4-bet 是红灯。看见就停。</strong></blockquote>
             <p>NL10 R&amp;C 对面主动 4-bet 的范围 = {AA(6), KK(6), AK(16)} = 28 个 combo。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你 AK</th>
@@ -3861,8 +4068,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>翻前 equity 37%，但翻后你总是在猜，对面从不用猜。实际 EV = 负数。</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>选择</th>
@@ -3883,8 +4092,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>8bb 止损 × 10 次 = 80bb。call 一次被 cooler = 100bb+。</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你 QQ call 4-bet</th>
@@ -3902,8 +4113,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>QQ = call 3-bet 的牌，不是接 4-bet 的牌。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你拿</th>
@@ -3951,12 +4164,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>关键区别</strong>：你主动 4-bet 别人 → 你有 fold equity + 范围优势。别人主动 4-bet 你 → 他范围碾压你。AK/QQ 只能当打人的，不能当被打的。</p>
             <pre><code>AK/QQ 面对 4-bet：<br>- IP → fold<br>- OOP → fold<br>- 不管在哪儿 → fold</code></pre>
             <p><strong>弃牌不是怂——是 NL10 R&amp;C 最高的 EV 动作。大牌不是通行证。翻前当顶尖守门员。</strong></p>
             <hr>
             <h4>(7) 底对转 Bluff：SRP vs 3-bet Pot 的致命区别</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -3987,6 +4202,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>陷阱：KQ 在 Q-high 面上永远是顶对好踢脚！</strong></p>
             <pre><code>他 flat call open，没 3-bet。<br>→ AQ、QQ+ 排除 ✅<br>→ 但 KQ 不 3-bet！刚好 flat call！<br>→ 翻牌 Q-high → KQ 是顶对第二踢脚 = TPTK<br>→ 你的底对 bluff 打过去 = 送钱</code></pre>
             <p>他 call open 范围里有 16 个 KQ + 4 QJs + 4 QTs = <strong>至少 24 个 Q+</strong>。别在 Q-high 面 bluff。</p>
@@ -3994,7 +4210,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(8) 保险：扑克最大的 -EV</h4>
             <blockquote><strong>永远不买。全下弹窗直接关。</strong></blockquote>
             <pre><code>你 AA vs AK all-in，锅 200bb。<br>你的胜率：87.5%。<br>你的期望值：200 × 0.875 = 175bb。<br><br>买两次保险后 → 到手只剩 ~120bb。<br>被吞掉：~55-80bb，占锅的 40%。<br><br>等于你把 87.5% 的胜率以 40% 的折扣卖给了 GG。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -4015,12 +4232,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>保险商的话术</strong>：「万一他中了呢？」 <strong>事实</strong>：他 12.5% 中。为 12.5% 的恐惧付了 40% 的代价。</p>
             <blockquote><strong>你 AA 的时候，该怕的是对手——不是你。保险是在替你对手买安心。</strong></blockquote>
             <hr>
             <h4>(9) 奖金池（特殊彩池）动态</h4>
             <blockquote><strong>关键原则：奖金池锅里免费钱在，对面不弃。不 bluff，只收 value。</strong></blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -4041,7 +4260,9 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
-            <table>
+</div>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>偏差</th>
@@ -4063,12 +4284,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>奖金池 = 拿他死不弃的钱，不拿他偶尔弃的钱。</strong></p>
             <hr>
             <h4>(10) PB 频率决策器</h4>
             <blockquote><strong>实战工具</strong>：<code>/Users/ymz/Documents/poker/randomizer.html</code></blockquote>
             <p>用于按频率混合决策，避免打法太透明。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>预设</th>
@@ -4104,6 +4327,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p>操作：点 ROLL 或按空格键。卡牌可拖拽到屏幕任意位置。底部可自定义预设。</p>
             <hr>
             <blockquote><strong>「如果拿大牌后的逻辑没搞清楚，那很难盈利。」</strong><br><strong>「翻前当顶尖守门员——守住 3-bet 锅，遇到 4-bet 就走。」</strong></blockquote>
@@ -4111,7 +4335,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(11) 4-bet 与 5-bet 策略体系</h4>
             <blockquote><strong>来源</strong>：盖伦贝 4-bet 进阶课 + 施老师实战推演</blockquote>
             <pre><code>4-bet range = 50% value + 50% bluff (1:1)</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>位置</th>
@@ -4141,9 +4366,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>核心逻辑</strong>：越靠前 → 对手 3-bet 越紧 → 你 4-bet 也得紧。越靠后 → 对手 3-bet 越宽 → 可以松。</p>
             <p>选 <strong>「差点能 flat 3-bet 但不够强」</strong> 的牌：<code>AJo</code>, <code>KQo</code>, <code>AXs</code>。有 A/K blocker 降低对手 AA/KK 概率。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你的牌 vs 对手 4-bet range</th>
@@ -4165,10 +4392,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <p><strong>GTO 推荐</strong>：AA ~80%+ 5-bet, ~15-20% flat。纯 flat AA → 5-bet range 只剩 KK → 不平衡。</p>
             <p><strong>NL10 实战调整</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手 4-bet 类型</th>
@@ -4189,12 +4418,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>KK 特殊逻辑</strong>：你手里两张 K → 对手 AK 只剩 8 组 → 4-bet range 偏向 QQ/AXs bluff。Flat 进去看翻牌：</p>
             <ul><li>出 A → <strong>fold</strong>（便宜保险）</li><li>无 A → 你是 overpair，慢慢收</li></ul>
             <p>需要 IP 来控池，OOP 出 A 只能 check-call 猜谜。</p>
             <hr>
             <p>5-bet = all-in。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>候选</th>
@@ -4220,11 +4451,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>AXs 的隐藏漏洞 — A blocker 自曝</strong>：</p>
             <pre><code>你的 5-bet range = {AA, KK} + {A5s, A4s, A3s}<br>对手拿 A 时：<br>  AA 6→3（砍半），KK 6（不变），AXs bluff 12→9（少 25%）<br>  → value 被砍得比 bluff 狠 → range 偏 bluff<br>  → 对手 AJ/AT 本来必 fold，现在敢 call</code></pre>
             <p><strong>解</strong>：加 <code>76s</code>/<code>65s</code> 冲淡 blocker 信号。GTO 合理，NL10 100bb 实战基本用不上。</p>
             <hr>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -4250,11 +4483,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
             <h4>(12) River 决策框架</h4>
             <p><strong>一句话</strong>：你至少得 call 多少，对手 bluff 才赚不到钱。</p>
             <p>$$MDF = \frac{pot}{pot + bet}$$</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手下注</th>
@@ -4285,9 +4520,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>三不挡</strong>：挡对手 value → 差；挡对手 bluff → 更差。最佳 = 既不挡 value 又不挡 bluff。</p>
             <p><strong>范例</strong>：<code>Kh 7d 2c 3s 9h</code>，OOP vs IP 2/3 pot</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>OOP hand</th>
@@ -4318,12 +4555,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>核心规则</strong>：block calling range, unblock folding range。</p>
             <blockquote>1/3 pot → MDF 更高（75%），ATs 从混频 50% 升 pure call。不是因为 outs，是因为 IP 下注范围更宽（含 thin value），ATs equity 更高。</blockquote>
             <hr>
             <blockquote><code>AX</code> 弱踢 check-call 才是 +EV。Check-raise = <strong>worse never calls, better never folds</strong> → -EV。</blockquote>
             <p><strong>价值提取的前提</strong>：对手手里得有二流牌愿意 call。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手类型</th>
@@ -4344,11 +4583,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><code>A7</code> 在 Axx 面 x/r = <strong>range-destruction</strong>：扫光所有你赢的牌，只剩碾压你的。</p>
             <hr>
             <h4>(13) 实战场景速查：OOP 3-bet → IP flat</h4>
             <blockquote><strong>场景</strong>：MP 或 BTN open 3BB → Hero BB/SB 3-bet → 对手 IP flat</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -4384,8 +4625,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p>MP 翻前丢 3/4 的 open range。翻后：A-high → AXs 多，K-high → KQs/KJs 在，低面 → mid pair 多。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -4421,12 +4664,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>关键区别</strong>：vs BTN → 双方都宽一圈。Hero 3-bet 多 ~50 组 bluff，BTN flat range 也更宽。</p>
             <hr>
             <blockquote><strong>「如果拿大牌后的逻辑没搞清楚，那很难盈利。」</strong><br><strong>「翻前当顶尖守门员——守住 3-bet 锅，遇到 4-bet 就走。」</strong></blockquote>
             <hr>
             <h4>(14) Check-Raise 使用指南</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>角色</th>
@@ -4452,8 +4697,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>一句话：<strong>PFR = bet，OOP caller = check（然后看情况 raise）。</strong></blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>条件</th>
@@ -4475,7 +4722,9 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
-            <table>
+</div>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>禁区</th>
@@ -4497,7 +4746,9 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
-            <table>
+</div>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手类型</th>
@@ -4523,13 +4774,15 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>板面对比</strong>：JJ on T72r → 梦想面，x/r 可行。JJ on A-high → 只能 x/c 控池。JJ on K-high → 怕 K，倾向 c-bet 确认位置。</p>
             <hr>
       </section>      <section id="22-overbet-与防-overbet" class="chapter">
         <h2>22. Overbet 与防 Overbet</h2>
             <blockquote><strong>为什么学这个</strong>：NL25 开始 overbet 是标准武器，NL10 会用的鱼不多但威力巨大——你先学会，就是降维打击。<br><strong>核心理念</strong>：overbet 不是&quot;赌一把大注&quot;，是<strong>极化范围的精确打击</strong>——当你的范围里只有坚果和空气，对手范围被 capped（没有坚果），overbet 就是把他们的中等牌全打跑。</blockquote>
             <h4>(1) Overbet 是什么</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>常规 bet</th>
@@ -4551,6 +4804,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>核心逻辑一句</strong>：当你有的 nut 组合比对手多得多，而且对手的范围里几乎没有 nut 时，overbet 就是印钞机。</p>
             <h4>(2) Overbet 的三大触发条件（缺一不可）</h4>
             <ol><li><strong>你有坚果优势</strong>：你范围里的 nut 组合比例 &gt; 对手</li><li><strong>对手范围被 capped</strong>：对手不太可能有坚果（比如他 check 了两条街）</li><li><strong>牌面静态</strong>：turn/river 没改变牌面结构（无花/顺完成）</li></ol>
@@ -4559,7 +4813,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>你 BTN AKs → 3-bet CO → CO call<br>Flop K72r → 你 c-bet 33%，对手 call<br>Turn 2 → 你 bet 66%，对手 call<br>River 3（完全空白）<br>你范围：AK/AA/KK/少量bluff<br>对手范围：Kx/中等对子/偶尔慢玩的set<br>→ 你 nut 优势巨大，对手 capped。Overbet 150% pot。<br>→ KQ/KJ 会痛苦 fold，set 会 raise 你（那你就跑）。</code></pre>
             <pre><code>你 BTN QJs → open → BB call<br>Flop K83r → 双方 check<br>Turn T（你有两头顺听牌）→ BB bet 66% → 你 call<br>River 7 → BB check<br>你范围里：AK/KQ/偶尔慢打的 set<br>对手范围：弱 Kx / 8x / 中对<br>→ 对手 check 河牌 = capped（不会 check nuts）<br>→ Overbet 125-150%。对手的 K5o 顶对差踢脚撑不住。</code></pre>
             <pre><code>你 BB 跟注 BTN open，手持 55<br>Flop A83r → BTN c-bet 33% → 你 call（float）<br>Turn 5（你中 set！）→ BTN check<br>你 nut 优势拉满（对手有 AA 但不 bet turn 就很少了）<br>River 2 → Overbet 150-200%。对手的 AK/AQ 会 crying call。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>场景</th>
@@ -4581,11 +4836,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(4) 特别说明：Overbet 与你的风格</h4>
             <p>你说过&quot;怕鱼一直跟买到花反打我&quot;。Overbet 恰恰是解决这个恐惧的武器——不是用来 bluff 的，是用来<strong>榨取极限价值</strong>的。</p>
             <p><strong>当你 nuts 时 overbet，对手的听牌要么 fold（放弃 equity）要么 call（-EV）。两种你都赢。</strong></p>
             <p>试试这个思维切换：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>旧思维</th>
@@ -4607,9 +4864,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(5) 如何防 Overbet</h4>
             <blockquote>当你面对 overbet 时，对手在告诉你：我的范围是极化的。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你的牌力</th>
@@ -4631,8 +4890,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <pre><code>牌面 K72r，河牌 offsuit 3。对手 overbet 150% pot。<br>你手持 AK（有 K，block 了对手的 KK/K7 value combo）。<br>→ 对手的 overbet 范围：value（set/两对）+ bluff（空气）<br>→ 你 block 了部分 value → 对手范围偏向 bluff → 可以考虑跟。<br><br>但是：你手持 88（不 block 任何 value）。<br>→ 对手的 value 组合全在 → fold。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手类型</th>
@@ -4654,6 +4915,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(6) 本周练习：Overbet 五手实验</h4>
             <p>每 session 结束后自问：</p>
             <ol><li><strong>我今天有至少一手 nuts 可以 overbet 但没做？</strong>（最常见的漏）</li><li><strong>我面对过 overbet 吗？</strong> 对手是什么类型？我的牌 block 了什么？</li><li><strong>我有没有在没 nut 优势时试图 overbet？</strong>（最常见的新手错误）</li></ol>
@@ -4678,7 +4940,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <p><strong>關鍵</strong>：Sizing 幫你排除 69 → 你知道自己的 set 是領先的 → 放心慢打。</p>
             <hr>
             <h4>(2) Range Cap vs Sizing Tell：兩種武器</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>武器</th>
@@ -4699,6 +4962,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <ul><li>Range cap 是靜態的——翻前已經鎖死。</li><li>Sizing tell 是動態的——uncapped range 裡的人也能用 sizing 把自己搞窄。</li></ul>
             <p>兩者可以疊加。對面 capped + sizing 小 = 雙重信號，raise 幾乎零風險。</p>
             <pre><code>Hero BTN open → Villain BB flat（capped range）<br>Flop 7♠5♥7♦ → Villain donk 1/3 pot。<br><br>雙重信號：<br>1. BB flat open → capped（沒 AA/KK/QQ/大對）<br>2. Donk 1/3 on paired board → 「我有 5 或空氣，但不確定」<br>→ Hero raise → Villain fold。</code></pre>
@@ -4714,7 +4978,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(4) 按位置調 Open 尺度</h4>
             <blockquote><strong>同一個 77，UTG open 3bb，BTN open 2bb。不是牌變了，是位置給你的 range 定了價。</strong></blockquote>
             <pre><code>手牌：7♠7♣<br><br>UTG open 3bb：<br>- UTG range 16%，77 在中間偏弱<br>- 3bb → 盲注守你花 2bb 贏 4.5bb（2.25:1），便宜→他們守得寬<br>- 但你的 range 夠強，翻後不怕。<br><br>BTN open 2bb：<br>- BTN range 40%，77 在中間偏強<br>- 2bb → BB 守你花 1bb 贏 3.5bb（3.5:1），超便宜→他什麼都守<br>- 但你有位置 + 他的 capped range → 翻後可操作。<br><br>同一手牌，兩個價錢，兩個計劃。</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>位置</th>
@@ -4744,8 +5009,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>為什麼 BTN 用小尺度</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>BTN open</th>
@@ -4772,11 +5039,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <ul><li>6bb vs 9bb = 50% 的絕對風險差異。</li><li>2bb 讓你用 suited connector 守得動，高 SPR 翻後有操作空間。</li><li><strong>不要因手牌強弱變尺度——因位置/range 寬度變。</strong> UTG AA 和 UTG T9s open 一樣大。</li></ul>
             <hr>
             <h4>(5) AXs IP 防 3-bet</h4>
             <p><strong>為什麼 AXs 是完美的 3-bet 防守牌</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>特性</th>
@@ -4802,8 +5071,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>哪些 AXs 跟、哪些棄</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>AXs</th>
@@ -4829,12 +5100,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <pre><code>Hero BTN open 2bb with A♠5♠ → BB 3-bet to 8bb。<br>Hero call（2bb open 的優勢：只需補 6bb）。<br><br>Flop J♠7♠3♦（中 NFD + overs）。<br>BB c-bet 1/3 pot → Hero call。<br><br>Turn 4♦（多了一個 gutter）。BB check → Hero bet 半池 → BB fold。</code></pre>
             <p>這手 A5s 贏了不是因為中牌——是因為 IP + blocker + 對手 turn 示弱。三樣東西疊在一起才讓這手打得動。沒有任一樣（比如 OOP，或無 blocker，或對面不示弱），這手只能棄。</p>
             <hr>
             <h4>(6) AJs OOP Miss Flop：什麼時候不該 C-bet</h4>
             <blockquote>AJs 是 premium，不是 nuts。翻後 miss 的高張手，A blocker 讓你覺得自己有 equity——其實沒有。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌</th>
@@ -4865,6 +5138,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>&quot;AJs 跟我犯冲啊 輸好多次了&quot; — 就是 K/Q-high 面上強行 c-bet 的結果。</blockquote>
             <pre><code>Hero SB A♠J♠，3-bet to 12bb vs BTN open<br>BTN cold-call。Flop K♣7♥3♦（乾燥，但 K-high）<br><br>Hero c-bet 1/3 pot → BTN call。<br>Turn 2♦ → Hero 再打半池 → BTN call。<br>River 9♣ → Hero 放棄 check → BTN bet 70% pot → Hero 棄。<br><br>對手攤牌：K♣Q♦（頂對）</code></pre>
             <p><strong>哪裡錯了</strong>：翻牌 K-high，BTN 冷跟 3-bet 的範圍天然重 KQ/KJs。你的 A blocker 擋了 AK，但沒擋 KQ。翻牌就該 check，不是開兩槍把自己套進去。</p>
@@ -4879,7 +5153,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(8) 超池決策 vs Capped Range</h4>
             <p><strong>QQ on 75778（single-raised pot）</strong></p>
             <pre><code>Hero BTN open → Villain cold-call<br>Board: 7♠5♥7♦ 7♣ 8♠（無花）<br>Hero QQ = 777QQ（7 葫蘆 Q）</code></pre>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>對面什麼贏你</th>
@@ -4901,6 +5176,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <ul><li>去掉 AA/KK 後，你幾乎是堅果。</li><li>超池 45bb → 30bb 鍋：對 reg 偏大（會嚇跑 99-JJ、8x）；對跟注站完全正確（K-high 都敢跟）。</li></ul>
             <p><strong>河牌被推回來該不該棄</strong></p>
             <ul><li>NL10 河牌 check-raise vs overbet = 99% value（7x、88）。棄。</li><li>除非對手已知 LAG/激進——NL10 少見。</li></ul>
@@ -4908,7 +5184,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(9) 怪魚辨識：Flat AA/KK/AK</h4>
             <p>NL10 有些人 preflop flat AA/KK/AK——不是 GTO 混合策略，是不會打。</p>
             <p><strong>怎麼辨識</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻後行為</th>
@@ -4926,6 +5203,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>你的調整</strong>：這類人的 range cap 判斷不適用——他的 capped range 頂部有驚喜。翻牌出 A/K 多問自己一句：「他可能是 flat 的 AK 嗎？」見過一次就標。</p>
             <pre><code>Hero UTG J♠J♦ open 3bb → MP flat。<br>翻牌 K♣7♥2♦ → Hero c-bet → MP call。<br>轉牌 9♠ → Hero check → MP bet → Hero fold。</code></pre>
             <p>如果你不知道 MP 會 flat KK/AK，你會覺得 K-high 面你 JJ 還是領先的（因為 MP「capped range」沒有 K 以上的手對）。實際上他就是 KK，翻前省了 3-bet 的錢，翻後吃你兩條街。</p>
@@ -4943,7 +5221,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <blockquote><strong>核心問題</strong>：不同底池類型裡，誰的範圍在哪種牌面上有優勢？勝率大概幾比幾？</blockquote>
             <h4>(1) SRP（單次加注底池）</h4>
             <p>SPR ~10-13。加注方有所有 premiums（uncapped），跟注方 capped（無 AA/KK）但更多同花連張和小對子。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -5003,10 +5282,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>口訣</strong>：高牌乾面加注方打，低牌濕面跟注方打，中間牌面大家 check。</blockquote>
             <h4>(2) 3BP（3-bet 底池）</h4>
             <p>SPR ~5-7。3-bet 方範圍窄而強（~8%），跟注方 capped 但有中強成牌。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -5060,10 +5341,12 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>核心差異 vs SRP</strong>：3-bet 方在幾乎所有牌面都有優勢。SPR 低 → 頂對/超對更容易打光。</blockquote>
             <h4>(3) 4BP（4-bet 底池）</h4>
             <p>SPR ~2-3。雙方範圍極窄，全是 JJ+/AK。<strong>翻前決定了 90%，翻後全範圍小注 c-bet，誰有 overpair 誰贏。</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -5123,9 +5406,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>真正重要的不是牌面，是：你有沒有 AA/KK，對手有沒有 set。</strong> 中小對子中 set 的機率 ~12%（1/8），在 T/9-high 牌面上 caller 有這個可能但 4-bet 方沒有——這就是 nuts advantage 的數學來源。</blockquote>
             <h4>(4) 三類底池對比總表</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -5179,9 +5464,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>為什麼 4BP 跟注方 uncapped？</strong> 不像 SRP 中 caller 永遠沒有 AA/KK，4BP 的 caller 可以 <strong>flat AA/KK/AKs 埋伏</strong>。理由：SPR 已經極低（2-3），不需要 5-bet 就能打完。Flat AA 讓 4-bettor 的 JJ/QQ/AK 繼續留在池裡——5-bet 反而會讓他們跑掉。所以你在 4BP 面對 caller 時，永遠要留一個心眼：他可能有 AA/KK 在慢打。</blockquote>
             <h4>(5) SB vs BB 範圍速查</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>場景</th>
@@ -5229,9 +5516,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>SB vs BB 口訣</strong>：「SB 寬開 OOP，BB 寬跟有位置。高牌面 SB 打，低牌面 BB 收。3-bet 極化打 SB，SB 只能跟中等。4-bet 只有 QQ+AK，A5s 當 bluff。」</blockquote>
             <p><strong>SB vs BB SRP 翻後牌面優勢</strong>（SB 開池 → BB 跟注）</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -5291,6 +5580,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>注意：SB vs BB 的 SRP 跟 UTG vs BTN 的 SRP 不一樣——SB 範圍寬得多（~45% vs ~17%），所以高牌面 SB 優勢沒那麼壓倒，低牌面 BB 優勢更明顯。</blockquote>
             <h4>(6) NL10 實戰調整</h4>
             <ol><li>NL10 fold too much to c-bet → 增加 c-bet 頻率</li><li>NL10 call too wide preflop → 縮小自己範圍，增加價值</li><li>SB vs BB：對手 fold too much to 3-bet → 增加 BB 的 3-bet bluff</li><li>簡化：SRP 翻後多用 33% 小注，3BP 用 50% 中注</li><li>低牌連張面 → <strong>多 check，少 bluff</strong></li></ol>
@@ -5298,7 +5588,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <blockquote><em>数据来源：GTO Wizard</em><br><strong>用法</strong>：翻牌出來先問自己「這是什麼底池類型？」→ 查表格 → 決定 c-bet or check。</blockquote>
             <h4>(7) Turn/River 牌面動態 — 勝率如何隨牌面演變</h4>
             <blockquote><strong>核心問題</strong>：翻牌分析完 → Turn 掉了一張卡 → 誰的勝率上升？</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>Turn 類型</th>
@@ -5334,8 +5625,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>大原則</strong>：牌越「濕」，寬範圍方的 equity 上升越多。牌越「乾」，攻擊方的範圍優勢越持久。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌</th>
@@ -5397,11 +5690,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>SRP Turn 口訣</strong>：「Turn 高牌打，Turn 花停，Turn 成對小心，Turn blank 繼續。」</blockquote>
             <p><strong>低牌連張面 (876) Turn 危險卡</strong>：5/9 成順 → BB equity 爆炸。TT+ overpair 照打，AK 沒中立即收手。Turn 花 → BB donk/XR。Turn 成對 → BB 更多 trips。</p>
             <p><strong>A-high Turn 再出高牌</strong>：A72r → Turn K/Q。攻擊方 AK/AQ 現在兩對或 TPTK。<strong>必須打</strong>——這是攻擊方 equity 最高峰。</p>
             <p><strong>Monotone Turn 第四花</strong>：沒花就 give up。跟注方有花的機率比你高。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌</th>
@@ -5432,13 +5727,15 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>3BP Turn 口訣</strong>：「除非被明顯超越，否則繼續打。」</blockquote>
             <p>SPR ~2-3。繼續 c-bet 或 all-in。唯一例外：低牌連張面 Turn 成順/花 → AK 可 give up，JJ+ 照推。</p>
             <blockquote><strong>4BP Turn 口訣</strong>：「SPR 這麼淺，想了也是 AI。」</blockquote>
             <ol><li>Turn 花/順面 NL10 玩家 overfold → 多 barrel</li><li>Turn 高牌 NL10 不敢打 → 你拿到就打</li><li>低牌連張 Turn 危險卡 → 別 hero call</li><li>Monotone Turn 第四花 → 沒花就放棄</li></ol>
             <h4>(8) River 牌面動態 — 最終決策與 Thin Value</h4>
             <blockquote><strong>核心問題</strong>：River 沒有下一條街。Bet 只有兩個理由：value 或 bluff。<strong>手牌強度是相對於牌面的——AK 在 A72r 是強牌，在 A♠7♠2♠ 只是抓詐牌。</strong></blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>類別</th>
@@ -5474,6 +5771,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>關鍵洞察</strong>：不要被「TPTK」這個名字騙了。對子面的頂對、花面的頂對——這些不是強牌，這些是抓詐牌。<strong>手牌強度不是絕對的，是相對於牌面的。</strong></blockquote>
             <div class="insight">✅ 對手 capped + 牌面安全（你的中等牌不會被超越）+ 對手不 bluff-raise</div>
             <div class="insight">❌ 牌面濕（你的中等牌可能已落後）+ 對手 uncapped</div>
@@ -5486,7 +5784,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
         <h2>25. BB/SB 盲注位防守系統</h2>
             <blockquote><strong>核心問題</strong>：OOP 的 BB 怎麼少輸？SB 被 3-bet 怎麼打？</blockquote>
             <h4>(1) BB 翻前防守：各位置應對表</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>偷盲位置</th>
@@ -5541,9 +5840,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>面對 3bb open：全線收緊 10-15%</strong> — KJo/QTo vs EP 直接棄，低位同花連張（65s-54s）棄。</p>
             <p><strong>快速決策表（2.5bb open）</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌</th>
@@ -5657,11 +5958,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>你的調整重點</strong>：減少 call AJo/ATo vs EP（容易被統治），提高 BTN/SB 位的 3-bet bluff（NL10 fold to 3-bet 偏高）。</blockquote>
             <blockquote>3-bet bluff 的手牌選擇原則：<strong>擋對面的繼續範圍 + 自己 flat 太弱 → 拿去 3-bet bluff。</strong></blockquote>
             <p><strong>為什麼 Axo 排第一？</strong> A blocker 同時擋 AA(3組)、AK(12組)、AQ(12組)、AJ(12組)——對面 4-bet/call 範圍裡大量組合被你砍掉。</p>
             <p><strong>BB vs BTN（最常用）</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>層級</th>
@@ -5697,11 +6000,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>不適合做 BB 3-bet bluff 的</strong>：</p>
             <ul><li>❌ <strong>A2s-A5s</strong> — 這些應該 flat，equity 夠好，不需要變 bluff</li><li>❌ <strong>小對子 22-66</strong> — 沒 blocker，被 call 後翻牌幾乎必 check-fold</li><li>❌ <strong>K2s-K5s</strong> — flat 更好，OOP 有 showdown value</li></ul>
             <p><strong>BB vs SB（特殊場景）</strong>：SB 開牌比 BTN 窄 → bluff 頻率要降。只保留 <strong>A2o-A5o + K6o-K9o</strong>，不要拿 Qxo/Jxo 亂來。</p>
             <p><strong>NL10 實戰調整</strong>：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>對手類型</th>
@@ -5723,9 +6028,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(2) BB 翻後 OOP 決策樹</h4>
             <p>核心原則：OOP 默認全範圍 check。<strong>策略性 donk 僅少數場景。</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>牌面</th>
@@ -5767,13 +6074,15 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>記住</strong>：低牌連張面是 BB 的黃金板面——心態從「防守」轉「進攻」。對子面 XR 要高達 35-45%，多數 NL10 玩家遠低於此。</blockquote>
             <h4>(3) BB vs SB：你有位置的優勢</h4>
             <p>SB 開池 ~45%（極寬），BB 跟注後 <strong>有位置</strong>。這是 BB 唯一有 IP 的場景——要最大化利用。</p>
             <ul><li><strong>BB 3-bet vs SB：15-20%</strong>（比 vs BTN 更寬）。Value: 88+, AT+, KQ。Bluff: A2s-A5s, 同花連張。</li><li><strong>SB check flop → BB bet wide</strong>：SB check 在低牌面 = 示弱，BB 應 bet 60-70% 頻率</li><li><strong>SB c-bet → BB 可以 float 更多</strong>：有位置 + SB 範圍寬 = BB 的 XC 可以更寬</li></ul>
             <h4>(4) SB 防守 vs BB 3-bet</h4>
             <p>當你 SB open、BB 3-bet 你：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>行動</th>
@@ -5799,6 +6108,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>SB call 3-bet 後 OOP</strong>：翻牌高牌面 XF 大部分、中低牌面可以 XR 你的強牌（set/兩對/OESD）。別 XC 中等牌——OOP 在 3BP 裡 XC 是最貴的玩法。</blockquote>
             <h4>(5) 三個最高優先級改善</h4>
             <ol><li><strong>低牌連張面進攻</strong>：876/654 類牌面從 XC 轉 donk/XR——這是你最大的未開發 EV</li><li><strong>對子面 XR 頻率</strong>：目標 35-45%，目前 NL10 普遍低於 20%</li><li><strong>BB vs SB 的 IP 激進度</strong>：SB check 後 bet wide，別浪費你有位置的唯一場景</li></ol>
@@ -5817,7 +6127,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
         <h2>26. 特定手牌專題 — 邊緣牌的攻防</h2>
             <blockquote><strong>核心問題</strong>：這些牌「會打」和「不會打」差很多——它們是 NL10 獲利的分水嶺。</blockquote>
             <h4>(1) 總覽</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌</th>
@@ -5975,6 +6286,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>終極心法</strong>：「你的 kicker 沒有你想像中那麼好。」</blockquote>
             <h4>(2) AJo / AJs</h4>
             <p><strong>AJo</strong>: Open HJ+，UTG fold。面對 3-bet → <strong>直接 fold</strong>（被 AK/AQ 統治）。 <strong>AJs</strong>: Open HJ+。面對 3-bet：IP flat call，OOP fold。</p>
@@ -5996,7 +6308,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <blockquote><strong>口訣</strong>：「QJo 只有 BTN 能看，QJs 才能跟注玩」</blockquote>
             <h4>(7) Axs (A2s–A9s) — 逐手拆解</h4>
             <p>關鍵區別：<strong>wheel equity</strong>（A-2-3-4-5）。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌</th>
@@ -6044,12 +6357,14 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <p><strong>被 call 後</strong>：A-high 中 A → top pair weak kicker，小心 AK/AQ。Bet small 1/3 for fold equity vs QQ/JJ，或被 raise 就 fold。中 5（如 T52）→ check-fold unless 有 draw。Flush draw → semi-bluff。低連線面（654）→ 中等對 + backdoor wheel + backdoor flush，可 barrel as semi-bluff 但 equity 沒想像中高。乾面沒中 → 放棄。</p>
             <blockquote><strong>口訣</strong>：「A5s 是 4-bet 之王，A4s 是二當家」</blockquote>
             <h4>(8) TT / JJ</h4>
             <p><strong>TT</strong>: Open 全部。對 3-bet → OOP fold vs EP/MP，OOP call vs LP（CO→BTN 3-bet or BTN→blind 3-bet）。理由：只需補 5-7bb，NL10 的 LP 3-bet 範圍寬（含 99/88/AJs/KQs）。翻後 OOP 靠對手 under-barrel 賺 showdown。4-bet bluff → <strong>不適合</strong>——TT 的 showdown value 不該浪費在 bluff 上。</p>
             <p><strong>JJ</strong>: Open 全部。對 3-bet → OOP call vs LP（理由同 TT），vs EP fold。可 4-bet 但更適合 flat。理由同 TT——JJ 有足夠 showdown value。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌</th>
@@ -6075,6 +6390,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>口訣</strong>：「TT/JJ 面低三條街，有 overcard 就退。OOP 遇 LP 3-bet 可 call，遇 EP 3-bet 就 fold。」</blockquote>
             <h4>(9) ATo</h4>
             <p>Open：HJ+ only。對 3-bet → <strong>fold</strong>。A-high → call flop 一次，turn 大注 fold。</p>
@@ -6087,7 +6403,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(11) 開池 Miss 後的第二條街防守 — AK/AQ/AJ/KQ</h4>
             <blockquote><strong>核心問題</strong>：翻前加注，flop miss 還是 c-bet，turn 又沒中——對手反打了。抵抗還是棄？</blockquote>
             <p>你 open 2.2-3bb，進來一個 caller。Flop 完全不中（沒 pair、沒 draw），但你還是 c-bet 1/3-1/2 pot（標準策略：PFR 率先開槍）。Turn 還是沒中，你面臨兩個選擇：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>情境</th>
@@ -6109,9 +6426,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>關鍵洞察</strong>：第一槍 c-bet 是義務（PFR 優勢）。第二槍才是分辨誰會打誰不會打的分水嶺。</blockquote>
             <p>本章只討論 <strong>翻牌完全 miss</strong> 的場景。如果你的牌在翻牌擊中了（top pair 以上），那不是「防守」問題——那是 value bet 或 pot control 的問題，不在本章範圍。</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌</th>
@@ -6142,9 +6461,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>本章前提</strong>：你 open、miss 全部、c-bet 被打回來。翻牌沒中任何對子、沒中任何 draw。只有這樣才是「抵抗 or 放棄」的決策點。</blockquote>
             <p>決定是否繼續抵抗，同時看三個東西：</p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>維度</th>
@@ -6174,9 +6495,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>以下只列出 <strong>翻牌 miss</strong> 的場景。中了的牌請去 value bet，不屬於本章。</blockquote>
             <p><strong>AK（16 combos）— Miss 場景：Q/J-high、低牌</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌型</th>
@@ -6212,9 +6535,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>AK 心法</strong>：「低牌乾面是 AK 的 ATM——對手 flop float 太多，turn barrel 收錢。」</blockquote>
             <p><strong>AQ（16 combos）— Miss 場景：K-high、J-high、低牌</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌型</th>
@@ -6250,9 +6575,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>AQ 心法</strong>：「A-high 和 Q-high 是你的地盤（value）；K-high 是人家的地盤（棄）。」</blockquote>
             <p><strong>AJ（16 combos）— Miss 場景：K-high、Q-high、低牌</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌型</th>
@@ -6288,9 +6615,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>AJ 心法</strong>：「AJ 是 AK/AQ 的小弟——低牌面能扮大哥，K/Q-high 面遇到反打要認命。」</blockquote>
             <p><strong>KQ（16 combos）— Miss 場景：A-high、J-high、低牌</strong></p>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>翻牌型</th>
@@ -6326,8 +6655,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>KQ 心法</strong>：「A-high 面上 KQ 就是垃圾。連 overcard 都不是——你的 K 被 A 擋，你的 Q 被 A 擋。一秒棄。」</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你的牌</th>
@@ -6383,8 +6714,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>「—」= 翻牌中了，本章不適用，去 value bet。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th></th>
@@ -6410,9 +6743,11 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>IP 優化</strong>：IP 有位置，低牌乾面的 AK/AQ <strong>必須開第二槍</strong>——這是你在 miss 時唯一的賺錢方式。<br><strong>OOP 現實</strong>：OOP turn barrel 成本更高。OOP miss 後多選 check-fold。</blockquote>
             <ol><li><strong>NL10 對手 turn donk = 超強</strong>。不要想抓 bluff——他們的 turn donk range 基本上是兩對以上。</li><li><strong>被動型對手</strong>：flop call c-bet 後 turn check → <strong>開第二槍 100%</strong>。這類對手的 float 太多，barrel 收錢。</li><li><strong>攻擊型對手</strong>：flop call 後 turn donk → <strong>棄 AK 以外的所有 miss</strong>。他們的 donk 不是 bluff。</li><li><strong>A-high 面 vs 被動型</strong>：AK/AQ 可 check turn 控池（對手不會 bet without nuts），river 決定。</li><li><strong>低牌乾面是 PFR 的 playground</strong>：AK/AQ/AJ/KQ 全部應該開第二槍。這在 NL10 是幾乎純賺的 spot。</li></ol>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你的牌</th>
@@ -6473,6 +6808,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote><strong>對角線檢查</strong>：左上（AK-A-high）→ 繼續。右下（KQ-連牌）→ 秒棄。<strong>最大教訓在第 1 行第 6 列：KQ A-high → 棄。</strong></blockquote>
             <blockquote>**「A-high 面前 KQ 亡，低牌乾面全部扛；<br>AK 是王不放棄，AQ 怕 K 不怕 A；<br>NL10 donk 是真牌，被動型 turn check 就開槍。」**</blockquote>
             <hr>
@@ -6501,7 +6837,8 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>你 BB K♥9♦，BTN open 2.5bb → 你 3-bet 12bb → BTN 跟<br>翻牌 7♥9♥J♠ — 你中中对。bet 1/3 → BTN 跟<br>转牌 5♦ — bet 1/2 → BTN 跟<br>河牌 A♣ — 你 ALL-IN $6.10 → BTN 弃！<br><br>✅ 好 bluff：<br>- A 是你 BB 3-bet 范围最强的牌（AK/AQ故事成立）<br>- BTN flat 3-bet 范围 capped，不可能有 AK<br>- 不是&quot;决定 bluff&quot;，是&quot;recognize 自己的手从好变坏，<br>  但自己的范围从好变更好，顺势转到 bluff&quot;<br>- 三条街 sizing 一致：1/3 → 1/2 → 3/4 pot all-in</code></pre>
             <hr>
             <h4>(20) 翻前 Equity</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>手牌</th>
@@ -6549,8 +6886,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(21) 翻后 Draw 的 Equity</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>Draw</th>
@@ -6588,8 +6927,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(22) Pot Odds 速算</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>对手 bet</th>
@@ -6627,8 +6968,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <h4>(23) 翻后 Overcard 出现概率</h4>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>你手里</th>
@@ -6654,8 +6997,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <hr>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>指標</th>
@@ -6711,7 +7056,9 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
-            <table>
+</div>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>位置</th>
@@ -6752,8 +7099,10 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>BB -19 在 NL10 已經優於多數玩家（平均 -30~-50），但仍是最大改善空間。Chapter 16 已針對此建立防守系統。</blockquote>
-            <table>
+            <div class="tbl-scroll">
+<table>
               <thead>
                 <tr>
                   <th>症狀</th>
@@ -6783,6 +7132,7 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
                 </tr>
               </tbody>
             </table>
+</div>
             <blockquote>自診體系有效。症狀命名 → 數據驗證 → 行為修復的流程已經建立。</blockquote>
             <ul><li><strong>你在贏。</strong> +11.2 bb/100 是 healthy win rate。</li><li><strong>C-bet 是下一個槓桿點。</strong> 從 48% 拉到 55% 可以增加 ~2-3 bb/100。</li><li><strong>BB 已是 NL10 中上水準，再微調即可。</strong> Chapter 16 的三個優先級改善到位後，BB 可從 -19 進步到 -25~-35。</li><li><strong>情緒管理系統在進化。</strong> Tilt 自診已驗證有效。第三道防線（非 tilt 貪打）待建。</li></ul>
             <hr>
@@ -6795,20 +7145,32 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>翻前：BTN open 2.5bb → 你 BB call<br>翻牌：你第一個行動 → 你 bet → Donk Bet</code></pre>
             <p>NL10 多數人不 donk——他們只 check。但 donk bet 是 BB 防守武器庫裡最重要的激進工具。</p>
             <h4>(2) NL10 的 Donk Bet 現狀</h4>
-            <table><thead><tr><th>對手類型</th><th>Donk 頻率</th><th>Donk 含義</th></tr></thead><tbody><tr><td>魚/娛樂玩家</td><td>高（15-25%）</td><td>亂 donk——"我中了就打"</td></tr><tr><td>Reg</td><td>低（< 5%）</td><td>Donk = 真貨。頂對+或強 draw</td></tr><tr><td>優秀 Reg</td><td>適中（8-12%）</td><td>平衡——有 value 有 bluff</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>對手類型</th><th>Donk 頻率</th><th>Donk 含義</th></tr></thead><tbody><tr><td>魚/娛樂玩家</td><td>高（15-25%）</td><td>亂 donk——"我中了就打"</td></tr><tr><td>Reg</td><td>低（< 5%）</td><td>Donk = 真貨。頂對+或強 draw</td></tr><tr><td>優秀 Reg</td><td>適中（8-12%）</td><td>平衡——有 value 有 bluff</td></tr></tbody></table>
+</div>
             <blockquote><strong>你在 NL10 不要平衡 donk range。</strong> 沒人會因為你只有 value donk 而剝削你。</blockquote>
             <h4>(3) 什麼時候 Donk Bet</h4>
             <p>Donk 的核心邏輯：<strong>牌面嚴重偏向 caller 的範圍時，aggressor 會 check back 太多，你需要自己建池。</strong></p>
             <h4>✅ 適合 Donk 的牌面</h4>
-            <table><thead><tr><th>牌面類型</th><th>為什麼 Donk</th><th>例子</th></tr></thead><tbody><tr><td><strong>中低連接面</strong></td><td>Aggressor 的高牌範圍大量 miss，他會 check back</td><td>9♠8♦6♥, 7♠5♣4♦</td></tr><tr><td><strong>對子低牌面</strong></td><td>Aggressor miss 頻率極高。你的範圍有大量 trips/對子</td><td>5♠5♦2♣</td></tr><tr><td><strong>濕潤中等面</strong></td><td>Aggressor check back 控池。Draw-heavy，你需要收學費</td><td>J♠T♠8♦</td></tr><tr><td><strong>雙同花連接面</strong></td><td>你 BB 範圍有大量 suited 牌。Aggressor offsuit 全 miss</td><td>8♠7♠4♥</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>牌面類型</th><th>為什麼 Donk</th><th>例子</th></tr></thead><tbody><tr><td><strong>中低連接面</strong></td><td>Aggressor 的高牌範圍大量 miss，他會 check back</td><td>9♠8♦6♥, 7♠5♣4♦</td></tr><tr><td><strong>對子低牌面</strong></td><td>Aggressor miss 頻率極高。你的範圍有大量 trips/對子</td><td>5♠5♦2♣</td></tr><tr><td><strong>濕潤中等面</strong></td><td>Aggressor check back 控池。Draw-heavy，你需要收學費</td><td>J♠T♠8♦</td></tr><tr><td><strong>雙同花連接面</strong></td><td>你 BB 範圍有大量 suited 牌。Aggressor offsuit 全 miss</td><td>8♠7♠4♥</td></tr></tbody></table>
+</div>
             <h4>❌ 不適合 Donk 的牌面</h4>
-            <table><thead><tr><th>牌面類型</th><th>為什麼不 Donk</th><th>你該做什麼</th></tr></thead><tbody><tr><td>A/K-high 乾燥</td><td>Aggressor 範圍有大量 A/K，他高頻 c-bet</td><td>check，等他 c-bet 再決定</td></tr><tr><td>超乾燥面</td><td>雙方都 miss，但 aggressor 會 c-bet</td><td>check-raise 或 check-call</td></tr><tr><td>Broadway-heavy</td><td>Aggressor 的 broadway 範圍命中率極高</td><td>check-fold 大部分</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>牌面類型</th><th>為什麼不 Donk</th><th>你該做什麼</th></tr></thead><tbody><tr><td>A/K-high 乾燥</td><td>Aggressor 範圍有大量 A/K，他高頻 c-bet</td><td>check，等他 c-bet 再決定</td></tr><tr><td>超乾燥面</td><td>雙方都 miss，但 aggressor 會 c-bet</td><td>check-raise 或 check-call</td></tr><tr><td>Broadway-heavy</td><td>Aggressor 的 broadway 範圍命中率極高</td><td>check-fold 大部分</td></tr></tbody></table>
+</div>
             <h4>(4) Donk Bet Sizing</h4>
-            <table><thead><tr><th>面類型</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>潮濕連接面（J♠T♠8♦）</td><td><strong>¾ pot</strong></td><td>收 draw 學費</td></tr><tr><td>對子低牌面（5♦5♠2♣）</td><td><strong>⅓ pot</strong></td><td>範圍 bet。小注讓弱牌跟</td></tr><tr><td>中低連接（9♠8♦6♥）</td><td><strong>½ pot</strong></td><td>兩對/順子/強 draw donk</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>面類型</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>潮濕連接面（J♠T♠8♦）</td><td><strong>¾ pot</strong></td><td>收 draw 學費</td></tr><tr><td>對子低牌面（5♦5♠2♣）</td><td><strong>⅓ pot</strong></td><td>範圍 bet。小注讓弱牌跟</td></tr><tr><td>中低連接（9♠8♦6♥）</td><td><strong>½ pot</strong></td><td>兩對/順子/強 draw donk</td></tr></tbody></table>
+</div>
             <h4>(5) Donk Bet Range 建構（BB vs BTN）</h4>
-            <table><thead><tr><th>牌力</th><th>Donk?</th><th>例子</th></tr></thead><tbody><tr><td>兩對+</td><td>✅ Donk</td><td>97 on 976, 55 on 552</td></tr><tr><td>頂對好踢腳</td><td>⚠️ 混</td><td>KQ on K-high 中低面</td></tr><tr><td>頂對弱踢腳</td><td>❌ Check</td><td>K5 on K-high</td></tr><tr><td>強 draw（flush + gutshot）</td><td>✅ Donk</td><td>A♠2♠ on J♠T♠4♦</td></tr><tr><td>中等 draw（OESD）</td><td>⚠️ 混</td><td>98 on JT4</td></tr><tr><td>Air + blocker</td><td>✅ Bluff donk</td><td>A♠3♦ on 852</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>牌力</th><th>Donk?</th><th>例子</th></tr></thead><tbody><tr><td>兩對+</td><td>✅ Donk</td><td>97 on 976, 55 on 552</td></tr><tr><td>頂對好踢腳</td><td>⚠️ 混</td><td>KQ on K-high 中低面</td></tr><tr><td>頂對弱踢腳</td><td>❌ Check</td><td>K5 on K-high</td></tr><tr><td>強 draw（flush + gutshot）</td><td>✅ Donk</td><td>A♠2♠ on J♠T♠4♦</td></tr><tr><td>中等 draw（OESD）</td><td>⚠️ 混</td><td>98 on JT4</td></tr><tr><td>Air + blocker</td><td>✅ Bluff donk</td><td>A♠3♦ on 852</td></tr></tbody></table>
+</div>
             <h4>(6) 如何應對對手的 Donk Bet</h4>
-            <table><thead><tr><th>你的牌</th><th>面對 Donk</th><th>理由</th></tr></thead><tbody><tr><td>TPTK+</td><td>Call（別 raise）</td><td>你 raise = 比他差的跑，比他好的推</td></tr><tr><td>中等對子</td><td>Call 一條街</td><td>他轉牌 check → 你可以 steal</td></tr><tr><td>Air（miss）</td><td><strong>直接棄</strong></td><td>NL10 donk = 有貨</td></tr><tr><td>Set/兩對</td><td><strong>Raise</strong></td><td>他 donk 有貨 → raise 被跟/推 → 吃大底池</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>你的牌</th><th>面對 Donk</th><th>理由</th></tr></thead><tbody><tr><td>TPTK+</td><td>Call（別 raise）</td><td>你 raise = 比他差的跑，比他好的推</td></tr><tr><td>中等對子</td><td>Call 一條街</td><td>他轉牌 check → 你可以 steal</td></tr><tr><td>Air（miss）</td><td><strong>直接棄</strong></td><td>NL10 donk = 有貨</td></tr><tr><td>Set/兩對</td><td><strong>Raise</strong></td><td>他 donk 有貨 → raise 被跟/推 → 吃大底池</td></tr></tbody></table>
+</div>
             <blockquote><strong>NL10 鐵律</strong>：reg 的 donk = 頂對+。魚的 donk = 任何中了的東西。被 reg donk 就謹慎，被魚 donk 可以 float。</blockquote>
             <hr>
       </section>      <section id="28-floating-ip-的空氣跟注" class="chapter">
@@ -6819,14 +7181,22 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>翻前：BTN open → 你 BB call<br>翻牌：你 check → BTN c-bet ½ pot → 你 call（float）<br>轉牌：BTN check → 你 bet ⅔ pot → BTN fold</code></pre>
             <p>你從頭到尾沒中牌——你是在打他的 <strong>check 信號</strong>。</p>
             <h4>(2) Float 的兩個前提（缺一不可）</h4>
-            <table><thead><tr><th>前提</th><th>說明</th></tr></thead><tbody><tr><td><strong>1. 有位置</strong></td><td>IP 才能 float。OOP float = 自殺</td></tr><tr><td><strong>2. 對手會 check 轉牌</strong></td><td>Float 的核心是 exploit「對手 c-bet 翻牌但 check 轉牌」的 pattern</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>前提</th><th>說明</th></tr></thead><tbody><tr><td><strong>1. 有位置</strong></td><td>IP 才能 float。OOP float = 自殺</td></tr><tr><td><strong>2. 對手會 check 轉牌</strong></td><td>Float 的核心是 exploit「對手 c-bet 翻牌但 check 轉牌」的 pattern</td></tr></tbody></table>
+</div>
             <blockquote><strong>NL10 人口特徵</strong>：大量玩家 c-bet flop 頻率高（65%+），但 turn c-bet 頻率驟降（< 40%）。這正是 float 的土壤。</blockquote>
             <h4>(3) Float 的好牌 vs 壞牌</h4>
-            <table><thead><tr><th>手牌特徵</th><th>Float?</th><th>理由</th></tr></thead><tbody><tr><td>有 backdoor flush draw</td><td>✅ 最佳</td><td>轉牌中花 draw → 半詐 bluff</td></tr><tr><td>有兩張 overcards</td><td>✅ 好</td><td>轉牌中 top pair → 變成 value</td></tr><tr><td>有 gutshot / OESD</td><td>✅ 好</td><td>轉牌中順 → value；不中 → bluff</td></tr><tr><td>有 blocker（A/K）</td><td>✅ 好</td><td>A blocker 降低他 AK/AA</td></tr><tr><td>純空氣 + 低牌面</td><td>⚠️ 可以</td><td>他 c-bet range 弱</td></tr><tr><td>純空氣 + A/K-high 面</td><td>❌ 不行</td><td>他 c-bet range 強，你撞牆</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>手牌特徵</th><th>Float?</th><th>理由</th></tr></thead><tbody><tr><td>有 backdoor flush draw</td><td>✅ 最佳</td><td>轉牌中花 draw → 半詐 bluff</td></tr><tr><td>有兩張 overcards</td><td>✅ 好</td><td>轉牌中 top pair → 變成 value</td></tr><tr><td>有 gutshot / OESD</td><td>✅ 好</td><td>轉牌中順 → value；不中 → bluff</td></tr><tr><td>有 blocker（A/K）</td><td>✅ 好</td><td>A blocker 降低他 AK/AA</td></tr><tr><td>純空氣 + 低牌面</td><td>⚠️ 可以</td><td>他 c-bet range 弱</td></tr><tr><td>純空氣 + A/K-high 面</td><td>❌ 不行</td><td>他 c-bet range 強，你撞牆</td></tr></tbody></table>
+</div>
             <h4>(4) Float 轉牌 Bet Sizing</h4>
-            <table><thead><tr><th>轉牌面</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>Blank（沒改變）</td><td><strong>⅔ pot</strong></td><td>他 check = 沒有。大注直接收</td></tr><tr><td>你中 draw 的牌</td><td><strong>½ pot</strong></td><td>建池 + 半詐</td></tr><tr><td>危險張（花/順到了）</td><td><strong>Check back</strong></td><td>card 幫了他範圍</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>轉牌面</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>Blank（沒改變）</td><td><strong>⅔ pot</strong></td><td>他 check = 沒有。大注直接收</td></tr><tr><td>你中 draw 的牌</td><td><strong>½ pot</strong></td><td>建池 + 半詐</td></tr><tr><td>危險張（花/順到了）</td><td><strong>Check back</strong></td><td>card 幫了他範圍</td></tr></tbody></table>
+</div>
             <h4>(5) Float vs Raise 的選擇</h4>
-            <table><thead><tr><th></th><th>Float</th><th>Raise</th></tr></thead><tbody><tr><td>成本</td><td>翻牌 ½ pot call</td><td>翻牌 raise（~3x c-bet）</td></tr><tr><td>風險</td><td>低（一條街）</td><td>高（被推回來就死了）</td></tr><tr><td>NL10 推薦</td><td>✅ 更常用</td><td>⚠️ 少用</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th></th><th>Float</th><th>Raise</th></tr></thead><tbody><tr><td>成本</td><td>翻牌 ½ pot call</td><td>翻牌 raise（~3x c-bet）</td></tr><tr><td>風險</td><td>低（一條街）</td><td>高（被推回來就死了）</td></tr><tr><td>NL10 推薦</td><td>✅ 更常用</td><td>⚠️ 少用</td></tr></tbody></table>
+</div>
             <blockquote><strong>口訣</strong>：「Float 是偷一條街，Raise 是跟對面打架。NL10——偷就好，別打架。」</blockquote>
             <hr>
       </section>      <section id="29-geometric-sizing-三街串聯思維" class="chapter">
@@ -6836,9 +7206,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <p><strong>Geometric Sizing</strong> = 按三街規劃下注大小，讓河牌最後一注剛好等於剩餘籌碼。</p>
             <pre><code>你有 TPTK，底池 6bb，有效碼 100bb。<br>幾何下注不是在問「翻牌打多少」——是在問：<br>「我要三條街打多少%，河牌才能剛好把 100bb 推進池裡？」</code></pre>
             <h4>(2) Geometric Size 速算</h4>
-            <table><thead><tr><th>目標街數</th><th>每街 Size (% pot)</th><th>總增長倍數</th></tr></thead><tbody><tr><td>2 街（翻牌 check，轉+河）</td><td>75% + 75%</td><td>~7x</td></tr><tr><td>3 街</td><td>66% + 66% + 66%</td><td>~13x</td></tr><tr><td>3 街（大）</td><td>75% + 75% + 75%</td><td>~20x</td></tr><tr><td>3 街（小）</td><td>50% + 50% + 62%</td><td>~8x</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>目標街數</th><th>每街 Size (% pot)</th><th>總增長倍數</th></tr></thead><tbody><tr><td>2 街（翻牌 check，轉+河）</td><td>75% + 75%</td><td>~7x</td></tr><tr><td>3 街</td><td>66% + 66% + 66%</td><td>~13x</td></tr><tr><td>3 街（大）</td><td>75% + 75% + 75%</td><td>~20x</td></tr><tr><td>3 街（小）</td><td>50% + 50% + 62%</td><td>~8x</td></tr></tbody></table>
+</div>
             <h4>(3) NL10 實戰模板</h4>
-            <table><thead><tr><th>SPR 區間</th><th>模板</th><th>例子</th></tr></thead><tbody><tr><td><strong>低 SPR（1-3）</strong></td><td>一槍 ½ pot，河牌推</td><td>4-bet pot with AA</td></tr><tr><td><strong>中 SPR（4-6）</strong></td><td>翻牌 ⅔，轉牌 ⅔，河牌推剩下的</td><td>3-bet pot with TPTK</td></tr><tr><td><strong>高 SPR（7-13）</strong></td><td>翻牌 ½，轉牌 ⅔，河牌 ¾</td><td>SRP with overpair</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>SPR 區間</th><th>模板</th><th>例子</th></tr></thead><tbody><tr><td><strong>低 SPR（1-3）</strong></td><td>一槍 ½ pot，河牌推</td><td>4-bet pot with AA</td></tr><tr><td><strong>中 SPR（4-6）</strong></td><td>翻牌 ⅔，轉牌 ⅔，河牌推剩下的</td><td>3-bet pot with TPTK</td></tr><tr><td><strong>高 SPR（7-13）</strong></td><td>翻牌 ½，轉牌 ⅔，河牌 ¾</td><td>SRP with overpair</td></tr></tbody></table>
+</div>
             <blockquote><strong>一句話</strong>：「翻牌打的每一分錢，都是在為河牌的那一推鋪路。」</blockquote>
             <hr>
       </section>      <section id="30-probe-bet-delayed-c-bet" class="chapter">
@@ -6849,31 +7223,47 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <pre><code>翻前：BTN open → 你 BB call<br>翻牌：你 check → BTN check back<br>轉牌：你 bet → Probe Bet</code></pre>
             <p>當 aggressor check back 翻牌時，他在說：①「我有 show down value，控池。」②「我完全 miss，放棄了。」Probe bet 同時攻擊這兩種。</p>
             <h4>適合 Probe 的轉牌</h4>
-            <table><thead><tr><th>轉牌</th><th>為什麼</th><th>動作</th></tr></thead><tbody><tr><td><strong>高牌（A/K/Q）</strong></td><td>你的 BB 範圍有大量 Ax/Kx</td><td>Bet ⅔</td></tr><tr><td><strong>完成 draw</strong></td><td>BB 有大量 suited connector</td><td>Bet ¾</td></tr><tr><td><strong>低 blank</strong></td><td>你先 bet → 他中等牌難受</td><td>Bet ½</td></tr><tr><td><strong>對子（board pair）</strong></td><td>Trips 在 BB 範圍密度高</td><td>Bet ⅔</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>轉牌</th><th>為什麼</th><th>動作</th></tr></thead><tbody><tr><td><strong>高牌（A/K/Q）</strong></td><td>你的 BB 範圍有大量 Ax/Kx</td><td>Bet ⅔</td></tr><tr><td><strong>完成 draw</strong></td><td>BB 有大量 suited connector</td><td>Bet ¾</td></tr><tr><td><strong>低 blank</strong></td><td>你先 bet → 他中等牌難受</td><td>Bet ½</td></tr><tr><td><strong>對子（board pair）</strong></td><td>Trips 在 BB 範圍密度高</td><td>Bet ⅔</td></tr></tbody></table>
+</div>
             <h4>(2) Delayed C-bet（延遲 C-bet）</h4>
             <p><strong>Delayed C-bet</strong> = 你是翻前 aggressor，翻牌<strong>故意 check</strong>，轉牌<strong>bet</strong>。</p>
-            <table><thead><tr><th></th><th>標準 C-bet</th><th>Delayed C-bet</th></tr></thead><tbody><tr><td>時機</td><td>翻牌就打</td><td>翻牌 check → 轉牌 bet</td></tr><tr><td>訊息</td><td>「我範圍比你強」</td><td>「我翻牌在陷阱/控池，現在我要打了」</td></tr><tr><td>對手反應</td><td>以為你總有牌</td><td>以為你 miss 了 → 更容易 call value / fold to bluff</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th></th><th>標準 C-bet</th><th>Delayed C-bet</th></tr></thead><tbody><tr><td>時機</td><td>翻牌就打</td><td>翻牌 check → 轉牌 bet</td></tr><tr><td>訊息</td><td>「我範圍比你強」</td><td>「我翻牌在陷阱/控池，現在我要打了」</td></tr><tr><td>對手反應</td><td>以為你總有牌</td><td>以為你 miss 了 → 更容易 call value / fold to bluff</td></tr></tbody></table>
+</div>
             <h4>什麼時候用 Delayed C-bet</h4>
-            <table><thead><tr><th>場景</th><th>Delayed?</th><th>理由</th></tr></thead><tbody><tr><td>你有堅果，面乾燥</td><td>✅</td><td>翻牌 check = 裝弱。轉牌 bet = 誘捕</td></tr><tr><td>你有 TPTK，面濕</td><td>❌</td><td>濕面直接 c-bet 收學費</td></tr><tr><td>你完全 miss，面乾</td><td>✅</td><td>你的 range 比 cold-call 的強</td></tr><tr><td>面 A/K-high，你 miss</td><td>❌</td><td>他 cold-call range 有 A/K。bet = 撞牆</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>場景</th><th>Delayed?</th><th>理由</th></tr></thead><tbody><tr><td>你有堅果，面乾燥</td><td>✅</td><td>翻牌 check = 裝弱。轉牌 bet = 誘捕</td></tr><tr><td>你有 TPTK，面濕</td><td>❌</td><td>濕面直接 c-bet 收學費</td></tr><tr><td>你完全 miss，面乾</td><td>✅</td><td>你的 range 比 cold-call 的強</td></tr><tr><td>面 A/K-high，你 miss</td><td>❌</td><td>他 cold-call range 有 A/K。bet = 撞牆</td></tr></tbody></table>
+</div>
             <blockquote><strong>記憶</strong>：「Probe = 被動變主動。Delayed = 主動裝被動再變主動。」</blockquote>
             <hr>
       </section>      <section id="31-3-bet-pot-翻後專項" class="chapter">
         <h2>31. 3-Bet Pot 翻後專項</h2>
             <blockquote><strong>核心問題</strong>：3-bet pot 的 SPR 只有 3-5，翻後決策樹極短——打錯一街就沒了。</blockquote>
             <h4>(1) 3-Bet Pot vs SRP</h4>
-            <table><thead><tr><th></th><th>SRP</th><th>3BP</th></tr></thead><tbody><tr><td>翻前底池</td><td>5-6bb</td><td>18-22bb</td></tr><tr><td>SPR</td><td>15-20</td><td>3-5</td></tr><tr><td>剩餘街數</td><td>3 街</td><td>1.5-2 街</td></tr><tr><td>TPTK 強度</td><td>能打三街 value</td><td>接近堅果</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th></th><th>SRP</th><th>3BP</th></tr></thead><tbody><tr><td>翻前底池</td><td>5-6bb</td><td>18-22bb</td></tr><tr><td>SPR</td><td>15-20</td><td>3-5</td></tr><tr><td>剩餘街數</td><td>3 街</td><td>1.5-2 街</td></tr><tr><td>TPTK 強度</td><td>能打三街 value</td><td>接近堅果</td></tr></tbody></table>
+</div>
             <h4>(2) 你是 3-Bettor — 翻牌 C-bet 策略</h4>
-            <table><thead><tr><th>SPR</th><th>C-bet 頻率</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>3-4</td><td>70%+</td><td>⅓-½ pot</td><td>小注就能威脅整組</td></tr><tr><td>4-5</td><td>60%+</td><td>½ pot</td><td>適中</td></tr><tr><td>5-6</td><td>55%+</td><td>½-⅔</td><td>接近 SRP 思維</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>SPR</th><th>C-bet 頻率</th><th>Size</th><th>理由</th></tr></thead><tbody><tr><td>3-4</td><td>70%+</td><td>⅓-½ pot</td><td>小注就能威脅整組</td></tr><tr><td>4-5</td><td>60%+</td><td>½ pot</td><td>適中</td></tr><tr><td>5-6</td><td>55%+</td><td>½-⅔</td><td>接近 SRP 思維</td></tr></tbody></table>
+</div>
             <h4>(3) 你是 3-Bet Caller — 翻牌面對 C-bet</h4>
-            <table><thead><tr><th>你的牌</th><th>SPR</th><th>動作</th></tr></thead><tbody><tr><td>TPTK</td><td>任何</td><td><strong>Call</strong>。低 SPR 下 TPTK 不需要 raise</td></tr><tr><td>頂對弱踢腳</td><td>任何</td><td>Call 一條街。轉牌對手 bet → 棄</td></tr><tr><td>中對（88-JJ on 低面）</td><td>< 4</td><td>Call。SPR 低 = 中對很強</td></tr><tr><td>Draw（flush/OESD）</td><td>< 4</td><td>可以推 all-in semi-bluff</td></tr><tr><td>Air</td><td>任何</td><td><strong>棄。</strong> 3BP 不是 float 的地方</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>你的牌</th><th>SPR</th><th>動作</th></tr></thead><tbody><tr><td>TPTK</td><td>任何</td><td><strong>Call</strong>。低 SPR 下 TPTK 不需要 raise</td></tr><tr><td>頂對弱踢腳</td><td>任何</td><td>Call 一條街。轉牌對手 bet → 棄</td></tr><tr><td>中對（88-JJ on 低面）</td><td>< 4</td><td>Call。SPR 低 = 中對很強</td></tr><tr><td>Draw（flush/OESD）</td><td>< 4</td><td>可以推 all-in semi-bluff</td></tr><tr><td>Air</td><td>任何</td><td><strong>棄。</strong> 3BP 不是 float 的地方</td></tr></tbody></table>
+</div>
             <h4>(4) NL10 3BP 特別篇</h4>
-            <table><thead><tr><th>NL10 特徵</th><th>你的調整</th></tr></thead><tbody><tr><td>3-bet 範圍偏 value-heavy</td><td>Call 3-bet 的範圍收緊</td></tr><tr><td>翻牌被 c-bet 後很少 float</td><td>你的 fold to c-bet in 3BP 可以高</td></tr><tr><td>轉牌 check = 放棄</td><td>當 aggressor：轉牌繼續 bet</td></tr><tr><td>河牌推 = 有貨</td><td>別 hero call 3BP river shove</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>NL10 特徵</th><th>你的調整</th></tr></thead><tbody><tr><td>3-bet 範圍偏 value-heavy</td><td>Call 3-bet 的範圍收緊</td></tr><tr><td>翻牌被 c-bet 後很少 float</td><td>你的 fold to c-bet in 3BP 可以高</td></tr><tr><td>轉牌 check = 放棄</td><td>當 aggressor：轉牌繼續 bet</td></tr><tr><td>河牌推 = 有貨</td><td>別 hero call 3BP river shove</td></tr></tbody></table>
+</div>
             <hr>
       </section>      <section id="32-手牌閱讀系統-逐街窄化範圍" class="chapter">
         <h2>32. 手牌閱讀系統 — 逐街窄化範圍</h2>
             <blockquote><strong>核心問題</strong>：對手的每一手動作都在窄化他的範圍。你能不能從「他有 AK」精確到「他在這 6 個 combo 裡」？</blockquote>
             <h4>(1) 手牌閱讀的三層次</h4>
-            <table><thead><tr><th>層次</th><th>你做什麼</th><th>例子</th></tr></thead><tbody><tr><td><strong>L1</strong>：翻前範圍</td><td>「他 MP open。」</td><td>15-18% range, ~200 combos</td></tr><tr><td><strong>L2</strong>：翻牌行動</td><td>「他 c-bet on A-high。」</td><td>窄到 ~90 combos</td></tr><tr><td><strong>L3</strong>：逐街精確</td><td>「他 turn bet ⅔, river check。」</td><td>窄到 ~12 combos</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>層次</th><th>你做什麼</th><th>例子</th></tr></thead><tbody><tr><td><strong>L1</strong>：翻前範圍</td><td>「他 MP open。」</td><td>15-18% range, ~200 combos</td></tr><tr><td><strong>L2</strong>：翻牌行動</td><td>「他 c-bet on A-high。」</td><td>窄到 ~90 combos</td></tr><tr><td><strong>L3</strong>：逐街精確</td><td>「他 turn bet ⅔, river check。」</td><td>窄到 ~12 combos</td></tr></tbody></table>
+</div>
             <h4>(2) 逐街窄化框架</h4>
             <p><strong>翻牌 Call 含義</strong>：有 equity——對子、draw、A-high（想 showdown）。不只是「他有頂對」。</p>
             <p><strong>轉牌從 Size 讀</strong>：Bet 大（¾+）= 窄（TPTK+）、Bet 小（⅓-½）= 寬（中等對子想便宜 showdown）、Check-raise = 極窄（nuts）。</p>
@@ -6881,34 +7271,48 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(3) 實戰：從 200 combos 到 24 combos</h4>
             <pre><code>翻前：MP open 2.5bb。範圍 ~18%（~240 combos）<br><br>翻牌：A♠J♦7♥。你 c-bet ½ → 他 call。<br>  → fold 空氣、gutshot、弱對子<br>  → 剩下 ~90 combos<br><br>轉牌：4♦（blank）。你 bet ⅔ → 他 call。<br>  → 剩下 AK/AQ/AJ/KJ/QJ/JT ~30 combos<br><br>河牌：2♣（blank）。你 bet ¾ → 他 call。<br>  → 剩下 AK/AQ/AJ/KJ ~24 combos</code></pre>
             <h4>(4) 新手常犯的讀牌錯誤</h4>
-            <table><thead><tr><th>錯誤</th><th>為什麼錯</th><th>正確做法</th></tr></thead><tbody><tr><td>「他一定有 AK」</td><td>把範圍坍縮成一組牌</td><td>想「他可能有 AK/AQ/AJ/AT，共 XX combos」</td></tr><tr><td>「他 check = 他沒牌」</td><td>Check 可能是陷阱</td><td>參照他的整體範圍。他會 check nuts 嗎？</td></tr><tr><td>「有 A blocker 所以他沒 A」</td><td>Blocker 只減 ~25%，不是 100%</td><td>「他有 A 的機率降低了，不是消失了」</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>錯誤</th><th>為什麼錯</th><th>正確做法</th></tr></thead><tbody><tr><td>「他一定有 AK」</td><td>把範圍坍縮成一組牌</td><td>想「他可能有 AK/AQ/AJ/AT，共 XX combos」</td></tr><tr><td>「他 check = 他沒牌」</td><td>Check 可能是陷阱</td><td>參照他的整體範圍。他會 check nuts 嗎？</td></tr><tr><td>「有 A blocker 所以他沒 A」</td><td>Blocker 只減 ~25%，不是 100%</td><td>「他有 A 的機率降低了，不是消失了」</td></tr></tbody></table>
+</div>
             <h4>(5) NL10 讀牌速查</h4>
-            <table><thead><tr><th>對手類型</th><th>翻牌 Call</th><th>轉牌 Call</th><th>河牌 Bet</th></tr></thead><tbody><tr><td>魚（VPIP 40%+）</td><td>任何中了/任何 draw</td><td>中了頂對+</td><td>有貨（很少 bluff）</td></tr><tr><td>Reg（VPIP 20-28%）</td><td>中等對+、draw、A-high</td><td>TPTK+、強 draw</td><td>平衡</td></tr><tr><td>NIT（VPIP < 18%）</td><td>頂對+</td><td>頂對好踢腳+</td><td>堅果</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>對手類型</th><th>翻牌 Call</th><th>轉牌 Call</th><th>河牌 Bet</th></tr></thead><tbody><tr><td>魚（VPIP 40%+）</td><td>任何中了/任何 draw</td><td>中了頂對+</td><td>有貨（很少 bluff）</td></tr><tr><td>Reg（VPIP 20-28%）</td><td>中等對+、draw、A-high</td><td>TPTK+、強 draw</td><td>平衡</td></tr><tr><td>NIT（VPIP < 18%）</td><td>頂對+</td><td>頂對好踢腳+</td><td>堅果</td></tr></tbody></table>
+</div>
             <blockquote><strong>終極口訣</strong>：「不是猜他拿什麼，是縮小他可能的範圍。每條街砍一半，河牌剩 10-20 combos。」</blockquote>
             <hr>
       </section>      <section id="33-solver-與工具入門-從感覺到數據" class="chapter">
         <h2>33. Solver 與工具入門 — 從「感覺」到「數據」</h2>
             <blockquote><strong>核心問題</strong>：你已經有大量理論知識。下一步是用工具把理論變成精確數字。</blockquote>
             <h4>(1) 工具全景圖</h4>
-            <table><thead><tr><th>工具</th><th>做什麼</th><th>什麼時候用</th><th>費用</th><th>連結</th></tr></thead><tbody><tr><td><strong>Equilab</strong></td><td>Equity 計算：手牌 vs 範圍勝率</td><td>每一手復盤的第一步</td><td>免費</td><td><a href="https://www.pokerstrategy.com/software/equilab-holdem/" target="_blank">下載</a></td></tr><tr><td><strong>Flopzilla</strong></td><td>Range 分析：翻牌對手中了多少？</td><td>研究牌面 texture vs 範圍</td><td>$25 一次性</td><td><a href="https://www.flopzilla.com/" target="_blank">購買</a></td></tr><tr><td><strong>GTO+</strong></td><td>Solver：GTO 最優策略</td><td>深度研究特定 spot</td><td>$75 一次性</td><td><a href="https://www.gtoplus.com/" target="_blank">購買</a></td></tr><tr><td><strong>PioSolver</strong></td><td>Solver（更強更貴）</td><td>專業研究</td><td>$250+</td><td><a href="https://www.piosolver.com/" target="_blank">購買</a></td></tr><tr><td><strong>HRC</strong></td><td>翻前範圍計算</td><td>建構翻前範圍</td><td>有免費版</td><td><a href="https://www.holdemresources.net/calculator" target="_blank">網站</a></td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>工具</th><th>做什麼</th><th>什麼時候用</th><th>費用</th><th>連結</th></tr></thead><tbody><tr><td><strong>Equilab</strong></td><td>Equity 計算：手牌 vs 範圍勝率</td><td>每一手復盤的第一步</td><td>免費</td><td><a href="https://www.pokerstrategy.com/software/equilab-holdem/" target="_blank">下載</a></td></tr><tr><td><strong>Flopzilla</strong></td><td>Range 分析：翻牌對手中了多少？</td><td>研究牌面 texture vs 範圍</td><td>$25 一次性</td><td><a href="https://www.flopzilla.com/" target="_blank">購買</a></td></tr><tr><td><strong>GTO+</strong></td><td>Solver：GTO 最優策略</td><td>深度研究特定 spot</td><td>$75 一次性</td><td><a href="https://www.gtoplus.com/" target="_blank">購買</a></td></tr><tr><td><strong>PioSolver</strong></td><td>Solver（更強更貴）</td><td>專業研究</td><td>$250+</td><td><a href="https://www.piosolver.com/" target="_blank">購買</a></td></tr><tr><td><strong>HRC</strong></td><td>翻前範圍計算</td><td>建構翻前範圍</td><td>有免費版</td><td><a href="https://www.holdemresources.net/calculator" target="_blank">網站</a></td></tr></tbody></table>
+</div>
             <blockquote><strong>NL10 路線</strong>：Equilab（必備）→ Flopzilla（強烈推薦）→ GTO+（升 NL25 時買）。</blockquote>
             <h4>(2) Equilab：每一手復盤的起點</h4>
             <p>復盤三步：</p>
-            <table><thead><tr><th>問題</th><th>Equilab 怎麼回答</th><th>例子</th></tr></thead><tbody><tr><td>「我翻牌領先嗎？」</td><td>你的牌 vs 他繼續的範圍</td><td>AJo on A72r vs BB call → ~78%</td></tr><tr><td>「轉牌我該繼續嗎？」</td><td>轉牌後的 equity</td><td>同上，turn T → ~65%</td></tr><tr><td>「河牌能 value bet 嗎？」</td><td>河牌 equity vs calling range</td><td>你的 hand vs 他河牌會跟的範圍</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>問題</th><th>Equilab 怎麼回答</th><th>例子</th></tr></thead><tbody><tr><td>「我翻牌領先嗎？」</td><td>你的牌 vs 他繼續的範圍</td><td>AJo on A72r vs BB call → ~78%</td></tr><tr><td>「轉牌我該繼續嗎？」</td><td>轉牌後的 equity</td><td>同上，turn T → ~65%</td></tr><tr><td>「河牌能 value bet 嗎？」</td><td>河牌 equity vs calling range</td><td>你的 hand vs 他河牌會跟的範圍</td></tr></tbody></table>
+</div>
             <p><strong>節奏</strong>：每天 1-2 手，用 Equilab 復盤，寫一句話結論。</p>
             <h4>(3) Solver 入門：什麼時候開始</h4>
             <blockquote><strong>誠實建議：NL10 不需要 solver。</strong> Equilab + Flopzilla 足夠打到 NL25。</blockquote>
-            <table><thead><tr><th>階段</th><th>用什麼</th></tr></thead><tbody><tr><td>NL10 盈利中</td><td>Equilab + Flopzilla 足夠</td></tr><tr><td>NL10 穩定 5+ bb/100</td><td>可以買 GTO+（$75）</td></tr><tr><td>準備升 NL25</td><td>GTO+ 必備</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>階段</th><th>用什麼</th></tr></thead><tbody><tr><td>NL10 盈利中</td><td>Equilab + Flopzilla 足夠</td></tr><tr><td>NL10 穩定 5+ bb/100</td><td>可以買 GTO+（$75）</td></tr><tr><td>準備升 NL25</td><td>GTO+ 必備</td></tr></tbody></table>
+</div>
             <p>Solver 的價值不是「每手牌都跑」——是<strong>跑一個 spot，學一個 pattern，然後舉一反三。</strong></p>
             <h4>(4) 推薦的學習節奏</h4>
-            <table><thead><tr><th>頻率</th><th>做什麼</th><th>花多久</th></tr></thead><tbody><tr><td>每 session 後</td><td>Equilab 復盤 1-2 手</td><td>5 分鐘</td></tr><tr><td>每週</td><td>Flopzilla 分析一個 spot</td><td>20 分鐘</td></tr><tr><td>每月</td><td>GTO+ 跑一個 spot</td><td>1 小時</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>頻率</th><th>做什麼</th><th>花多久</th></tr></thead><tbody><tr><td>每 session 後</td><td>Equilab 復盤 1-2 手</td><td>5 分鐘</td></tr><tr><td>每週</td><td>Flopzilla 分析一個 spot</td><td>20 分鐘</td></tr><tr><td>每月</td><td>GTO+ 跑一個 spot</td><td>1 小時</td></tr></tbody></table>
+</div>
             <blockquote><strong>核心</strong>：「工具是顯微鏡，不是拐杖。用完要關掉，回到牌桌用學到的 pattern 打。」</blockquote>
             <hr>
       </section>      <section id="34-研究方法論-如何獨立復盤一手牌" class="chapter">
         <h2>34. 研究方法論 — 如何獨立復盤一手牌</h2>
             <blockquote><strong>核心問題</strong>：打完一手牌，你怎麼知道自己打對還是打錯？</blockquote>
             <h4>(1) 復盤的五個層次</h4>
-            <table><thead><tr><th>層次</th><th>你做什麼</th><th>例子</th></tr></thead><tbody><tr><td><strong>L0</strong>：結果導向</td><td>「我輸了 → 我打錯了」</td><td>AA 被 bad beat → 「AA 真爛」 ❌</td></tr><tr><td><strong>L1</strong>：單街檢查</td><td>「這條街的決定對嗎？」</td><td>「翻牌 c-bet 對，但他 raise 我該 fold」</td></tr><tr><td><strong>L2</strong>：全街串聯</td><td>翻前→翻→轉→河每個決定連起來</td><td>你的檢測點</td></tr><tr><td><strong>L3</strong>：範圍驗證</td><td>用 Solver/Equilab 驗證偏離</td><td>數據驅動</td></tr><tr><td><strong>L4</strong>：模式識別</td><td>發現重複錯誤，加一條新規則</td><td>在筆記裡歸檔</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>層次</th><th>你做什麼</th><th>例子</th></tr></thead><tbody><tr><td><strong>L0</strong>：結果導向</td><td>「我輸了 → 我打錯了」</td><td>AA 被 bad beat → 「AA 真爛」 ❌</td></tr><tr><td><strong>L1</strong>：單街檢查</td><td>「這條街的決定對嗎？」</td><td>「翻牌 c-bet 對，但他 raise 我該 fold」</td></tr><tr><td><strong>L2</strong>：全街串聯</td><td>翻前→翻→轉→河每個決定連起來</td><td>你的檢測點</td></tr><tr><td><strong>L3</strong>：範圍驗證</td><td>用 Solver/Equilab 驗證偏離</td><td>數據驅動</td></tr><tr><td><strong>L4</strong>：模式識別</td><td>發現重複錯誤，加一條新規則</td><td>在筆記裡歸檔</td></tr></tbody></table>
+</div>
             <h4>(2) 復盤三步法</h4>
             <p><strong>Step 1：還原（2分鐘）</strong> — 不看結果，重建每條街決策點。寫下來。</p>
             <p><strong>Step 2：逐街檢查（5分鐘）</strong> — 每街三問：有 +EV 嗎？有更好的決定嗎？和策略一致嗎？</p>
@@ -6916,9 +7320,13 @@ River 6♥ → check-raise 3.28（悄悄变两对，收 value）</code></pre>
             <h4>(3) 復盤模板</h4>
             <pre><code>## Hand Review: [日期] [手牌] [位置]<br><br>### 場景<br>- 位置: BTN open, BB call<br>- 有效碼: 100bb<br>- 手牌: A♠J♠<br><br>### 逐街<br>| 街 | 動作 | 我的決定 | 更好？ | 符合策略？ |<br>|----|------|---------|--------|----------|<br>| 翻前 | open 2.5bb | ✅ | - | ✅ |<br>| 翻牌 A72r | c-bet ½ | ✅ | ⅓ 更好 | ⚠️ |<br>| 轉牌 T | bet ⅔ | ⚠️ | check 控池 | ❌ |<br>| 河牌 3 | check-fold | ✅ | - | ✅ |<br><br>### Equilab 驗證<br>- 翻牌 equity: 78% → c-bet ✅<br>- 轉牌 equity: 65% → 可 bet ½ 就夠<br><br>### 學到的規則<br>「A-high 乾燥面 TPTK → 翻牌 ⅓，轉牌 check 控池或 ½。」</code></pre>
             <h4>(4) 哪些牌值得復盤</h4>
-            <table><thead><tr><th>優先</th><th>場景</th><th>為什麼</th></tr></thead><tbody><tr><td>🔴 最高</td><td>你輸了大底池（> 40bb）</td><td>最貴的錯誤</td></tr><tr><td>🟡 中</td><td>你不確定該 fold 還是 call</td><td>灰色地帶是進步空間</td></tr><tr><td>🟢 低</td><td>贏了大底池但不知道是否打對</td><td>可能只是運氣好</td></tr><tr><td>⚪ 不復盤</td><td>標準 cooler（AA vs KK pre）</td><td>沒東西可學</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>優先</th><th>場景</th><th>為什麼</th></tr></thead><tbody><tr><td>🔴 最高</td><td>你輸了大底池（> 40bb）</td><td>最貴的錯誤</td></tr><tr><td>🟡 中</td><td>你不確定該 fold 還是 call</td><td>灰色地帶是進步空間</td></tr><tr><td>🟢 低</td><td>贏了大底池但不知道是否打對</td><td>可能只是運氣好</td></tr><tr><td>⚪ 不復盤</td><td>標準 cooler（AA vs KK pre）</td><td>沒東西可學</td></tr></tbody></table>
+</div>
             <h4>(5) NL10 復盤節奏</h4>
-            <table><thead><tr><th>頻率</th><th>做什麼</th></tr></thead><tbody><tr><td>每 session</td><td>復盤 1 手最困惑的牌（用模板）</td></tr><tr><td>每週</td><td>復盤 3-5 手，找 pattern</td></tr><tr><td>每月</td><td>對照數據審計，驗證改善是否反映在 win rate</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>頻率</th><th>做什麼</th></tr></thead><tbody><tr><td>每 session</td><td>復盤 1 手最困惑的牌（用模板）</td></tr><tr><td>每週</td><td>復盤 3-5 手，找 pattern</td></tr><tr><td>每月</td><td>對照數據審計，驗證改善是否反映在 win rate</td></tr></tbody></table>
+</div>
             <blockquote><strong>終極心法</strong>：「復盤不是為了判斷這手牌打對打錯——是為了下一手不再犯同樣的錯。」</blockquote>
             <hr>
       </section>      <section id="35-弱者道之用极化支付能力与ev来源" class="chapter">
@@ -6947,7 +7355,9 @@ Cooler 部分：
             <h4>(3) "弱者道之用"——弱牌变强的辩证</h4>
             <p>老子的"弱者道之用"在扑克中的应用：</p>
             <h4>弱牌如何变成强牌</h4>
-            <table><thead><tr><th>阶段</th><th>45s on A84</th><th>88 on K85</th></tr></thead><tbody><tr><td>翻牌</td><td>底对 4，弱</td><td>中 set，强</td></tr><tr><td>转牌</td><td>方块听牌，中等</td><td>K 配对变葫芦，更强</td></tr><tr><td>河牌</td><td>没中，纯空气 → <strong>变身 bluff</strong></td><td>不变，但等对面变</td></tr><tr><td>结果</td><td>超池 jam 收锅</td><td>等 66 变葫芦后收他全部</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>阶段</th><th>45s on A84</th><th>88 on K85</th></tr></thead><tbody><tr><td>翻牌</td><td>底对 4，弱</td><td>中 set，强</td></tr><tr><td>转牌</td><td>方块听牌，中等</td><td>K 配对变葫芦，更强</td></tr><tr><td>河牌</td><td>没中，纯空气 → <strong>变身 bluff</strong></td><td>不变，但等对面变</td></tr><tr><td>结果</td><td>超池 jam 收锅</td><td>等 66 变葫芦后收他全部</td></tr></tbody></table>
+</div>
             <h4>强牌如何不知不觉变弱</h4>
             <p>AQ on A-high 4-bet pot vs 3-barrel：</p>
             <ul><li>看起来：TPTK，很强</li><li>实际上：在 4-bet pot 里面对 3 条街的猛打，只是 bluff-catcher</li><li>危险：<strong>你以为你很强，其实你只是支付方</strong></li></ul>
@@ -6969,19 +7379,27 @@ Cooler 部分：
             <p>花多少钱去验证你的假设？</p>
             <p><strong>案例</strong>：TT vs AA — 对手小尺寸 c-bet，几何上限制了他 turn 的 bet size。你一共只花了 18bb 就看到 river。成本可控。</p>
             <h4>(5) 五手复盘精华速查</h4>
-            <table><thead><tr><th>#</th><th>Hero Hand</th><th>Pos</th><th>Board</th><th>Eff</th><th>Key Action</th><th>核心主题</th><th>关键教训</th></tr></thead><tbody><tr><td>1</td><td>A♦Q♦</td><td>BTN</td><td>4♥6♠2♠5♦A♠</td><td>105bb</td><td>3-bet pot, float flop, bet turn, call river jam vs A♥7♥</td><td>叙事判断</td><td>对手4-bet翻前→check-call转牌→jam河牌：叙事断裂=可以call</td></tr><tr><td>2</td><td>T♦T♥</td><td>CO</td><td>7♥6♥7♣K♣T♠</td><td>100bb</td><td>Call 3-bet, float 小尺寸两街, river donk-jam 1.6x收AA</td><td>成本控制</td><td>对手小尺寸c-bet限制turn膨胀→花18bb买信息看river</td></tr><tr><td>3</td><td>K♦K♠</td><td>BB</td><td>A♥7♠T♦J♥K♥</td><td>100bb</td><td>3-bet pot, c-bet→call xr→call turn重注→river成set反超TT</td><td>信息投资</td><td>KK block KQ(16→8), 6 outs+隐含赔率, 有出口条件才call down</td></tr><tr><td>4</td><td>4♦5♦</td><td>SB</td><td>A♦8♠4♣2♦K♠</td><td>162bb</td><td>Flat BU open, xr turn(方块14 outs), river 2.2x overbet jam bluff</td><td>极化 bluff</td><td>低连接面+blocker+equity backup+超池→45s变空气收锅</td></tr><tr><td>5</td><td>8♣8♦</td><td>CO</td><td>K♠8♥5♦K♣6♣</td><td>112bb</td><td>Open, flop check-back, 小bet turn, river 1.7x诱导xr→call收66</td><td>诱导支付</td><td>慢玩set等对面发展支付能力(66变葫芦)→对面主动全下→收全部</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>#</th><th>Hero Hand</th><th>Pos</th><th>Board</th><th>Eff</th><th>Key Action</th><th>核心主题</th><th>关键教训</th></tr></thead><tbody><tr><td>1</td><td>A♦Q♦</td><td>BTN</td><td>4♥6♠2♠5♦A♠</td><td>105bb</td><td>3-bet pot, float flop, bet turn, call river jam vs A♥7♥</td><td>叙事判断</td><td>对手4-bet翻前→check-call转牌→jam河牌：叙事断裂=可以call</td></tr><tr><td>2</td><td>T♦T♥</td><td>CO</td><td>7♥6♥7♣K♣T♠</td><td>100bb</td><td>Call 3-bet, float 小尺寸两街, river donk-jam 1.6x收AA</td><td>成本控制</td><td>对手小尺寸c-bet限制turn膨胀→花18bb买信息看river</td></tr><tr><td>3</td><td>K♦K♠</td><td>BB</td><td>A♥7♠T♦J♥K♥</td><td>100bb</td><td>3-bet pot, c-bet→call xr→call turn重注→river成set反超TT</td><td>信息投资</td><td>KK block KQ(16→8), 6 outs+隐含赔率, 有出口条件才call down</td></tr><tr><td>4</td><td>4♦5♦</td><td>SB</td><td>A♦8♠4♣2♦K♠</td><td>162bb</td><td>Flat BU open, xr turn(方块14 outs), river 2.2x overbet jam bluff</td><td>极化 bluff</td><td>低连接面+blocker+equity backup+超池→45s变空气收锅</td></tr><tr><td>5</td><td>8♣8♦</td><td>CO</td><td>K♠8♥5♦K♣6♣</td><td>112bb</td><td>Open, flop check-back, 小bet turn, river 1.7x诱导xr→call收66</td><td>诱导支付</td><td>慢玩set等对面发展支付能力(66变葫芦)→对面主动全下→收全部</td></tr></tbody></table>
+</div>
             <hr>
       </section>      <section id="36-如何人为制造极化gto技术篇" class="chapter">
         <h2>36. 如何人为制造极化 — GTO 技术篇</h2>
             <blockquote><strong>目标</strong>：从理论框架进入可操作的技术层面<br><strong>核心问题</strong>：哪些 spot 适合极化？哪些牌面？用哪些手牌？尺度怎么设计？</blockquote>
             <h4>(1) 极化的前提条件</h4>
             <p><strong>不是所有 spot 都适合极化。</strong> 极化需要三个条件同时满足：</p>
-            <table><thead><tr><th>条件</th><th>含义</th><th>反例</th></tr></thead><tbody><tr><td><strong>牌面有利</strong></td><td>面让对手的 medium hand 感到威胁</td><td>K-high 干面—对面不怕</td></tr><tr><td><strong>范围有利</strong></td><td>你的范围里有 nuts，对面没有</td><td>你是 caller 对面是 aggressor</td></tr><tr><td><strong>SPR 合适</strong></td><td>深度允许你制造足够大的压力</td><td>SPR 太高→超池也吓不住</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>条件</th><th>含义</th><th>反例</th></tr></thead><tbody><tr><td><strong>牌面有利</strong></td><td>面让对手的 medium hand 感到威胁</td><td>K-high 干面—对面不怕</td></tr><tr><td><strong>范围有利</strong></td><td>你的范围里有 nuts，对面没有</td><td>你是 caller 对面是 aggressor</td></tr><tr><td><strong>SPR 合适</strong></td><td>深度允许你制造足够大的压力</td><td>SPR 太高→超池也吓不住</td></tr></tbody></table>
+</div>
             <h4>(2) 适合极化的牌面类型</h4>
             <h4>✅ 适合极化（对面 medium 难受）</h4>
-            <table><thead><tr><th>牌面类型</th><th>例</th><th>为什么</th></tr></thead><tbody><tr><td><strong>连接面</strong></td><td>4-6-2、7-8-9、5-6-7</td><td>你的范围有 set/顺，对面没有</td></tr><tr><td><strong>中低湿面</strong></td><td>2-6-9 两花、3-5-8 两花</td><td>任何 turn 都是 scare card</td></tr><tr><td><strong>配对面（你有 trips）</strong></td><td>A-A-7、K-K-5</td><td>你 block 对面的 trips</td></tr><tr><td><strong>turn scare card</strong></td><td>A 或 K 落在连接面上</td><td>对面 medium 不知道你中没中</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>牌面类型</th><th>例</th><th>为什么</th></tr></thead><tbody><tr><td><strong>连接面</strong></td><td>4-6-2、7-8-9、5-6-7</td><td>你的范围有 set/顺，对面没有</td></tr><tr><td><strong>中低湿面</strong></td><td>2-6-9 两花、3-5-8 两花</td><td>任何 turn 都是 scare card</td></tr><tr><td><strong>配对面（你有 trips）</strong></td><td>A-A-7、K-K-5</td><td>你 block 对面的 trips</td></tr><tr><td><strong>turn scare card</strong></td><td>A 或 K 落在连接面上</td><td>对面 medium 不知道你中没中</td></tr></tbody></table>
+</div>
             <h4>❌ 不适合极化（对面 medium 舒服）</h4>
-            <table><thead><tr><th>牌面类型</th><th>例</th><th>为什么</th></tr></thead><tbody><tr><td><strong>K-high 干面</strong></td><td>K-7-2 rainbow</td><td>对面拿 KT，"能被超车的牌只有 4 张 A"</td></tr><tr><td><strong>A-high 干面（你是 aggressor）</strong></td><td>A-9-3 rainbow</td><td>对面 Ax 有 showdown，不容易弃</td></tr><tr><td><strong>Q-high 干面</strong></td><td>Q-7-2 rainbow</td><td>同上，顶对舒服</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>牌面类型</th><th>例</th><th>为什么</th></tr></thead><tbody><tr><td><strong>K-high 干面</strong></td><td>K-7-2 rainbow</td><td>对面拿 KT，"能被超车的牌只有 4 张 A"</td></tr><tr><td><strong>A-high 干面（你是 aggressor）</strong></td><td>A-9-3 rainbow</td><td>对面 Ax 有 showdown，不容易弃</td></tr><tr><td><strong>Q-high 干面</strong></td><td>Q-7-2 rainbow</td><td>同上，顶对舒服</td></tr></tbody></table>
+</div>
             <p><strong>核心规律</strong>：</p>
             <ul><li>翻牌面越低、越连接、越湿 → 对面的 medium hand 越恐惧 → 越适合极化</li><li>翻牌面越高、越干 → 对面越敢抓 → 极化效果越差</li><li><strong>K-high 面是 bluff 的地狱、value 的天堂</strong></li></ul>
             <h4>(3) 选择哪些手牌来极化</h4>
@@ -6990,7 +7408,9 @@ Cooler 部分：
   有 blocker（阻挡对面的顶端）
   + 有 equity backup（被接了还有活路）
   + 在 range 的边界（刚好不够 value bet）</code></pre>
-            <table><thead><tr><th>手牌</th><th>Blocker</th><th>Equity Backup</th><th>适用面</th></tr></thead><tbody><tr><td>AQ</td><td>blocks AK/QQ</td><td>6 outs (A or Q)</td><td>K-high 面</td></tr><tr><td>AK</td><td>blocks AA/KK</td><td>6 outs</td><td>Q-high 面</td></tr><tr><td>45s-78s</td><td>blocks set combos</td><td>顺子+花听牌</td><td>连接面</td></tr><tr><td>Axs</td><td>blocks A</td><td>花听牌</td><td>有花的面上</td></tr><tr><td>KQ</td><td>blocks AK/KK/QQ</td><td>6 outs</td><td>A-high 面</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>手牌</th><th>Blocker</th><th>Equity Backup</th><th>适用面</th></tr></thead><tbody><tr><td>AQ</td><td>blocks AK/QQ</td><td>6 outs (A or Q)</td><td>K-high 面</td></tr><tr><td>AK</td><td>blocks AA/KK</td><td>6 outs</td><td>Q-high 面</td></tr><tr><td>45s-78s</td><td>blocks set combos</td><td>顺子+花听牌</td><td>连接面</td></tr><tr><td>Axs</td><td>blocks A</td><td>花听牌</td><td>有花的面上</td></tr><tr><td>KQ</td><td>blocks AK/KK/QQ</td><td>6 outs</td><td>A-high 面</td></tr></tbody></table>
+</div>
             <h4>Value 候选牌的标准</h4>
             <pre><code>理想的价值极化手牌：
   有足够强的绝对牌力（set+）
@@ -7004,7 +7424,9 @@ Cooler 部分：
 爆炸模式（直接制造最大压力）：
   Flop：check/call → Turn：check-raise 80-100% → River：jam (1.5-3x pot)</code></pre>
             <h4>为什么超池有效？</h4>
-            <table><thead><tr><th>尺寸</th><th>对手读到的信号</th><th>你的手牌</th></tr></thead><tbody><tr><td>½-¾ pot</td><td>"普通 value bet，想被跟"</td><td>need to be strong</td></tr><tr><td>1.5x+ pot</td><td>"要么 nuts 要么 bluff"</td><td><strong>可以极化</strong></td></tr><tr><td>2x+ pot</td><td>"nuts or nothing，我弃"</td><td>极高的 fold equity</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>尺寸</th><th>对手读到的信号</th><th>你的手牌</th></tr></thead><tbody><tr><td>½-¾ pot</td><td>"普通 value bet，想被跟"</td><td>need to be strong</td></tr><tr><td>1.5x+ pot</td><td>"要么 nuts 要么 bluff"</td><td><strong>可以极化</strong></td></tr><tr><td>2x+ pot</td><td>"nuts or nothing，我弃"</td><td>极高的 fold equity</td></tr></tbody></table>
+</div>
             <p><strong>案例对比</strong>：</p>
             <ul><li>45s bluff：2.2x pot → 对面想"他不可能是 bluff" → fold</li><li>88 boat value：1.7x pot → 对面想"这么打肯定是 bluff" → raise all-in</li></ul>
             <p><strong>同一种武器，两种效果——取决于你如何包装你的故事。</strong></p>
@@ -7033,7 +7455,9 @@ Cooler 部分：
         <h2>37. 锦标赛（MTT）实战笔记</h2>
             <blockquote><strong>第一次锦标赛记录</strong>：2026-06-08<br><strong>核心认知</strong>：MTT 和 Cash Game 是完全不同的两个游戏。MTT 的核心不是打牌，是打 ICM。</blockquote>
             <h4>(1) MTT 与 Cash Game 的本质区别</h4>
-            <table><thead><tr><th>维度</th><th>Cash Game</th><th>MTT</th></tr></thead><tbody><tr><td>目标</td><td>每手牌 +EV</td><td>活下去 + 攒筹码</td></tr><tr><td>筹码价值</td><td>线性（$1 = $1）</td><td>非线性（最后一个 $1 比第一个 $1 值钱）</td></tr><tr><td>生存压力</td><td>无限 rebuy，挂了再买</td><td>一条命，出局就是出局</td></tr><tr><td>核心技能</td><td>翻后技术、剥削</td><td>ICM 意识、筹码管理</td></tr><tr><td>波动承受</td><td>高（一手牌可能输 100bb）</td><td>中（一手牌出局但还有奖金阶梯）</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>维度</th><th>Cash Game</th><th>MTT</th></tr></thead><tbody><tr><td>目标</td><td>每手牌 +EV</td><td>活下去 + 攒筹码</td></tr><tr><td>筹码价值</td><td>线性（$1 = $1）</td><td>非线性（最后一个 $1 比第一个 $1 值钱）</td></tr><tr><td>生存压力</td><td>无限 rebuy，挂了再买</td><td>一条命，出局就是出局</td></tr><tr><td>核心技能</td><td>翻后技术、剥削</td><td>ICM 意识、筹码管理</td></tr><tr><td>波动承受</td><td>高（一手牌可能输 100bb）</td><td>中（一手牌出局但还有奖金阶梯）</td></tr></tbody></table>
+</div>
             <h4>(2) ICM 基础</h4>
             <p><strong>ICM（Independent Chip Model）</strong>：把筹码转换成奖金期望值的模型。</p>
             <p>关键原则：</p>
@@ -7043,7 +7467,9 @@ Cooler 部分：
             <h4>(3) PKO（赏金赛）特殊规则</h4>
             <p>在 PKO 中，bounty 是额外的 EV 来源：</p>
             <h4>谁 cover 你谁多一个理由接你</h4>
-            <table><thead><tr><th>你的 bounty</th><th>大码对你的 calling range</th></tr></thead><tbody><tr><td>大（&gt;2x 当前奖金跳）</td><td>宽——他们专门追你</td></tr><tr><td>小（&lt;1x 当前奖金跳）</td><td>接近标准 ICM</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>你的 bounty</th><th>大码对你的 calling range</th></tr></thead><tbody><tr><td>大（&gt;2x 当前奖金跳）</td><td>宽——他们专门追你</td></tr><tr><td>小（&lt;1x 当前奖金跳）</td><td>接近标准 ICM</td></tr></tbody></table>
+</div>
             <h4>策略调整</h4>
             <ul><li><strong>你的 bounty 小</strong>：正常 ICM，不要为了收 bounty 放宽范围</li><li><strong>你的 bounty 大</strong>：比标准 ICM 更紧——大码在追你</li><li><strong>收短码 bounty</strong>：可以比标准 ICM 更宽——bounty 补贴让你的 calling range 更宽</li><li><strong>bounty 猎人模式</strong>（你筹码多）：覆盖桌上所有短码时可以放宽 open/shove range</li></ul>
             <h4>(4) MTT 各阶段策略</h4>
@@ -7058,12 +7484,18 @@ Cooler 部分：
             <h4>决赛桌（FT）</h4>
             <pre><code>目标：最大化奖金<br>- 每跳一级奖金差变大 → ICM 压力最大<br>- 短码等死，中码等短码死，大码收割<br>- 不要为了冠军去打 neutral EV 的 coinflip</code></pre>
             <h4>(5) Stack Size 行动指南</h4>
-            <table><thead><tr><th>BB</th><th>模式</th><th>行动</th></tr></thead><tbody><tr><td>50+</td><td>正常</td><td>正常 open/fold/3-bet</td></tr><tr><td>30-50</td><td>正常但收紧</td><td>减少 marginal 3-bet，更多 flat</td></tr><tr><td>20-30</td><td>过渡</td><td>减少 open-raise，宁可 open-shove 也不 open-call</td></tr><tr><td>12-20</td><td>Re-steal 模式</td><td>open-shove or fold，不要 flat</td></tr><tr><td>8-12</td><td>Push/Fold</td><td>有牌就推，没牌就弃</td></tr><tr><td>&lt;8</td><td>绝望模式</td><td>任何 A、任何对子、任何 suited connector 都可以推</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>BB</th><th>模式</th><th>行动</th></tr></thead><tbody><tr><td>50+</td><td>正常</td><td>正常 open/fold/3-bet</td></tr><tr><td>30-50</td><td>正常但收紧</td><td>减少 marginal 3-bet，更多 flat</td></tr><tr><td>20-30</td><td>过渡</td><td>减少 open-raise，宁可 open-shove 也不 open-call</td></tr><tr><td>12-20</td><td>Re-steal 模式</td><td>open-shove or fold，不要 flat</td></tr><tr><td>8-12</td><td>Push/Fold</td><td>有牌就推，没牌就弃</td></tr><tr><td>&lt;8</td><td>绝望模式</td><td>任何 A、任何对子、任何 suited connector 都可以推</td></tr></tbody></table>
+</div>
             <h4>(6) 实战记录</h4>
             <h4>2026-06-08 — WSOP Express $10 Step 3</h4>
-            <table><thead><tr><th>项目</th><th>数据</th></tr></thead><tbody><tr><td>结果</td><td>第 5 名 / 6 人</td></tr><tr><td>奖金</td><td>+$27（$10 ticket → $27）</td></tr><tr><td>关键节点</td><td>8 BB 泡沫期存活，等短码先死</td></tr><tr><td>特例</td><td>CL 筹码超过所有人总和，自动结束</td></tr><tr><td>教训</td><td>短码生存术：泡沫期优先苟住，不主动 all-in</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>项目</th><th>数据</th></tr></thead><tbody><tr><td>结果</td><td>第 5 名 / 6 人</td></tr><tr><td>奖金</td><td>+$27（$10 ticket → $27）</td></tr><tr><td>关键节点</td><td>8 BB 泡沫期存活，等短码先死</td></tr><tr><td>特例</td><td>CL 筹码超过所有人总和，自动结束</td></tr><tr><td>教训</td><td>短码生存术：泡沫期优先苟住，不主动 all-in</td></tr></tbody></table>
+</div>
             <h4>2026-06-08 — Bounty Hunters Special $2.50</h4>
-            <table><thead><tr><th>项目</th><th>数据</th></tr></thead><tbody><tr><td>结果</td><td>第 47 名 / 1,454 人</td></tr><tr><td>奖金</td><td>+$20.54（$5.42 + $15.12 bounty）</td></tr><tr><td>人头</td><td>7 个</td></tr><tr><td>时长</td><td>1 小时 59 分</td></tr><tr><td>最佳手</td><td>KK</td></tr><tr><td>关键节点</td><td>从 25 BB → 90 BB 冲到全场第 5</td></tr><tr><td>出局原因</td><td>连续两把 cooler（deep run 撞牌）</td></tr><tr><td>教训</td><td>PKO 中 bounty 大小决定对手对你的态度</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>项目</th><th>数据</th></tr></thead><tbody><tr><td>结果</td><td>第 47 名 / 1,454 人</td></tr><tr><td>奖金</td><td>+$20.54（$5.42 + $15.12 bounty）</td></tr><tr><td>人头</td><td>7 个</td></tr><tr><td>时长</td><td>1 小时 59 分</td></tr><tr><td>最佳手</td><td>KK</td></tr><tr><td>关键节点</td><td>从 25 BB → 90 BB 冲到全场第 5</td></tr><tr><td>出局原因</td><td>连续两把 cooler（deep run 撞牌）</td></tr><tr><td>教训</td><td>PKO 中 bounty 大小决定对手对你的态度</td></tr></tbody></table>
+</div>
             <h4>(7) MTT 速查卡</h4>
             <pre><code>┌─────────────────────────────────────────────┐<br>│          MTT 关键数字                        │<br>├─────────────────────────────────────────────┤<br>│ 20 BB — push/fold 临界线                    │<br>│ 15 BB — 再不推就来不及了                     │<br>│ 10 BB — 任何 Ax/对子都可以推                 │<br>│ 5 BB  — 几乎 any two cards                  │<br>├─────────────────────────────────────────────┤<br>│ 奖金阶梯：每跳一级 ≈ 30-50% 增幅             │<br>│ 泡沫期：全场最紧的节点                       │<br>│ 泡沫刚破：全场最松的节点（可以偷）           │<br>│ FT 前 2 跳：ICM 压力最大                    │<br>├─────────────────────────────────────────────┤<br>│ PKO 口诀：                                   │<br>│ - 你 bounty 大 → 紧（大码追你）             │<br>│ - 你 bounty 小 → 正常                        │<br>│ - 收短码 → 可以宽（bounty 补贴）             │<br>└─────────────────────────────────────────────┘</code></pre>
             <blockquote><strong>下一步</strong>：继续积累锦标赛手数，建立对不同阶段的具体手牌范围数据。</blockquote>
@@ -7077,15 +7509,21 @@ Cooler 部分：
             <ul><li>HU里BTN=SB, BB=BB</li><li>BTN有位置 → 可以玩更多牌，open wider (<strong>80%+ BTN open</strong>)</li><li>BB没位置 → 但已经放了1bb，defend wider</li><li>口诀：<strong>BTN抢，BB守</strong></li></ul>
             <h4>(3) Opening Ranges by Stack Depth</h4>
             <h4>Deep (>40bb)</h4>
-            <table><thead><tr><th>位置</th><th>Action</th><th>Range</th></tr></thead><tbody><tr><td>BTN</td><td>Open</td><td>75-85% of hands</td></tr><tr><td>BB</td><td>Defend</td><td>50-60%</td></tr><tr><td>BB</td><td>3-Bet</td><td>15-20%</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>位置</th><th>Action</th><th>Range</th></tr></thead><tbody><tr><td>BTN</td><td>Open</td><td>75-85% of hands</td></tr><tr><td>BB</td><td>Defend</td><td>50-60%</td></tr><tr><td>BB</td><td>3-Bet</td><td>15-20%</td></tr></tbody></table>
+</div>
             <p>可以limp、可以trap、有翻后三街。</p>
             <h4>Mid (20-40bb)</h4>
-            <table><thead><tr><th>位置</th><th>Action</th><th>Range</th></tr></thead><tbody><tr><td>BTN</td><td>Open</td><td>70-80%</td></tr><tr><td>BB</td><td>3-Bet</td><td>20-25%, polarized</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>位置</th><th>Action</th><th>Range</th></tr></thead><tbody><tr><td>BTN</td><td>Open</td><td>70-80%</td></tr><tr><td>BB</td><td>3-Bet</td><td>20-25%, polarized</td></tr></tbody></table>
+</div>
             <p>BB: <strong>3-bet or fold</strong> — 不flat，没位置翻后难打。</p>
             <h4>Short (12-20bb)</h4>
             <ul><li>BTN: min-raise or jam (两极)</li><li>Min-raise: premiums (AA-JJ, AK) + some traps</li><li>Jam: 中等牌 (small pairs, Ax, Kx, Qx)</li><li>BB: jam over min-raises wide</li></ul>
             <h4>Super Short (<12bb) — Nash Push/Fold</h4>
-            <table><thead><tr><th>Scenario</th><th>Range</th></tr></thead><tbody><tr><td>BTN Jam (<10bb)</td><td>any pair, any A, any K, Q5s+, Q8o+, J7s+, J9o+, T7s+, T9o, 97s+, 86s+, 76s, 65s</td></tr><tr><td>BB Call (<10bb)</td><td>any pair, any A, K6s+, K9o+, Q8s+, QTo+, JTs</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>Scenario</th><th>Range</th></tr></thead><tbody><tr><td>BTN Jam (<10bb)</td><td>any pair, any A, any K, Q5s+, Q8o+, J7s+, J9o+, T7s+, T9o, 97s+, 86s+, 76s, 65s</td></tr><tr><td>BB Call (<10bb)</td><td>any pair, any A, K6s+, K9o+, Q8s+, QTo+, JTs</td></tr></tbody></table>
+</div>
             <h4>(4) Key Exploits</h4>
             <h4>4a. Limp-Strategy (Deep Stacks)</h4>
             <ul><li>BTN limp with: AA-QQ (trap), small pairs (see cheap flop), suited connectors</li><li>BB vs limp: raise 3-4x with top 30%, check back the weak</li><li>Don't limp too much — opponent will punish with raises</li></ul>
@@ -7094,9 +7532,13 @@ Cooler 部分：
             <h4>4c. River Bluff Spots</h4>
             <ul><li>HU rivers: villain's range is wide, your bluff gets through more</li><li>Good bluff cards: flush completes, straight completes, overcards</li><li>Bad bluff cards: blanks that don't change board texture</li></ul>
             <h4>4d. Small Ball vs Big Ball</h4>
-            <table><thead><tr><th>Stack Depth</th><th>Style</th><th>Approach</th></tr></thead><tbody><tr><td>Deep</td><td>Small Ball</td><td>Small bets, many streets, grind them down</td></tr><tr><td>Shallow</td><td>Big Ball</td><td>Large bets, fewer streets, maximize fold equity</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>Stack Depth</th><th>Style</th><th>Approach</th></tr></thead><tbody><tr><td>Deep</td><td>Small Ball</td><td>Small bets, many streets, grind them down</td></tr><tr><td>Shallow</td><td>Big Ball</td><td>Large bets, fewer streets, maximize fold equity</td></tr></tbody></table>
+</div>
             <h4>(5) Common HU Mistakes</h4>
-            <table><thead><tr><th>#</th><th>Mistake</th><th>Fix</th></tr></thead><tbody><tr><td>1</td><td><strong>Playing too tight</strong></td><td>Q7o BTN is an open. 98s BB is a defend.</td></tr><tr><td>2</td><td><strong>Not adjusting to opponent</strong></td><td>If they fold too much, widen opens. If they call too much, tighten and value-bet thinner.</td></tr><tr><td>3</td><td><strong>Flatting too much from BB</strong></td><td>没位置不要flat太多。3-bet or fold mindset.</td></tr><tr><td>4</td><td><strong>Overvaluing Ax</strong></td><td>A2-A9在HU里虽然可以open，但不能call大注</td></tr><tr><td>5</td><td><strong>Not switching gears</strong></td><td>Deep play ≠ Short play. 20bb和50bb是两种游戏。</td></tr></tbody></table>
+            <div class="tbl-scroll">
+<table><thead><tr><th>#</th><th>Mistake</th><th>Fix</th></tr></thead><tbody><tr><td>1</td><td><strong>Playing too tight</strong></td><td>Q7o BTN is an open. 98s BB is a defend.</td></tr><tr><td>2</td><td><strong>Not adjusting to opponent</strong></td><td>If they fold too much, widen opens. If they call too much, tighten and value-bet thinner.</td></tr><tr><td>3</td><td><strong>Flatting too much from BB</strong></td><td>没位置不要flat太多。3-bet or fold mindset.</td></tr><tr><td>4</td><td><strong>Overvaluing Ax</strong></td><td>A2-A9在HU里虽然可以open，但不能call大注</td></tr><tr><td>5</td><td><strong>Not switching gears</strong></td><td>Deep play ≠ Short play. 20bb和50bb是两种游戏。</td></tr></tbody></table>
+</div>
             <h4>(6) Three HU Rules of Thumb</h4>
             <ol><li><strong>BTN open 80%+ always.</strong> 没有什么"这手太弱了不open" — HU里position > cards.</li><li><strong>当你有chip lead:</strong> 施压，施压，再施压。让他每手牌都难打。</li><li><strong>当你短码:</strong> 回归Nash push/fold。别想在10bb打翻后。</li></ol>
             <h4>(7) Mental Game</h4>
@@ -7135,5 +7577,64 @@ Cooler 部分：
 
     document.querySelectorAll('.chapter').forEach(ch => observer.observe(ch));
   </script>
+
+<!-- === P1-ENHANCE JS === -->
+<script>
+(function(){
+  var root=document.documentElement;
+  var THEME_KEY='poker-site-theme';
+  function applyTheme(t){
+    root.setAttribute('data-theme',t);
+    var btn=document.getElementById('p1-theme-toggle');
+    if(btn) btn.textContent=(t==='dark')?'☀️':'🌙';
+  }
+  var saved=null;
+  try{ saved=localStorage.getItem(THEME_KEY); }catch(e){}
+  applyTheme(saved || root.getAttribute('data-theme') || 'dark');
+  var tbtn=document.getElementById('p1-theme-toggle');
+  if(tbtn) tbtn.addEventListener('click',function(){
+    var t=(root.getAttribute('data-theme')==='dark')?'light':'dark';
+    applyTheme(t);
+    try{ localStorage.setItem(THEME_KEY,t); }catch(e){}
+  });
+  var bar=document.getElementById('p1-progress');
+  var top=document.getElementById('p1-top');
+  function onScroll(){
+    var d=document.documentElement;
+    var max=d.scrollHeight-d.clientHeight;
+    var y=d.scrollTop||document.body.scrollTop||0;
+    bar.style.width=(max>0?(y/max*100):0)+'%';
+    if(top) top.classList.toggle('show', y>400);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  onScroll();
+  if(top) top.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+  var links=[].slice.call(document.querySelectorAll('a.nav-link[href^="#"]'));
+  var map={};
+  links.forEach(function(a){ var id=a.getAttribute('href').slice(1); if(id) map[id]=a; });
+  var targets=Object.keys(map).map(function(id){return document.getElementById(id);}).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          var a=map[e.target.id]; if(a) a.classList.add('active');
+        }
+      });
+    },{rootMargin:'-15% 0px -75% 0px',threshold:0});
+    targets.forEach(function(t){ io.observe(t); });
+  }
+  var ham=document.querySelector('.p1-hamburger');
+  if(ham){
+    var sb=document.querySelector('.sidebar');
+    var ov=document.querySelector('.sidebar-overlay-p1');
+    function tog(){ if(sb) sb.classList.toggle('open'); if(ov) ov.classList.toggle('show'); }
+    ham.addEventListener('click',tog);
+    if(ov) ov.addEventListener('click',tog);
+  }
+})();
+</script>
+
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,8 +68,53 @@
   .nav-link.sub:hover { padding-left: 34px; }
 
 </style>
+/* === P1-ENHANCE === */
+
+/* === P1-ENHANCE === */
+html{ scroll-behavior:smooth; }
+#p1-progress{ position:fixed; top:0; left:0; height:3px; width:0; z-index:10000;
+  background:linear-gradient(90deg,#00d4ff,#00ff88); transition:width .08s linear; }
+#p1-theme-toggle{ position:fixed; top:14px; right:16px; z-index:10000; width:40px; height:40px;
+  border-radius:50%; border:1px solid var(--border,#2a2f45); background:var(--bg-card,#161c26);
+  color:var(--text-primary,#c9d1d9); cursor:pointer; font-size:17px; display:flex;
+  align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,.35); }
+#p1-top{ position:fixed; bottom:22px; right:16px; z-index:10000; width:42px; height:42px;
+  border-radius:50%; border:1px solid var(--border,#2a2f45); background:var(--bg-card,#161c26);
+  color:var(--text-primary,#c9d1d9); cursor:pointer; font-size:18px; display:none;
+  align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,.35); }
+#p1-top.show{ display:flex; }
+.tbl-scroll{ width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; margin:1em 0; }
+.tbl-scroll table{ width:100%; }
+a.nav-link.active{ color:#00d4ff !important; font-weight:700;
+  border-left-color:#00d4ff !important; background:rgba(0,212,255,.10); }
+.p1-hamburger{ position:fixed; top:12px; left:14px; z-index:9998; display:none; width:42px; height:42px;
+  border-radius:8px; border:1px solid #fbbf24; background:#fff7ed; color:#b45309; font-size:20px;
+  cursor:pointer; align-items:center; justify-content:center; }
+.sidebar-overlay-p1{ position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9996; display:none; }
+.sidebar-overlay-p1.show{ display:block; }
+@media (max-width:1024px){
+  .p1-hamburger{ display:flex; }
+  .sidebar{ transform:translateX(-100%); transition:transform .3s ease; z-index:9997; }
+  .sidebar.open{ transform:none; }
+  .main-wrap{ margin-left:0 !important; padding:70px 18px 60px !important; }
+  #p1-theme-toggle{ top:12px; right:12px; }
+}
+
+
+html[data-theme="dark"]{ filter: invert(1) hue-rotate(180deg); }
+html[data-theme="dark"] img,
+html[data-theme="dark"] video,
+html[data-theme="dark"] .no-invert{ filter: invert(1) hue-rotate(180deg); }
+
 </head>
 <body class="gradient-warm min-h-screen" style="display:flex;margin:0;">
+
+<div id="p1-progress"></div>
+<button class="p1-hamburger" title="菜单 (Menu)">☰</button>
+<div class="sidebar-overlay-p1"></div>
+<button id="p1-theme-toggle" title="切换 深色 / 浅色 (Dark / Light)">🌙</button>
+<button id="p1-top" title="回到顶部 (Back to top)">↑</button>
+
 
 <!-- Confetti Background -->
 <div class="confetti w-full h-full overflow-hidden">
@@ -209,7 +254,8 @@
 
   <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3">现金桌 vs 锦标赛</h3>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">维度</th><th class="text-left p-3">现金桌</th><th class="text-left p-3 text-orange-600">锦标赛 ✨</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3 font-medium">筹码价值</td><td class="p-3">1:1</td><td class="p-3 text-orange-600 font-semibold">非线性（ICM）</td></tr>
@@ -219,6 +265,7 @@
         <tr><td class="p-3 font-medium">有趣程度</td><td class="p-3">重复 grind</td><td class="p-3 text-orange-600 font-semibold">每手牌一个新场景 🤩</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3">锦标赛三阶段</h3>
@@ -642,7 +689,8 @@
   <div class="bg-gradient-to-r from-orange-100 via-amber-100 to-yellow-100 rounded-xl p-5 mt-6">
     <p class="font-black text-orange-800 text-lg mb-3">⚡ 十阶段速查表</p>
     <div class="overflow-x-auto">
-      <table class="w-full text-xs">
+      <div class="tbl-scroll">
+<table class="w-full text-xs">
         <thead><tr class="bg-white/50"><th class="p-2 text-left">#</th><th class="p-2 text-left">阶段</th><th class="p-2 text-left">Stack</th><th class="p-2 text-left">核心动作</th><th class="p-2 text-left">心态</th></tr></thead>
         <tbody>
           <tr class="border-b border-white/30"><td class="p-2">1</td><td class="p-2">🌅 早期深码</td><td class="p-2">50-100+bb</td><td class="p-2">TAG，等 premium，观察</td><td class="p-2">🐢 慢就是快</td></tr>
@@ -657,6 +705,7 @@
           <tr><td class="p-2 bg-amber-100/50">10</td><td class="p-2 bg-amber-100/50">⚔️ HU</td><td class="p-2 bg-amber-100/50">any</td><td class="p-2 bg-amber-100/50">NO ICM！Cash 本能全开</td><td class="p-2 bg-amber-100/50">👊 决斗</td></tr>
         </tbody>
       </table>
+</div>
     </div>
   </div>
 </section>
@@ -682,7 +731,8 @@
   <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3">🔹 第一维：位置 (Position)</h3>
   <p class="text-base text-gray-500 mb-3">以 40bb 为基准码量。位置越晚，范围越宽——<strong>UTG 到 BTN 差约 3 倍</strong>。</p>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">位置</th><th class="text-right p-3">开池%</th><th class="text-left p-3">典型手牌</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3 font-bold">UTG</td><td class="p-3 text-right font-black text-gray-700">15-18%</td><td class="p-3 text-gray-500">55+, ATo+, KQo+, A2s+, 76s+</td></tr>
@@ -692,6 +742,7 @@
         <tr><td class="p-3 font-bold">SB</td><td class="p-3 text-right font-black text-gray-700">30-42%</td><td class="p-3 text-gray-500">宽但需极化——BB 有位置</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <!-- 第二维：码量 -->
@@ -700,7 +751,8 @@
 
   <p class="text-base text-gray-500 mb-3">以 40bb 为基准（系数=1.0）。<strong>浅码往高位牌集中，深码加 speculative hands。</strong></p>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">码量</th><th class="text-center p-3">系数</th><th class="text-left p-3">逻辑</th><th class="text-left p-3">范围变化</th></tr></thead>
       <tbody>
         <tr class="border-b bg-green-50"><td class="p-3 font-bold">50bb+</td><td class="p-3 text-center font-black">1.1-1.2</td><td class="p-3">深码 → 隐含赔率高 → 加 speculative</td><td class="p-3 text-green-700">+5-10%宽松</td></tr>
@@ -712,6 +764,7 @@
         <tr class="bg-red-50"><td class="p-3 font-bold"><12bb</td><td class="p-3 text-center font-black">push-fold</td><td class="p-3"><strong>Nash push/fold</strong></td><td class="p-3 text-red-700">仅 all-in，不再 min-raise</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <div class="bg-yellow-50 rounded-xl p-4 mt-4 border border-yellow-200">
@@ -723,7 +776,8 @@
   <h3 class="text-xl font-bold text-gray-700 mt-8 mb-3">🔻 第三维：ICM 压强 — 筹码领先者的偷盲优势</h3>
   <p class="text-base text-gray-500 mb-3"><strong>锦标赛的灵魂。</strong>ICM 使短码的筹码比长码"值钱" → 长码可以<strong>无成本施压</strong>。</p>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">角色</th><th class="text-center p-3">ICM系数</th><th class="text-left p-3">开池调整</th></tr></thead>
       <tbody>
         <tr class="border-b bg-green-100"><td class="p-3 font-bold text-green-800">👑 Chip Leader（碾压全场）</td><td class="p-3 text-center font-black text-green-700">1.2-1.5</td><td class="p-3">大幅加宽——短码不敢跟你拼</td></tr>
@@ -733,6 +787,7 @@
         <tr class="bg-red-50"><td class="p-3 font-bold">💀 极短（<15bb FT）</td><td class="p-3 text-center font-black">0.50</td><td class="p-3">等你推，不 open</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <h4 class="font-bold text-gray-700 mt-6 mb-3">Chip Leader 偷盲三原则</h4>
@@ -783,7 +838,8 @@
 <figure style="margin:18px 0"><img src="img/pushfold-heatmap.svg" alt="Push/Fold 范围" loading="lazy" style="max-width:100%;height:auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3)"><figcaption style="color:#8b9bb4;font-size:12px;margin-top:6px;text-align:center">Push/Fold 范围 — BTN <15bb（示例）· 用 Nash 表替换</figcaption></figure>
 
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">码量</th><th class="text-center p-3">BTN 推牌 %</th><th class="text-center p-3">SB 推牌 %</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3 font-bold">10bb</td><td class="p-3 text-center font-black text-red-600">30-35%</td><td class="p-3 text-center font-black text-red-600">60-70%</td></tr>
@@ -791,6 +847,7 @@
         <tr><td class="p-3 font-bold">15bb</td><td class="p-3 text-center font-black">20-25%</td><td class="p-3 text-center font-black">40-50%</td></tr>
       </tbody>
     </table>
+</div>
   </div>
   <p class="text-xs text-gray-400 mt-2">⚠️ 15-20bb 区间不放全推：强牌 min-raise，中等牌放推牌范围。</p>
 
@@ -967,7 +1024,8 @@
 
   <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3">Bubble Factor 速算表</h3>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">阶段</th><th class="text-left p-3">Bubble Factor</th><th class="text-left p-3">感觉</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3">早期</td><td class="p-3">1.0-1.2</td><td class="p-3">差不多像 cash</td></tr>
@@ -978,6 +1036,7 @@
         <tr><td class="p-3 bg-green-50"><strong>Heads-up</strong></td><td class="p-3 bg-green-50"><strong>1.0</strong></td><td class="p-3 bg-green-50">没有 ICM！纯 chip EV ✨</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3">🏆 锦标赛四大 ICM 死法</h3>
@@ -1025,7 +1084,8 @@
 
   <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3">🎯 Bubble Abuse — 攻击目标表</h3>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">目标 stack</th><th class="text-left p-3">ICM 痛感</th><th class="text-left p-3">你的动作</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3">>50bb</td><td class="p-3">低</td><td class="p-3">正常游戏</td></tr>
@@ -1034,6 +1094,7 @@
         <tr><td class="p-3"><12bb</td><td class="p-3">低（免疫）</td><td class="p-3">别 bluff，只 value</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <div class="bg-yellow-50 rounded-xl p-4 mt-4 border border-yellow-200">
@@ -1043,7 +1104,8 @@
 
   <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3">📋 Stack Size 决策树</h3>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">Stack</th><th class="text-left p-3">策略</th></tr></thead>
       <tbody>
         <tr><td class="p-3 font-bold">>50bb</td><td class="p-3">正常打牌。TAG。Cash player 本能区域。</td></tr>
@@ -1055,6 +1117,7 @@
         <tr><td class="p-3 font-bold bg-red-50"><6bb</td><td class="p-3 bg-red-50">Any A, any pair, any two broadway。位置无所谓。</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 </section>
 
@@ -1230,7 +1293,8 @@
   <!-- 板面速查 -->
   <h3 class="text-xl font-bold text-gray-700 mt-8 mb-3">🎯 哪些板面适合 Hero Call</h3>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">板面类型</th><th class="text-center p-3">范围极化</th><th class="text-center p-3">对手 bluff 频率</th><th class="text-center p-3">Hero Call 可行性</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3 font-bold">J♠T♠7♥ (花顺双抽)</td><td class="p-3 text-center">🔴 极高</td><td class="p-3 text-center">高</td><td class="p-3 text-center"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-bold">高 ✅</span></td></tr>
@@ -1239,6 +1303,7 @@
         <tr><td class="p-3 font-bold">K♠Q♠J♠ (单色连通)</td><td class="p-3 text-center">🔴 极高</td><td class="p-3 text-center">最高</td><td class="p-3 text-center"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-bold">最高 ✅</span></td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <!-- 跟 ICM 的对接 -->
@@ -1336,7 +1401,8 @@
   <!-- 线上 vs 现场对照表 -->
   <h3 class="text-xl font-bold text-gray-700 mt-8 mb-3">📊 线上 vs 现场锦标赛对照</h3>
   <div class="overflow-x-auto">
-    <table class="w-full text-base">
+    <div class="tbl-scroll">
+<table class="w-full text-base">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">维度</th><th class="text-center p-3">🖥️ 线上</th><th class="text-center p-3">🎭 现场</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3 font-bold">手数/小时</td><td class="p-3 text-center">300+（6桌）</td><td class="p-3 text-center">25-30（1桌）</td></tr>
@@ -1348,6 +1414,7 @@
         <tr><td class="p-3 font-bold">ROI 预期</td><td class="p-3 text-center">>10% 即盈利</td><td class="p-3 text-center">>30% 才算真盈利</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <!-- 转线下的关键调整 -->
@@ -1424,7 +1491,8 @@
   <p class="text-sm text-gray-500 mb-4">同一场景（5人FT，筹码分布有极端短码2.5bb），用 ICM 和 FGS 分别跑 Solver。</p>
 
   <div class="overflow-x-auto">
-    <table class="w-full text-sm">
+    <div class="tbl-scroll">
+<table class="w-full text-sm">
       <thead><tr class="bg-gray-50"><th class="text-left p-3">场景</th><th class="text-center p-3">ICM 说</th><th class="text-center p-3">FGS 说</th><th class="text-center p-3">变化</th><th class="text-left p-3">逻辑</th></tr></thead>
       <tbody>
         <tr class="border-b"><td class="p-3 font-bold">短码 2.5bb UTG</td><td class="p-3 text-center">推 23.4%</td><td class="p-3 text-center font-black text-red-600">推 47.8%</td><td class="p-3 text-center"><span class="bg-red-100 text-red-800 px-2 py-0.5 rounded-full text-xs font-bold">翻倍 ↑</span></td><td class="p-3 text-xs">下一把交盲变 1.5bb → 不推就是等死。必须 gamble。</td></tr>
@@ -1434,6 +1502,7 @@
         <tr class="border-b bg-amber-50"><td class="p-3 font-bold">BTN AQo 面对 CL 推</td><td class="p-3 text-center font-black text-red-600">fold ❌</td><td class="p-3 text-center font-black text-green-600">call ✅</td><td class="p-3 text-center"><span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs font-bold">反转</span></td><td class="p-3 text-xs font-bold">🔥 赢了变 CL → 值额外 1 个 buy-in。AQo 甚至 A9o 都能接。</td></tr>
       </tbody>
     </table>
+</div>
   </div>
 
   <!-- 成为CL值多少钱 -->
@@ -1697,7 +1766,8 @@
   <div class="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 rounded-xl p-5 mt-6">
     <p class="font-black text-indigo-800 text-lg mb-3">🗺️ 你在每个阶段的商业角色</p>
     <div class="overflow-x-auto">
-      <table class="w-full text-xs">
+      <div class="tbl-scroll">
+<table class="w-full text-xs">
         <thead><tr class="bg-white/50"><th class="p-2 text-left">MTT 阶段</th><th class="p-2 text-left">商业角色</th><th class="p-2 text-left">你的优势</th></tr></thead>
         <tbody>
           <tr class="border-b border-white/30"><td class="p-2">🌅 早期</td><td class="p-2 font-bold">价值投资者</td><td class="p-2">翻后技术 → 选优质资产比别人准</td></tr>
@@ -1708,6 +1778,7 @@
           <tr><td class="p-2">⚔️ HU</td><td class="p-2 font-bold">双头垄断者</td><td class="p-2">Cash 翻后 = 核武器</td></tr>
         </tbody>
       </table>
+</div>
     </div>
   </div>
 
@@ -1800,7 +1871,8 @@
     <div class="bg-white rounded-xl p-5 border border-gray-200">
       <p class="font-bold text-gray-800 mb-3">🔬 Case Study: 82o SB steal · 15bb vs 20bb · 6/10 Lv35</p>
       <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+        <div class="tbl-scroll">
+<table class="w-full text-sm">
           <thead><tr class="bg-gray-100"><th class="p-2 text-left">对比</th><th class="p-2 text-left">93s SB steal ✅</th><th class="p-2 text-left">82o SB steal ❌</th></tr></thead>
           <tbody class="divide-y">
             <tr><td class="p-2 font-bold">对手码量</td><td class="p-2">BB 4.69bb 快死</td><td class="p-2">BB 20bb 中长码</td></tr>
@@ -1811,6 +1883,7 @@
             <tr><td class="p-2 font-bold">后果</td><td class="p-2">回到安全区</td><td class="p-2 text-red-700">20bb→14bb，进 push-fold 区；对手 20bb→25bb，进 FT</td></tr>
           </tbody>
         </table>
+</div>
       </div>
     </div>
 
@@ -1893,7 +1966,8 @@
     <h3 class="text-2xl font-black text-gray-800 mb-4">📐 按码量分层的 SB Limp 策略</h3>
     
     <div class="overflow-x-auto mb-4">
-      <table class="w-full text-sm">
+      <div class="tbl-scroll">
+<table class="w-full text-sm">
         <thead><tr class="bg-gray-100"><th class="p-3 text-left">码量</th><th class="p-3 text-left">主策略</th><th class="p-3 text-left">Limp 范围</th><th class="p-3 text-left">关键动作</th></tr></thead>
         <tbody class="divide-y">
           <tr><td class="p-3 font-bold">30bb+ 深码</td><td class="p-3">Limp + Raise 混合</td><td class="p-3">22-66, A2s-A9s, SCs, 弱 Kx (~50%)</td><td class="p-3">强牌 raise · 宽范围 limp · limp 里藏 AA/KK</td></tr>
@@ -1902,6 +1976,7 @@
           <tr><td class="p-3 font-bold">&lt;12bb</td><td class="p-3 text-red-700 font-bold">Push-Fold</td><td class="p-3">22+, A2s+, A8o+, K9s+, KTo+</td><td class="p-3">几乎不 limp——直接 shove or fold</td></tr>
         </tbody>
       </table>
+</div>
     </div>
   </div>
 
@@ -1954,7 +2029,8 @@ SB Limp →<br>
     <h3 class="text-2xl font-black text-gray-800 mb-4">🔬 施老师实战对照</h3>
     
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <div class="tbl-scroll">
+<table class="w-full text-sm">
         <thead><tr class="bg-orange-100"><th class="p-3 text-left">手牌</th><th class="p-3 text-left">场景</th><th class="p-3 text-left">当时动作</th><th class="p-3 text-left">如果用 Limp 策略</th></tr></thead>
         <tbody class="divide-y">
           <tr><td class="p-3 font-bold text-red-700">82o SB 15bb</td><td class="p-3">BvB，BB 20bb 中长码</td><td class="p-3 text-red-700">❌ raise 2.5bb → float → -6bb</td><td class="p-3 text-green-700">limp-fold 或直接 fold。82o 不在任何 limp range</td></tr>
@@ -1962,6 +2038,7 @@ SB Limp →<br>
           <tr><td class="p-3 font-bold">K5s SB 8.4bb</td><td class="p-3">BvB，短码</td><td class="p-3 text-green-700">✅ shove → 翻倍</td><td class="p-3">短码 shove，标准</td></tr>
         </tbody>
       </table>
+</div>
     </div>
 
     <div class="mt-4 space-y-2 text-sm text-gray-700">
@@ -2014,7 +2091,8 @@ SB Limp →<br>
     <p class="text-sm text-gray-600 mb-4">Bubble Factor = 你出局损失 ÷ 你淘汰对手的收益。BF 越高，风险溢价越高。</p>
     
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <div class="tbl-scroll">
+<table class="w-full text-sm">
         <thead><tr class="bg-gray-100"><th class="p-3 text-left">阶段</th><th class="p-3 text-center">BF</th><th class="p-3 text-center">风险溢价</th><th class="p-3 text-left">感觉</th></tr></thead>
         <tbody class="divide-y">
           <tr><td class="p-3">🌅 早期</td><td class="p-3 text-center font-mono">1.0-1.2</td><td class="p-3 text-center font-bold text-green-700">~0%</td><td class="p-3">像 cash，随便接</td></tr>
@@ -2024,6 +2102,7 @@ SB Limp →<br>
           <tr><td class="p-3">⚔️ HU</td><td class="p-3 text-center font-mono">1.0</td><td class="p-3 text-center font-bold text-green-700">0%</td><td class="p-3">风险溢价归零！纯 cEV</td></tr>
         </tbody>
       </table>
+</div>
     </div>
   </div>
 
@@ -2261,7 +2340,8 @@ SB Limp →<br>
     <h3 class="text-2xl font-black text-gray-800 mb-4">🔄 两极框架：你的体系 × No Fold</h3>
     
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <div class="tbl-scroll">
+<table class="w-full text-sm">
         <thead><tr class="bg-gray-200"><th class="p-3 text-left">维度</th><th class="p-3 text-left">🛡️ ICM 防守体系（你的）</th><th class="p-3 text-left">⚡ No Fold 进攻体系（周懿楠）</th></tr></thead>
         <tbody class="divide-y">
           <tr><td class="p-3 font-bold">风险溢价</td><td class="p-3">让我 fold 的理由</td><td class="p-3 text-red-700">让对手 fold 的理由 → 我 attack</td></tr>
@@ -2272,6 +2352,7 @@ SB Limp →<br>
           <tr><td class="p-3 font-bold">生存 vs 累积</td><td class="p-3">生存 10/10 · 累积 4/10</td><td class="p-3 text-red-700">生存 7/10 · 累积 10/10</td></tr>
         </tbody>
       </table>
+</div>
     </div>
 
     <div class="bg-white rounded-xl p-4 mt-4 text-sm">
@@ -2301,7 +2382,8 @@ SB Limp →<br>
   <div class="bg-white rounded-xl p-6 border border-gray-200 mb-6">
     <h3 class="text-xl font-black text-gray-800 mb-3">📐 三种分钱方式</h3>
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <div class="tbl-scroll">
+<table class="w-full text-sm">
         <thead><tr class="bg-gray-100"><th class="p-3 text-left">方式</th><th class="p-3 text-left">逻辑</th><th class="p-3 text-left">场景</th></tr></thead>
         <tbody class="divide-y">
           <tr><td class="p-3 font-bold text-emerald-700">ICM Chop</td><td class="p-3">按 ICM 模型算每人 equity 分钱</td><td class="p-3">GGpoker 默认，线上标准</td></tr>
@@ -2309,6 +2391,7 @@ SB Limp →<br>
           <tr><td class="p-3">Save + Play</td><td class="p-3">每人预留一部分保底，剩余按 ICM 分，继续打</td><td class="p-3">线下常见</td></tr>
         </tbody>
       </table>
+</div>
     </div>
   </div>
 
@@ -2380,5 +2463,64 @@ SB Limp →<br>
 
 </div>
 </div><!-- main-wrap -->
+
+<!-- === P1-ENHANCE JS === -->
+<script>
+(function(){
+  var root=document.documentElement;
+  var THEME_KEY='poker-site-theme';
+  function applyTheme(t){
+    root.setAttribute('data-theme',t);
+    var btn=document.getElementById('p1-theme-toggle');
+    if(btn) btn.textContent=(t==='dark')?'☀️':'🌙';
+  }
+  var saved=null;
+  try{ saved=localStorage.getItem(THEME_KEY); }catch(e){}
+  applyTheme(saved || root.getAttribute('data-theme') || 'dark');
+  var tbtn=document.getElementById('p1-theme-toggle');
+  if(tbtn) tbtn.addEventListener('click',function(){
+    var t=(root.getAttribute('data-theme')==='dark')?'light':'dark';
+    applyTheme(t);
+    try{ localStorage.setItem(THEME_KEY,t); }catch(e){}
+  });
+  var bar=document.getElementById('p1-progress');
+  var top=document.getElementById('p1-top');
+  function onScroll(){
+    var d=document.documentElement;
+    var max=d.scrollHeight-d.clientHeight;
+    var y=d.scrollTop||document.body.scrollTop||0;
+    bar.style.width=(max>0?(y/max*100):0)+'%';
+    if(top) top.classList.toggle('show', y>400);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  onScroll();
+  if(top) top.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+  var links=[].slice.call(document.querySelectorAll('a.nav-link[href^="#"]'));
+  var map={};
+  links.forEach(function(a){ var id=a.getAttribute('href').slice(1); if(id) map[id]=a; });
+  var targets=Object.keys(map).map(function(id){return document.getElementById(id);}).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          var a=map[e.target.id]; if(a) a.classList.add('active');
+        }
+      });
+    },{rootMargin:'-15% 0px -75% 0px',threshold:0});
+    targets.forEach(function(t){ io.observe(t); });
+  }
+  var ham=document.querySelector('.p1-hamburger');
+  if(ham){
+    var sb=document.querySelector('.sidebar');
+    var ov=document.querySelector('.sidebar-overlay-p1');
+    function tog(){ if(sb) sb.classList.toggle('open'); if(ov) ov.classList.toggle('show'); }
+    ham.addEventListener('click',tog);
+    if(ov) ov.addEventListener('click',tog);
+  }
+})();
+</script>
+
 </body>
 </html>
