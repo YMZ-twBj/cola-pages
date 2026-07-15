@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛠️ 范围查看器 · MTT 锦标赛学院</title>
+<style>
+  :root{
+    --bg:#f6f3ed; --bg2:#fffdf9; --card:#ffffff; --text:#2b2620;
+    --muted:#8a7f70; --border:#e7ded0; --accent:#0d9488; --accent2:#b45309;
+    --shadow:0 8px 30px rgba(80,60,30,.10);
+    --c-open:#22c55e; --c-push:#0d9488; --c-3bet:#3b82f6;
+    --c-call:#f59e0b; --c-fold:#e8e0d2; --c-foldtext:#a99e8c;
+  }
+  html[data-theme="dark"]{
+    --bg:#161310; --bg2:#1d1a15; --card:#241f18; --text:#f1ead9;
+    --muted:#a8997f; --border:#3a3228; --accent:#2dd4bf; --accent2:#fbbf24;
+    --shadow:0 8px 30px rgba(0,0,0,.45);
+    --c-open:#16a34a; --c-push:#14b8a6; --c-3bet:#60a5fa;
+    --c-call:#f59e0b; --c-fold:#2e2820; --c-foldtext:#6f6452;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:10px 18px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .topbar a{color:var(--accent);text-decoration:none;font-weight:600;font-size:14px}
+  .topbar a:hover{text-decoration:underline}
+  .spacer{flex:1}
+  .tgl{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:999px;
+    padding:6px 12px;cursor:pointer;font-size:13px;font-weight:600;box-shadow:var(--shadow)}
+  .tgl:hover{border-color:var(--accent)}
+  .wrap{max-width:960px;margin:0 auto;padding:0 18px}
+  header.hero{text-align:center;padding:34px 0 10px}
+  header.hero h1{font-size:30px;font-weight:800;letter-spacing:-.5px}
+  header.hero p{color:var(--muted);margin-top:8px;font-size:15px}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:18px;
+    box-shadow:var(--shadow);padding:20px;margin:18px 0}
+  .controls{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:6px}
+  .seg{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .seg button{border:0;background:transparent;color:var(--text);padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer}
+  .seg button.active{background:var(--accent);color:#fff}
+  .possel{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+  .possel select{background:var(--bg2);border:1px solid var(--border);color:var(--text);
+    border-radius:10px;padding:8px 12px;font-size:14px;font-weight:600;cursor:pointer}
+  .summary{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0 4px}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:var(--bg2);border:1px solid var(--border);
+    border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600}
+  .dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .gridbox{overflow-x:auto;padding:6px 2px 2px}
+  .grid{display:grid;grid-template-columns:repeat(13,minmax(40px,1fr));gap:4px;min-width:560px;margin:0 auto}
+  .cell{position:relative;aspect-ratio:1/1;border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-size:12.5px;font-weight:700;cursor:default;transition:transform .08s,box-shadow .08s;border:1px solid rgba(0,0,0,.06)}
+  .cell:hover{transform:scale(1.12);box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:5;outline:2px solid var(--text)}
+  .cell small{position:absolute;bottom:2px;right:3px;font-size:8.5px;font-weight:600;opacity:.7}
+  .axis{font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:16px;font-size:13px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .tip{position:fixed;pointer-events:none;z-index:60;background:var(--card);border:1px solid var(--border);
+    border-radius:12px;box-shadow:var(--shadow);padding:10px 13px;max-width:280px;font-size:13px;line-height:1.5;
+    opacity:0;transform:translateY(4px);transition:opacity .1s;color:var(--text)}
+  .tip.show{opacity:1}
+  .tip b{color:var(--accent)}
+  .tip .act{font-weight:800}
+  .foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:24px}
+  .note{font-size:13px;color:var(--muted);background:var(--bg2);border:1px dashed var(--border);
+    border-radius:12px;padding:12px 14px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← 锦标赛学院</a>
+  <span style="color:var(--muted);font-size:13px">范围查看器</span>
+  <span class="spacer"></span>
+  <a href="../nl10-poker-notes/" style="color:var(--muted)">NL10 主站 ↗</a>
+  <button class="tgl" id="themeTgl">🌙 深色</button>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <h1>🛠️ 扑克范围查看器</h1>
+    <p>切换场景与位置，hover 任一手牌查看<strong>动作 · 频率 · 策略提示</strong>。范围比例为启发式示意，正式决策请对照 GTO Wizard 导出。</p>
+  </header>
+
+  <div class="panel">
+    <div class="controls">
+      <div class="seg" id="modeSeg">
+        <button data-mode="rfi" class="active">常规开池 RFI</button>
+        <button data-mode="hu">Heads-up</button>
+        <button data-mode="push">Push/Fold &lt;15bb</button>
+      </div>
+      <div class="possel">
+        <span>位置</span>
+        <select id="posSel"></select>
+      </div>
+    </div>
+    <div class="summary" id="summary"></div>
+    <div class="gridbox">
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--c-open)"></i>开池 OPEN</span>
+      <span><i class="dot" style="background:var(--c-push)"></i>全下 PUSH</span>
+      <span><i class="dot" style="background:var(--c-3bet)"></i>3-bet</span>
+      <span><i class="dot" style="background:var(--c-call)"></i>跟注 CALL</span>
+      <span><i class="dot" style="background:var(--c-fold)"></i>弃牌 FOLD</span>
+    </div>
+    <div class="note" id="ctxNote"></div>
+  </div>
+
+  <p class="foot">本工具为纯前端静态页面，数据在浏览器本地计算，不上传任何信息。范围比例为教学示意，非精确的 GTO 解。</p>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+const RANKS = ['A','K','Q','J','T','9','8','7','6','5','4','3','2'];
+const RV = {A:14,K:13,Q:12,J:11,T:10,9:9,8:8,7:7,6:6,5:5,4:4,3:3,2:2};
+
+function handScore(r1,r2,suited){
+  let s = (r1-2)*1.8 + (r2-2)*1.0;
+  if(r1===r2) s += (r1-2)*1.4;
+  if(suited) s += 2.2;
+  const gap = r1-r2;
+  if(r1!==r2){
+    if(gap===1) s += 2.0;
+    else if(gap===2) s += 1.1;
+    else if(gap===3) s += 0.5;
+    else if(gap>=4) s -= 0.35*(gap-3);
+  }
+  if(suited && gap<=1 && r1>=10) s += 1.5;
+  return s;
+}
+
+// build 169 hands
+const HANDS = [];
+for(let i=0;i<13;i++){
+  for(let j=0;j<13;j++){
+    const r1=RV[RANKS[i]], r2=RV[RANKS[j]];
+    if(i===j){ HANDS.push({r1,r2,suited:false,pair:true,label:RANKS[i]+RANKS[i]}); }
+    else if(i<j){ HANDS.push({r1,r2,suited:true,pair:false,label:RANKS[i]+RANKS[j]+'s'}); }
+    else { HANDS.push({r1,r2,suited:false,pair:false,label:RANKS[i]+RANKS[j]+'o'}); }
+  }
+}
+HANDS.forEach(h=>h.score=handScore(h.r1,h.r2,h.suited));
+HANDS.sort((a,b)=>b.score-a.score);
+const N=HANDS.length;
+HANDS.forEach((h,idx)=>h.rank=idx); // 0 = strongest
+
+const PRESETS = {
+  rfi:{ label:'常规开池 RFI（六人桌）', positions:{'UTG':0.15,'MP':0.20,'CO':0.28,'BTN':0.45,'SB':0.40}, mode:'open',
+        ctx:'六人桌翻前率先加注（RFI）。越靠前位范围越紧；按钮位最宽。数值为近似 RFI 频率。' },
+  hu:{ label:'Heads-up 单挑', positions:{'SB 开池':0.80,'BB 防守':0.55}, mode:'hu',
+        ctx:'单挑时范围极宽：SB 几乎全范围 open；BB 用 3-bet 极化 + 跟注防守来对抗。' },
+  push:{ label:'Push/Fold 阶段（<15bb）', positions:{'UTG':0.18,'MP':0.26,'CO':0.34,'BTN':0.45}, mode:'push',
+        ctx:'短码全下/弃牌阶段。Push 范围取决于位置与筹码深度，用 Nash 表校准最准。' }
+};
+
+function computeActions(presetKey, posKey){
+  const p = PRESETS[presetKey];
+  const frac = p.positions[posKey];
+  const n = Math.round(frac*N);
+  const actions = {};
+  if(p.mode==='open'){
+    HANDS.forEach(h=>{ actions[h.label] = (h.rank < n) ? 'OPEN' : 'FOLD'; });
+  } else if(p.mode==='hu'){
+    if(posKey==='SB 开池'){
+      HANDS.forEach(h=>{ actions[h.label] = (h.rank < n) ? 'OPEN' : 'FOLD'; });
+    } else { // BB 防守
+      const three = Math.round(0.10*N);
+      const callTo = Math.round(frac*N);
+      HANDS.forEach(h=>{
+        if(h.rank < three) actions[h.label]='3BET';
+        else if(h.rank < callTo) actions[h.label]='CALL';
+        else actions[h.label]='FOLD';
+      });
+    }
+  } else if(p.mode==='push'){
+    HANDS.forEach(h=>{ actions[h.label] = (h.rank < n) ? 'PUSH' : 'FOLD'; });
+  }
+  return actions;
+}
+
+function noteText(action, h){
+  const type = h.pair ? '对子' : (h.suited ? '同花' : '非同花');
+  let base;
+  if(h.pair){
+    if(h.r1>=12) base='超对/高对，翻前强价值，主动建池';
+    else if(h.r1>=8) base='中对，位置好可开，注意翻后被高对压制';
+    else base='小对子，靠隐含赔率追 set，无位置慎玩';
+  } else if(h.r1>=12 && h.r2>=10){
+    base = h.suited ? '同花高牌，可玩性极强，翻后多顶对+' : '非同花高牌，依赖位置，翻后顶对常够用';
+  } else if(h.suited && (h.r1-h.r2)<=2 && h.r1>=7){
+    base='同花连张，翻后多听牌，适合投机与半诈唬';
+  } else if(!h.suited && (h.r1-h.r2)<=2 && h.r1>=7){
+    base='连张（非同花），翻后听牌较少，需位置';
+  } else if(h.suited){
+    base='同花边牌，看位置与赔率，翻后靠同花听牌';
+  } else {
+    base='非同花边牌，通常需强位置才入局';
+  }
+  const act = {
+    OPEN:'开池：标准加注 2.2bb 建池',
+    PUSH:'全下 Push：短码靠弃牌权益 + 底池赔率',
+    '3BET':'3-bet 极化：价值（高对/AK）或诈唬（同花连张）',
+    CALL:'跟注防守：翻后看翻牌，利用位置',
+    FOLD:'不在范围：弃牌'
+  }[action];
+  const pct = Math.round((N-h.rank)/N*100);
+  return {type, base, act, pct};
+}
+
+const COLORS = {OPEN:'var(--c-open)',PUSH:'var(--c-push)','3BET':'var(--c-3bet)',CALL:'var(--c-call)',FOLD:'var(--c-fold)'};
+const TEXTON = {OPEN:'#fff',PUSH:'#fff','3BET':'#fff',CALL:'#1a1206',FOLD:'var(--c-foldtext)'};
+const LABELS = {OPEN:'开',PUSH:'全','3BET':'3B',CALL:'跟',FOLD:''};
+
+let state = {mode:'rfi', pos:'UTG'};
+
+function render(){
+  const p = PRESETS[state.mode];
+  const actions = computeActions(state.mode, state.pos);
+  const grid = document.getElementById('grid');
+  grid.innerHTML='';
+  // top axis (columns = lower card)
+  grid.appendChild(axcell(''));
+  for(let j=0;j<13;j++) grid.appendChild(axcell(RANKS[j]));
+  // rows
+  for(let i=0;i<13;i++){
+    grid.appendChild(axcell(RANKS[i]));
+    for(let j=0;j<13;j++){
+      const label = (i===j)? RANKS[i]+RANKS[i] : (i<j? RANKS[i]+RANKS[j]+'s' : RANKS[i]+RANKS[j]+'o');
+      const h = HANDS.find(x=>x.label===label);
+      const act = actions[label];
+      const cell = document.createElement('div');
+      cell.className='cell';
+      cell.style.background = COLORS[act];
+      cell.style.color = TEXTON[act];
+      cell.innerHTML = `<span>${label}</span>` + (LABELS[act]? `<small>${LABELS[act]}</small>`:'');
+      const info = noteText(act, h);
+      cell.addEventListener('mousemove', e=>showTip(e, label, act, info));
+      cell.addEventListener('mouseleave', hideTip);
+      grid.appendChild(cell);
+    }
+  }
+  // summary
+  const counts = {OPEN:0,PUSH:0,'3BET':0,CALL:0,FOLD:0};
+  Object.values(actions).forEach(a=>counts[a]++);
+  const totPct = Math.round((N-counts.FOLD)/N*100);
+  const sum = document.getElementById('summary');
+  sum.innerHTML =
+    chip('var(--c-open)','开池/全下 '+(counts.OPEN+counts.PUSH)) +
+    (counts['3BET']?chip('var(--c-3bet)','3-bet '+counts['3BET']):'') +
+    (counts.CALL?chip('var(--c-call)','跟注 '+counts.CALL):'') +
+    chip('var(--c-fold)','弃牌 '+counts.FOLD) +
+    `<span class="chip" style="border-color:var(--accent);color:var(--accent)">入局率 ${totPct}%</span>`;
+  document.getElementById('ctxNote').textContent = p.ctx + '（当前：'+state.pos+'，约 '+totPct+'% 入局）';
+}
+
+function axcell(t){ const d=document.createElement('div'); d.className='axis'; d.textContent=t; return d; }
+function chip(c,t){ return `<span class="chip"><i class="dot" style="background:${c}"></i>${t}</span>`; }
+
+const tip = document.getElementById('tip');
+function showTip(e,label,act,info){
+  tip.innerHTML = `<div style="font-size:15px;font-weight:800;margin-bottom:4px">${label} <span style="color:var(--muted);font-weight:600">${info.type}</span></div>`+
+    `<div class="act" style="color:${COLORS[act]}">${LABELS[act]||'✕'} ${act} · 强度 top ${info.pct}%</div>`+
+    `<div style="margin-top:4px">${info.act}</div>`+
+    `<div style="color:var(--muted);margin-top:3px">${info.base}</div>`;
+  tip.classList.add('show');
+  let x=e.clientX+16, y=e.clientY+16;
+  if(x+290>window.innerWidth) x=e.clientX-290;
+  if(y+120>window.innerHeight) y=e.clientY-120;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+}
+function hideTip(){ tip.classList.remove('show'); }
+
+// controls
+document.getElementById('modeSeg').addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  state.mode=b.dataset.mode;
+  [...e.currentTarget.children].forEach(x=>x.classList.toggle('active',x===b));
+  fillPos();
+  state.pos = Object.keys(PRESETS[state.mode].positions)[0];
+  render();
+});
+function fillPos(){
+  const sel=document.getElementById('posSel');
+  sel.innerHTML='';
+  Object.keys(PRESETS[state.mode].positions).forEach(k=>{
+    const o=document.createElement('option'); o.value=k; o.textContent=k; sel.appendChild(o);
+  });
+}
+document.getElementById('posSel').addEventListener('change', e=>{ state.pos=e.target.value; render(); });
+
+// theme
+const tgl=document.getElementById('themeTgl');
+function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); tgl.textContent = t==='dark'?'☀️ 浅色':'🌙 深色';
+  try{localStorage.setItem('mtt-tools-theme',t);}catch(e){} }
+tgl.addEventListener('click', ()=>{ const cur=document.documentElement.getAttribute('data-theme'); applyTheme(cur==='dark'?'light':'dark'); });
+try{ const saved=localStorage.getItem('mtt-tools-theme'); if(saved) applyTheme(saved); }catch(e){}
+
+// init
+fillPos(); render();
+</script>
+</body>
+</html>
