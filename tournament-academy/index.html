@@ -153,6 +153,7 @@ html[data-theme="dark"] .no-invert{ filter: invert(1) hue-rotate(180deg); }
   <a href="#risk-premium" class="nav-link">💎 第九关：风险溢价</a>
   <a href="#no-fold" class="nav-link">⚡ 第十关：跟世界冠军学MTT</a>
   <a href="#deal" class="nav-link">🤝 第十一关：FT协商Deal</a>
+<a href="#tactics" class="nav-link">🎯 第十二关：战术锦囊</a>
   <a href="mindset.html" class="nav-link">🧠 第十二关：心态篇</a>
   <div class="nav-section-title">💡 深度专题</div>
   <a href="#business" class="nav-link">🏢 商业模式映射</a>
@@ -1123,7 +1124,116 @@ html[data-theme="dark"] .no-invert{ filter: invert(1) hue-rotate(180deg); }
 </section>
 
 <!-- ===== Section 3: Heads-up ===== -->
-<div id="hu"></div>
+<div id="hu"><h2 class="text-3xl font-black text-gray-800">第三关：Heads-up 决胜</h2>
+
+<p>Final Table 的最后一战 —— 最纯粹的扑克。当桌上只剩你们两人，<strong>没有多人 ICM</strong>（只有一个奖项跳级：1st vs 2nd），你的现金桌翻后技术在这里就是核武器。你是 NL10 盈利玩家，HU 阶段你天然有优势。</p>
+<p style="background:rgba(94,141,239,.12);border-left:4px solid #5b8def;padding:.8em 1em;border-radius:8px;margin:1em 0;">
+📌 <strong>单挑胜率对最终 ROI 的影响占比超过 35%</strong>（utown 扑克 200 场 MTT 实战统计）。换句话说：能不能赢下 HU，往往决定你这趟是"进圈"还是"夺冠"。这是整场最值得投入精力打磨的阶段。</p>
+
+<h3>🔥 为什么 HU 是 MTT 最赚钱的阶段</h3>
+<ul>
+  <li><strong>奖池跳级最大</strong>：从 3 人桌到 HU，奖金跳级通常是整场最大的一次（典型 9 人桌：第 2 名约 20%、第 1 名约 30%）。</li>
+  <li><strong>翻后技术变现</strong>：HU 几乎每手都进翻牌，谁的翻后执行更好，谁拿走冠军。你的 NL10 功底直接转化。</li>
+  <li><strong>ICM 压强归零</strong>：没有中间码可以"被挤压"，你只需要和一个人博弈。</li>
+</ul>
+
+<h3>🧊 HU 的 ICM 真相：几乎为零，但不是完全零</h3>
+<ul>
+  <li>2 人时只有一个跳级（1st/2nd），<strong>chip value ≈ 线性</strong>，可以放开打。</li>
+  <li>仍有<strong>小 ICM</strong>：当筹码差距极大（比如 4:1 以上），短码方"输=拿 2nd、赢=拿 1st"，风险不对称 → 短码会略紧、深码略宽。但相比 3–9 人 FT 的 ICM 压强，这几乎可以忽略。</li>
+  <li>⚠️ <strong>误区纠正</strong>："HU 零 ICM"说对了一半。极端码量下仍要保留一点风险意识（见下方"筹码差距打法"）。深度理解见第六关 FGS 与第九关 风险溢价。</li>
+</ul>
+
+<h3>🎯 位置是一切（基础）</h3>
+<ul>
+  <li><strong>BTN（=SB，有位置）</strong>：Open <strong>80%+</strong> 的手牌。Position &gt; Cards，你是在抢 BB 的盲注。</li>
+  <li><strong>BB（已放 1bb）</strong>：Defend <strong>50–60%</strong>。<strong>3-bet or fold —— 别 flat</strong>（没位置翻后极难打）。</li>
+</ul>
+
+<h3>🃏 翻前范围系统化</h3>
+<p>按码量分层（保留你原有框架，细化）：</p>
+<div class="tbl-scroll"><table class="w-full text-sm"><thead><tr><th>码量</th><th>SB/BTN 开池</th><th>BB 应对</th></tr></thead><tbody>
+<tr><td>Deep (&gt;40bb)</td><td>Open 75–85%。可 limp、可 trap，翻后三街随便玩</td><td>3-bet 频率低，call 宽</td></tr>
+<tr><td>Mid (20–40bb)</td><td>Open 70–80%。BB 3-bet 20–25%，开始 polarized</td><td>3-bet or fold，少 call</td></tr>
+<tr><td>Short (12–20bb)</td><td>两极：premium min-raise（AA–JJ / AK），其余 jam</td><td>call 范围收紧到 ~35–45%</td></tr>
+<tr><td>Super Short (&lt;12bb)</td><td>Nash push/fold：BTN jam 60–70%</td><td>BB call 35–45%（按 Nash）</td></tr>
+</tbody></table></div>
+<p>下面是两套<strong>示意范围矩阵</strong>（按手牌强度排序，非精确 GTO；上线请用 GTO Wizard 导出替换）：</p>
+<figure style="margin:1.5em 0;text-align:center;">
+  <img src="img/hu_range_sb.svg" alt="HU SB 开池范围" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.35);">
+  <figcaption style="color:#8b9bb4;font-size:12px;margin-top:.5em;">HU SB/BTN 开池范围矩阵（~80% 示意）· 真实范围用 GTO Wizard 导出替换</figcaption>
+</figure><figure style="margin:1.5em 0;text-align:center;">
+  <img src="img/hu_range_bb.svg" alt="HU BB 防守范围" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.35);">
+  <figcaption style="color:#8b9bb4;font-size:12px;margin-top:.5em;">HU BB 防守范围矩阵（~55% 防守，极化 · 示意）· 真实范围用 GTO Wizard 导出替换</figcaption>
+</figure>
+<h3>♠️ 翻后战术（核心）</h3>
+<p>HU 的翻后和多人桌完全不同 —— 池子小（只有 1.5bb 死钱），几乎每手都进翻牌，<strong>位置与连续性下注</strong>是主线。</p>
+<h4>🔹 c-bet 频率与尺寸</h4>
+<ul>
+  <li><strong>干燥面</strong>（A 高、无听牌）：作为 PFR 的 c-bet 频率 &gt; 70%，用小注（1/3–1/2 pot）保持范围优势、用便宜的价格持续施压。</li>
+  <li><strong>湿润面</strong>（多听牌）：c-bet 频率下降，但尺寸加大，避免被听牌便宜地看牌。</li>
+  <li><strong>强牌可以超池</strong>：当你的强牌会在后续街贬值时，用 &gt;geometric 的大注把价值"前载"（详见第十二关 战术锦囊 · 超池触发）。</li>
+</ul>
+<h4>🔸 单一下注底池 vs 3-bet 底池</h4>
+<ul>
+  <li><strong>单一下注底池</strong>：IP（BTN）做多条街连续性下注施压；OOP（BB）主打 <strong>check-raise 诈唬 / 慢玩强牌</strong>。</li>
+  <li><strong>3-bet 底池</strong>：双方范围更极化，c-bet 频率略降但尺寸更大；OOP 的 3-bettor 通常用小注保持平衡。</li>
+</ul>
+<h4>🔻 IP 与 OOP 的执行差异</h4>
+<ul>
+  <li><strong>IP（BTN）</strong>：用位置做连续下注，控池、拿薄价值、在危险面轻松撤退。</li>
+  <li><strong>OOP（BB）</strong>：别 flat 防守后被动过牌 —— 用 check-raise 把压力还给 IP，或用 trap 慢玩坚果。</li>
+  <li><strong>河牌薄价值</strong>：HU 几乎没有 ICM → 对手 bluff 频率最高 → 中对 / 底对也经常能 call 住（见第四关 Hero Call）。</li>
+</ul>
+
+<h3>⚖️ 筹码差距下的打法（引 utown 实战）</h3>
+<div class="tbl-scroll"><table class="w-full text-sm"><thead><tr><th>筹码差距</th><th>深码（你领先）策略</th><th>短码（你落后）策略</th></tr></thead><tbody>
+<tr><td>接近（2:1 以下）</td><td>标准打法，重视位置</td><td>不主动冒险，等对手失误</td></tr>
+<tr><td>中等（2:1 – 4:1）</td><td>持续施压，迫推或弃</td><td>选择性全压，建立翻盘机会</td></tr>
+<tr><td>悬殊（4:1 以上）</td><td>耐心压制，用盲注慢性消耗</td><td>任何合理机会就推，博翻倍</td></tr>
+</tbody></table></div>
+
+<h3>🔄 进入 HU 前的 3 人过渡</h3>
+<ul>
+  <li><strong>3-handed 仍有 ICM</strong>：3rd → 2nd 是真实奖金跳级，所以比纯 HU 略紧，别在边缘牌上和深码硬碰。</li>
+  <li><strong>一旦到 HU（2 人）</strong>：ICM 压强骤降 → 立刻放开 aggression，恢复到上面"位置是一切"的打法。</li>
+  <li>战术：3 人时优先打击<strong>中间码 / 短码</strong>，避免和深码互相消耗；把"逼退中码"当成目标（呼应第十关 ⑤ ICM 挤压）。</li>
+</ul>
+
+<h3>🎭 剥削调整（按对手类型）</h3>
+<div class="tbl-scroll"><table class="w-full text-sm"><thead><tr><th>对手类型</th><th>他的特征</th><th>你的应对</th></tr></thead><tbody>
+<tr><td>紧（fold 多）</td><td>经常弃牌，只玩强牌</td><td>多偷盲、扩大 open 到 85%+、多 bluff</td></tr>
+<tr><td>跟注站（call 多）</td><td>爱跟注，很少弃</td><td>少 bluff、多用强牌拿薄价值、不浪费诈唬</td></tr>
+<tr><td>疯狂（3-bet/4-bet 多）</td><td>频繁加注、爱施压</td><td>慢玩强牌 trap、用坚果 call 他的 bluff、收紧跟注范围</td></tr>
+</tbody></table></div>
+
+<h3>📋 HU 实战例题推演</h3>
+<p><strong>场景</strong>：HU 决赛桌，盲注 50k/100k，前注 10k。你（BB）码量 18bb，对手（BTN）码量 22bb。</p>
+<ul>
+  <li>翻前：BTN open 2.2bb（标准）。你拿 <strong>ATo</strong>。按上面矩阵，BB 该 defend 的中等牌 → 你 <strong>call</strong>（不 3-bet 轻码，避免翻后难打）。</li>
+  <li>翻牌：<strong>K♠ 7♦ 2♣</strong>（彩虹，干燥）。你是 OOP。对手 c-bet 1/2 pot。你只有 A 高 + 后门，没什么权益 → <strong>check-fold</strong>（别用 A 高硬 call，干燥面他的 range 太强）。</li>
+  <li>对比：若你拿的是 <strong>77</strong>（中对），同翻牌 → 这是你范围顶端的牌，OOP 应该 <strong>check-raise 或 lead</strong> 拿价值，因为对手 c-bet 范围里大量空气。</li>
+  <li><strong>要点</strong>：HU 里"中对"在干燥面就是强牌；"A 高"在干燥面常是抓诈唬的边界，按对手类型决定是否 call。</li>
+</ul>
+
+<h3>⚠️ HU 五大常见错误（补充版）</h3>
+<ul>
+  <li>❌ <strong>打太紧</strong>：HU 里 Q7o BTN 是 open，98s BB 是 defend。用现金桌范围打 HU 必输。</li>
+  <li>❌ <strong>不调整对手</strong>：他 fold 多就多偷，他 call 多就 value bet 薄，他疯狂就 trap。</li>
+  <li>❌ <strong>BB flat 太多</strong>：没位置别 flat，3-bet or fold。</li>
+  <li>❌ <strong>高估 Ax</strong>：A2–A9 可以 open，但不能 call 大注。</li>
+  <li>❌ <strong>Deep ≠ Short</strong>：20bb 和 50bb 是两种游戏；且在 3-handed 误用纯 HU 打法（忘了还有 ICM）。</li>
+</ul>
+
+<h3>👑 HU 三条黄金法则</h3>
+<ol>
+  <li><strong>BTN open 80%+ always</strong>。HU 里 position &gt; cards。</li>
+  <li><strong>Chip lead 时施压到底</strong>。让他每手牌都难打。</li>
+  <li><strong>短码时回归 Nash push/fold</strong>。别想在 10bb 打翻后。</li>
+</ol>
+<p>🔗 <strong>HU 延伸：Hero Call 的核心逻辑</strong> —— HU 没有 ICM → 对手 bluff 频率最高 → 中对 / 底对也能 call。关键不是牌力，是"我阻挡了什么" + "对手的范围是否两极分化"。见下方第四关。</p>
+
+</div>
 <section class="bg-white rounded-2xl shadow-lg p-10 card-hover transition-all">
   <div class="flex items-center gap-3 mb-6">
     <span class="text-4xl">⚔️</span>
@@ -1635,72 +1745,7 @@ html[data-theme="dark"] .no-invert{ filter: invert(1) hue-rotate(180deg); }
   <div class="flex items-center gap-3 mb-6">
     <span class="text-4xl">🏢</span>
     <div>
-      <h2 id="tactics" class="text-3xl font-black text-gray-800">第十二关：MTT 战术锦囊（实战小技巧）</h2>
-
-<p>把前面整套体系浓缩成<strong>可立即执行</strong>的战术卡片。每条都对应一个具体场景，照着打就行。</p>
-
-<h3>🃏 翻前战术</h3>
-<ul>
-  <li><strong>混合 open size</strong>：min-raise（2x）用来偷盲、保持翻后便宜；标准 2.2–2.5bb 用来建立底池、用强牌拿价值。别永远一个尺寸。</li>
-  <li><strong>Squeeze 时机</strong>：当前面有人 limp / 加注，你有位置 + 强牌时，3-bet 隔离 weakest。注意 ICM：FT 上 squeeze 要更紧（别 squeeze 短码去赌命）。</li>
-  <li><strong>3-bet 两极化</strong>：价值（AA/KK/AKs）+ 诈唬（同花连张 / 小对子），中间牌 flat 或弃。别用"中等牌" 3-bet。</li>
-  <li><strong>捍卫盲注</strong>：面对 BTN 2–2.5bb open，你只需 <strong>~20% 权益</strong> 就能跟注获利（例：码量 80k、盲注 1k/2k、前注 2k，跟注 2.2k 赢 11.4k → 约 20%）。但位置劣势要收紧：同花连张 / 对子 / 连张别弃，边缘 offsuit 弃。</li>
-</ul>
-
-<h3>♠️ 翻后战术</h3>
-<p><strong>超池下注的 4 类触发</strong>（结合 poker-alpha solver 实战 + GTO 通用原则）：</p>
-<figure style="margin:1.5em 0;text-align:center;">
-  <img src="img/hu_overbet.svg" alt="超池下注触发" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.35);">
-  <figcaption style="color:#8b9bb4;font-size:12px;margin-top:.5em;">超池下注（≈150% pot）的 4 类触发场景 · 结合 poker-alpha solver 实战 + GTO 通用原则</figcaption>
-</figure>
-<ul>
-  <li><strong>① 脆弱强牌 → 前载价值</strong>：你的强牌后续会贬值（被超牌反超）→ 现在用 &gt;geometric 的大注把价值提前放进池。GTO Wizard 在此类场景给到约 <strong>150% pot</strong>。</li>
-  <li><strong>② 动态 / 听牌密集面</strong>：牌面允许大量顺 / 同花听牌 → solver 下注尺寸明显上推，压制听牌、拿满价值。</li>
-  <li><strong>③ 极化范围 + 对手 capped</strong>：你两端极化、对手范围封顶 → 超池同时拿价值（坚果）与诈唬（空气）。</li>
-  <li><strong>④ 对抗跟注站的危险面</strong>：对手爱跟注、但只在稀缺场景会弃 → 在他会弃牌的威胁面用超池施压。</li>
-</ul>
-<p>💡 MTT 码量有限，三条街根本下不完 → solver 把资源集中在最有把握的那条街（常是翻牌）。这正是超池在 MTT 比 cash 更常见的根本原因。</p>
-<ul>
-  <li><strong>阻断牌（Blocker）</strong>：用 A 阻塞对手的 Ax 范围 → 你的 bluff 更难被 call；用坚果阻断牌做价值超池（你拿坚果，对手几乎不可能也有）。</li>
-  <li><strong>Float / 延时 float</strong>：在干燥面 float 对手的 c-bet，转牌 / 河牌再施压。前提是他的 c-bet 频率高、且翻后他会放弃。</li>
-  <li><strong>河牌阻拦下注（Blocker bet）</strong>：当你不想被对手下大注时，主动下一个小注"锁住"底池，控制自己要面对的注码。</li>
-  <li><strong>Donk bet</strong>：翻牌主动下注（非 PFR）。常用于中码在 FT 偷取底池，或被深码压制时的反制。</li>
-</ul>
-
-<h3>🎭 剥削战术（按对手类型）</h3>
-<div class="tbl-scroll"><table class="w-full text-sm"><thead><tr><th>对手</th><th>特征</th><th>你的战术</th></tr></thead><tbody>
-<tr><td>紧弱（nit）</td><td>只玩强牌、常弃</td><td>多偷盲、多 bluff、他用大注时给予尊重</td></tr>
-<tr><td>跟注站</td><td>爱跟注、少弃</td><td>少 bluff、强牌一直价值、不在危险面诈唬</td></tr>
-<tr><td>疯狂（maniac）</td><td>频繁加注施压</td><td>慢玩强牌 trap、用坚果 call、收紧跟注范围</td></tr>
-<tr><td>疲劳 / tilt</td><td>late reg 深码、现场 late 段</td><td>用标准范围 exploit，不创意、不给他喘息</td></tr>
-</tbody></table></div>
-
-<h3>🏟️ 现场 vs 线上 战术差异</h3>
-<ul>
-  <li><strong>现场</strong>：读人 / 节奏 / 身体语言是核心。注意"现场看似软、实则硬"的陷阱（小六：现场 MTT 往往比线上更难，因为对手会 adapt）。控制自己的节奏与桌面形象，建立"凶"的 identity 让其他人让路。</li>
-  <li><strong>线上</strong>：多桌时<strong>简化决策</strong>（push/fold 优先、减少边缘 call）；利用 HUD 数据针对弱点；用<strong>思考时间</strong>做剥削（短思考 = 自动 play，长思考 = 强牌或纠结）。</li>
-</ul>
-
-<h3>⚔️ BvB 反制：BB 如何应对 SB Limp</h3>
-<p>回链第八关 SB Limp 战术。SB limp 后，BB 用宽范围 <strong>raise 惩罚</strong>（两极化）：</p>
-<ul>
-  <li><strong>强牌</strong>：raise 大，建立底池、拿价值。</li>
-  <li><strong>诈唬</strong>：用同花连张 / 小对子 raise，利用位置（BB 有位置）施压。</li>
-  <li><strong>边缘牌</strong>：call 看翻牌，别过度 raise 轻码（FT 上 ICM 要克制）。</li>
-</ul>
-
-<h3>🗂️ 战术速查卡</h3>
-<div class="tbl-scroll"><table class="w-full text-sm"><thead><tr><th>场景</th><th>战术</th><th>要点</th></tr></thead><tbody>
-<tr><td>对手 fold 多</td><td>多偷盲 / 多 bluff</td><td>open 拉到 80%+</td></tr>
-<tr><td>湿润翻牌有听牌</td><td>超池 / 大注</td><td>压制听牌，frontload value</td></tr>
-<tr><td>你有坚果阻断牌</td><td>超池价值</td><td>对手难有坚果</td></tr>
-<tr><td>干燥面 IP</td><td>连续小注施压</td><td>1/3 – 1/2 pot</td></tr>
-<tr><td>河牌不想被下大</td><td>阻拦下注</td><td>小注锁池</td></tr>
-<tr><td>对手疯狂</td><td>慢玩强牌 trap</td><td>用坚果 call 他的 bluff</td></tr>
-<tr><td>你在中码 FT</td><td>避免中庸路线</td><td>要么施压短码，要么缩手等大码互耗</td></tr>
-</tbody></table></div>
-
-<h2 class="text-3xl font-black text-gray-800">MTT × 商业模式映射</h2>
+      <h2 class="text-3xl font-black text-gray-800">MTT × 商业模式映射</h2>
       <p class="text-base text-gray-500">每个 MTT 阶段 = 一种商业策略。你不是在打牌——你是在经营资本。</p>
     </div>
   </div>
@@ -2533,6 +2578,74 @@ SB Limp →<br>
     </div>
   </div>
 </section>
+
+<div id="tactics">
+<h2 class="text-3xl font-black text-gray-800">第十二关：MTT 战术锦囊（实战小技巧）</h2>
+
+<p>把前面整套体系浓缩成<strong>可立即执行</strong>的战术卡片。每条都对应一个具体场景，照着打就行。</p>
+
+<h3>🃏 翻前战术</h3>
+<ul>
+  <li><strong>混合 open size</strong>：min-raise（2x）用来偷盲、保持翻后便宜；标准 2.2–2.5bb 用来建立底池、用强牌拿价值。别永远一个尺寸。</li>
+  <li><strong>Squeeze 时机</strong>：当前面有人 limp / 加注，你有位置 + 强牌时，3-bet 隔离 weakest。注意 ICM：FT 上 squeeze 要更紧（别 squeeze 短码去赌命）。</li>
+  <li><strong>3-bet 两极化</strong>：价值（AA/KK/AKs）+ 诈唬（同花连张 / 小对子），中间牌 flat 或弃。别用"中等牌" 3-bet。</li>
+  <li><strong>捍卫盲注</strong>：面对 BTN 2–2.5bb open，你只需 <strong>~20% 权益</strong> 就能跟注获利（例：码量 80k、盲注 1k/2k、前注 2k，跟注 2.2k 赢 11.4k → 约 20%）。但位置劣势要收紧：同花连张 / 对子 / 连张别弃，边缘 offsuit 弃。</li>
+</ul>
+
+<h3>♠️ 翻后战术</h3>
+<p><strong>超池下注的 4 类触发</strong>（结合 poker-alpha solver 实战 + GTO 通用原则）：</p>
+<figure style="margin:1.5em 0;text-align:center;">
+  <img src="img/hu_overbet.svg" alt="超池下注触发" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.35);">
+  <figcaption style="color:#8b9bb4;font-size:12px;margin-top:.5em;">超池下注（≈150% pot）的 4 类触发场景 · 结合 poker-alpha solver 实战 + GTO 通用原则</figcaption>
+</figure>
+<ul>
+  <li><strong>① 脆弱强牌 → 前载价值</strong>：你的强牌后续会贬值（被超牌反超）→ 现在用 &gt;geometric 的大注把价值提前放进池。GTO Wizard 在此类场景给到约 <strong>150% pot</strong>。</li>
+  <li><strong>② 动态 / 听牌密集面</strong>：牌面允许大量顺 / 同花听牌 → solver 下注尺寸明显上推，压制听牌、拿满价值。</li>
+  <li><strong>③ 极化范围 + 对手 capped</strong>：你两端极化、对手范围封顶 → 超池同时拿价值（坚果）与诈唬（空气）。</li>
+  <li><strong>④ 对抗跟注站的危险面</strong>：对手爱跟注、但只在稀缺场景会弃 → 在他会弃牌的威胁面用超池施压。</li>
+</ul>
+<p>💡 MTT 码量有限，三条街根本下不完 → solver 把资源集中在最有把握的那条街（常是翻牌）。这正是超池在 MTT 比 cash 更常见的根本原因。</p>
+<ul>
+  <li><strong>阻断牌（Blocker）</strong>：用 A 阻塞对手的 Ax 范围 → 你的 bluff 更难被 call；用坚果阻断牌做价值超池（你拿坚果，对手几乎不可能也有）。</li>
+  <li><strong>Float / 延时 float</strong>：在干燥面 float 对手的 c-bet，转牌 / 河牌再施压。前提是他的 c-bet 频率高、且翻后他会放弃。</li>
+  <li><strong>河牌阻拦下注（Blocker bet）</strong>：当你不想被对手下大注时，主动下一个小注"锁住"底池，控制自己要面对的注码。</li>
+  <li><strong>Donk bet</strong>：翻牌主动下注（非 PFR）。常用于中码在 FT 偷取底池，或被深码压制时的反制。</li>
+</ul>
+
+<h3>🎭 剥削战术（按对手类型）</h3>
+<div class="tbl-scroll"><table class="w-full text-sm"><thead><tr><th>对手</th><th>特征</th><th>你的战术</th></tr></thead><tbody>
+<tr><td>紧弱（nit）</td><td>只玩强牌、常弃</td><td>多偷盲、多 bluff、他用大注时给予尊重</td></tr>
+<tr><td>跟注站</td><td>爱跟注、少弃</td><td>少 bluff、强牌一直价值、不在危险面诈唬</td></tr>
+<tr><td>疯狂（maniac）</td><td>频繁加注施压</td><td>慢玩强牌 trap、用坚果 call、收紧跟注范围</td></tr>
+<tr><td>疲劳 / tilt</td><td>late reg 深码、现场 late 段</td><td>用标准范围 exploit，不创意、不给他喘息</td></tr>
+</tbody></table></div>
+
+<h3>🏟️ 现场 vs 线上 战术差异</h3>
+<ul>
+  <li><strong>现场</strong>：读人 / 节奏 / 身体语言是核心。注意"现场看似软、实则硬"的陷阱（小六：现场 MTT 往往比线上更难，因为对手会 adapt）。控制自己的节奏与桌面形象，建立"凶"的 identity 让其他人让路。</li>
+  <li><strong>线上</strong>：多桌时<strong>简化决策</strong>（push/fold 优先、减少边缘 call）；利用 HUD 数据针对弱点；用<strong>思考时间</strong>做剥削（短思考 = 自动 play，长思考 = 强牌或纠结）。</li>
+</ul>
+
+<h3>⚔️ BvB 反制：BB 如何应对 SB Limp</h3>
+<p>回链第八关 SB Limp 战术。SB limp 后，BB 用宽范围 <strong>raise 惩罚</strong>（两极化）：</p>
+<ul>
+  <li><strong>强牌</strong>：raise 大，建立底池、拿价值。</li>
+  <li><strong>诈唬</strong>：用同花连张 / 小对子 raise，利用位置（BB 有位置）施压。</li>
+  <li><strong>边缘牌</strong>：call 看翻牌，别过度 raise 轻码（FT 上 ICM 要克制）。</li>
+</ul>
+
+<h3>🗂️ 战术速查卡</h3>
+<div class="tbl-scroll"><table class="w-full text-sm"><thead><tr><th>场景</th><th>战术</th><th>要点</th></tr></thead><tbody>
+<tr><td>对手 fold 多</td><td>多偷盲 / 多 bluff</td><td>open 拉到 80%+</td></tr>
+<tr><td>湿润翻牌有听牌</td><td>超池 / 大注</td><td>压制听牌，frontload value</td></tr>
+<tr><td>你有坚果阻断牌</td><td>超池价值</td><td>对手难有坚果</td></tr>
+<tr><td>干燥面 IP</td><td>连续小注施压</td><td>1/3 – 1/2 pot</td></tr>
+<tr><td>河牌不想被下大</td><td>阻拦下注</td><td>小注锁池</td></tr>
+<tr><td>对手疯狂</td><td>慢玩强牌 trap</td><td>用坚果 call 他的 bluff</td></tr>
+<tr><td>你在中码 FT</td><td>避免中庸路线</td><td>要么施压短码，要么缩手等大码互耗</td></tr>
+</tbody></table></div>
+
+</div>
 
 <!-- ===== FOOTER ===== -->
 <div class="text-center py-12">
